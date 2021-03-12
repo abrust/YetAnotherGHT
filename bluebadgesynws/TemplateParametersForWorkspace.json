@@ -8,13 +8,22 @@
 		"AzureBlobStorage1_connectionString": {
 			"value": ""
 		},
+		"AzureBlobStorage2_connectionString": {
+			"value": ""
+		},
 		"AzureSqlDatabaseLinkedService_connectionString": {
 			"value": ""
 		},
 		"AzureStorageLinkedService_connectionString": {
 			"value": ""
 		},
+		"AzureStorageLinkedService2_connectionString": {
+			"value": ""
+		},
 		"HDIService_password": {
+			"value": ""
+		},
+		"SqlServerLinkedService_connectionString": {
 			"value": ""
 		},
 		"bluebadgesynws-WorkspaceDefaultSqlServer_connectionString": {
