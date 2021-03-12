@@ -1,0 +1,30 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"workspaceName": {
+			"value": "bluebadgesynws"
+		},
+		"AzureBlobStorage1_connectionString": {
+			"value": ""
+		},
+		"AzureSqlDatabaseLinkedService_connectionString": {
+			"value": ""
+		},
+		"AzureStorageLinkedService_connectionString": {
+			"value": ""
+		},
+		"HDIService_password": {
+			"value": ""
+		},
+		"bluebadgesynws-WorkspaceDefaultSqlServer_connectionString": {
+			"value": ""
+		},
+		"HDIService_properties_typeProperties_userName": {
+			"value": "abrust"
+		},
+		"bluebadgesynws-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"value": "https://bluebadgesynadlsa.dfs.core.windows.net"
+		}
+	}
+}
