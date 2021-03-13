@@ -1,9 +1,9 @@
 {
-	"name": "DeltaLake",
+	"name": "DeltaLakeUpdate",
 	"properties": {
 		"activities": [
 			{
-				"name": "DeltaLakeCreate",
+				"name": "Data flow1",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
@@ -15,10 +15,6 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"dataflow": {
-						"referenceName": "Dataflow1",
-						"type": "DataFlowReference"
-					},
 					"compute": {
 						"coreCount": 8,
 						"computeType": "General"
