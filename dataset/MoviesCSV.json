@@ -1,0 +1,23 @@
+{
+	"name": "MoviesCSV",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ADLSService",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "MoviesDB.csv",
+				"fileSystem": "adftutorial"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
