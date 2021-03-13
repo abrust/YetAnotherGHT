@@ -5,6 +5,12 @@
 		"workspaceName": {
 			"value": "bluebadgesynws"
 		},
+		"ADLSService_accountKey": {
+			"value": ""
+		},
+		"AzureBlobFS1_connectionString": {
+			"value": ""
+		},
 		"AzureBlobStorage1_connectionString": {
 			"value": ""
 		},
@@ -28,6 +34,9 @@
 		},
 		"bluebadgesynws-WorkspaceDefaultSqlServer_connectionString": {
 			"value": ""
+		},
+		"ADLSService_properties_typeProperties_url": {
+			"value": "https://bluebadgegen22sa.dfs.core.windows.net"
 		},
 		"HDIService_properties_typeProperties_userName": {
 			"value": "abrust"
