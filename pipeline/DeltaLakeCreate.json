@@ -1,9 +1,9 @@
 {
-	"name": "DeltaLake",
+	"name": "DeltaLakeCreate",
 	"properties": {
 		"activities": [
 			{
-				"name": "DeltaLakeCreate",
+				"name": "DeltaLake",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
