@@ -1,0 +1,16 @@
+{
+	"name": "SQL script 1",
+	"properties": {
+		"content": {
+			"query": "CREATE MASTER KEY ENCRYPTION BY PASSWORD = 'booboo123booboo123booboo123!';\nGO\n\nCREATE DATABASE SCOPED CREDENTIAL SynapseSqlCredential\n\tWITH IDENTITY = 'SHARED ACCESS SIGNATURE',\n\tSECRET = 'b0OQou2uD8Jp1nw1y1ZTWIVI3+fEfJplaoUV17Iyz35je7pNaTSShq5NrOX7CIQIEmUUjeoeZqfTF5yiJvK1dQ==';  \nGO\n\nCREATE EXTERNAL DATA SOURCE SynapseSqlDataSource\nWITH  (\n\tLOCATION = 'abfs://bluebadgegen2fs@bluebadgehdihdistorage.dfs.core.windows.net/',\n\tCREDENTIAL = SynapseSqlCredential\n);\nGO\n\nCREATE EXTERNAL FILE FORMAT QuotedCsvWithHeaderFormat\nWITH (  \n    FORMAT_TYPE = DELIMITEDTEXT,\n    FORMAT_OPTIONS ( FIELD_TERMINATOR = ',', STRING_DELIMITER = '\"', FIRST_ROW = 2   )\n);\nGO\n\nCREATE EXTERNAL TABLE MoviesDB(\n    id int,\n    title VARCHAR(100),\n    genre VARCHAR(100),\n    year SMALLINT,\n    rating SMALLINT\n)\nWITH ( LOCATION= '', DATA_SOURCE = SynapseSqlDataSource, FILE_FORMAT = QuotedCsvWithHeaderFormat);\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"poolName": "Built-in",
+				"databaseName": "Sample"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}
