@@ -65,15 +65,6 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('workspaceName'), '/SampleSQL1')]",
-			"type": "Microsoft.Synapse/workspaces/sqlPools",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"annotations": []
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('workspaceName'), '/CopyPipeline')]",
 			"type": "Microsoft.Synapse/workspaces/pipelines",
 			"apiVersion": "2019-06-01-preview",
@@ -653,6 +644,20 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/PowerBIWorkspace1')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "PowerBIWorkspace",
+				"typeProperties": {
+					"workspaceID": "a3d187c4-67ad-4292-80e2-bf9fb2b89ee9",
+					"tenantID": "76bf72de-ebdd-4f09-b452-ff4b18da01cb"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/SqlServerLinkedService')]",
 			"type": "Microsoft.Synapse/workspaces/linkedServices",
 			"apiVersion": "2019-06-01-preview",
@@ -892,7 +897,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/SQL script 1')]",
+			"name": "[concat(parameters('workspaceName'), '/MoviesDB EXTERNAL TABLE script')]",
 			"type": "Microsoft.Synapse/workspaces/sqlscripts",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
@@ -904,7 +909,8 @@
 					"currentConnection": {
 						"poolName": "Built-in",
 						"databaseName": "Sample"
-					}
+					},
+					"resultLimit": 5000
 				},
 				"type": "SqlQuery"
 			},
@@ -1126,6 +1132,46 @@
 			},
 			"dependsOn": [],
 			"location": "eastus"
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Yellow Taxi OPENROWSET queries')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "SELECT TOP 100 * FROM\n    OPENROWSET(\n        BULK 'https://azureopendatastorage.blob.core.windows.net/nyctlc/yellow/puYear=*/puMonth=*/*.parquet',\n        FORMAT='PARQUET'\n    ) AS [nyc]\n\nSELECT TOP 100 * FROM\n\tOPENROWSET(\n\t\tBULK 'https://azureopendatastorage.blob.core.windows.net/holidaydatacontainer/Processed/*.parquet',\n\t\tFORMAT='PARQUET'\n\t) AS [holidays]\n\nSELECT\n    TOP 100 *\nFROM  \n    OPENROWSET(\n        BULK 'https://azureopendatastorage.blob.core.windows.net/isdweatherdatacontainer/ISDWeather/year=*/month=*/*.parquet',\n        FORMAT='PARQUET'\n    ) AS [weather]\n\nSELECT\n    YEAR(tpepPickupDateTime) AS current_year,\n    COUNT(*) AS rides_per_year\nFROM\n    OPENROWSET(\n        BULK 'https://azureopendatastorage.blob.core.windows.net/nyctlc/yellow/puYear=*/puMonth=*/*.parquet',\n        FORMAT='PARQUET'\n    ) AS [nyc]\nWHERE nyc.filepath(1) >= '2009' AND nyc.filepath(1) <= '2019'\nGROUP BY YEAR(tpepPickupDateTime)\nORDER BY 1 ASC\n\nSELECT\n    CAST([tpepPickupDateTime] AS DATE) AS [current_day],\n    COUNT(*) as rides_per_day\nFROM\n    OPENROWSET(\n        BULK 'https://azureopendatastorage.blob.core.windows.net/nyctlc/yellow/puYear=*/puMonth=*/*.parquet',\n        FORMAT='PARQUET'\n    ) AS [nyc]\nWHERE nyc.filepath(1) = '2016'\nGROUP BY CAST([tpepPickupDateTime] AS DATE)\nORDER BY 1 ASC\n\nWITH taxi_rides AS\n(\n    SELECT\n        CAST([tpepPickupDateTime] AS DATE) AS [current_day],\n        COUNT(*) as rides_per_day\n    FROM  \n        OPENROWSET(\n            BULK 'https://azureopendatastorage.blob.core.windows.net/nyctlc/yellow/puYear=*/puMonth=*/*.parquet',\n            FORMAT='PARQUET'\n        ) AS [nyc]\n    WHERE nyc.filepath(1) = '2016'\n    GROUP BY CAST([tpepPickupDateTime] AS DATE)\n),\npublic_holidays AS\n(\n    SELECT\n        holidayname as holiday,\n        date\n    FROM\n        OPENROWSET(\n            BULK 'https://azureopendatastorage.blob.core.windows.net/holidaydatacontainer/Processed/*.parquet',\n            FORMAT='PARQUET'\n        ) AS [holidays]\n    WHERE countryorregion = 'United States' AND YEAR(date) = 2016\n)\nSELECT\n*\nFROM taxi_rides t\nLEFT OUTER JOIN public_holidays p on t.current_day = p.date\nORDER BY current_day ASC\n\nSELECT\n    AVG(windspeed) AS avg_windspeed,\n    MIN(windspeed) AS min_windspeed,\n    MAX(windspeed) AS max_windspeed,\n    AVG(temperature) AS avg_temperature,\n    MIN(temperature) AS min_temperature,\n    MAX(temperature) AS max_temperature,\n    AVG(sealvlpressure) AS avg_sealvlpressure,\n    MIN(sealvlpressure) AS min_sealvlpressure,\n    MAX(sealvlpressure) AS max_sealvlpressure,\n    AVG(precipdepth) AS avg_precipdepth,\n    MIN(precipdepth) AS min_precipdepth,\n    MAX(precipdepth) AS max_precipdepth,\n    AVG(snowdepth) AS avg_snowdepth,\n    MIN(snowdepth) AS min_snowdepth,\n    MAX(snowdepth) AS max_snowdepth\nFROM\n    OPENROWSET(\n        BULK 'https://azureopendatastorage.blob.core.windows.net/isdweatherdatacontainer/ISDWeather/year=*/month=*/*.parquet',\n        FORMAT='PARQUET'\n    ) AS [weather]\nWHERE countryorregion = 'US' AND CAST([datetime] AS DATE) = '2016-01-23' AND stationname = 'JOHN F KENNEDY INTERNATIONAL AIRPORT'",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"poolName": "Built-in",
+						"databaseName": "Sample"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/PANDEMIC OPENROWSET queries')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "SELECT \n\t*\nFROM OPENROWSET(\n    BULK 'https://pandemicdatalake.blob.core.windows.net/public/curated/covid-19/ecdc_cases/latest/ecdc_cases.csv',\n    FORMAT = 'CSV',\n    PARSER_VERSION = '2.0',\n\tHEADER_ROW = TRUE) as [r]",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"poolName": "Built-in",
+						"databaseName": "master"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
 		}
 	]
 }
