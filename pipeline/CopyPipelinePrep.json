@@ -79,13 +79,13 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "SourceBlobDSPrep",
+						"referenceName": "SourceBlobDSPractice",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "SqlDSPrep",
+						"referenceName": "AzureSqlDSPractice",
 						"type": "DatasetReference"
 					}
 				]
