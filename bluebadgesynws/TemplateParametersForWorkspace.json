@@ -20,10 +20,16 @@
 		"AzureSqlDatabaseLinkedService_connectionString": {
 			"value": ""
 		},
+		"AzureSqlLSPractice_connectionString": {
+			"value": ""
+		},
 		"AzureStorageLinkedService_connectionString": {
 			"value": ""
 		},
 		"AzureStorageLinkedService2_connectionString": {
+			"value": ""
+		},
+		"BlobLSPractice_connectionString": {
 			"value": ""
 		},
 		"HDIService_password": {
