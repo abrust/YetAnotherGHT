@@ -79,7 +79,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "SourceBlobDSPrep",
+						"referenceName": "SourceBlobDSPractice",
 						"type": "DatasetReference"
 					}
 				],
