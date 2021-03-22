@@ -31,6 +31,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureSqlLSPractice'"
 		},
+		"AzureSqlLSPrep_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSqlLSPrep'"
+		},
 		"AzureStorageLinkedService_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureStorageLinkedService'"
@@ -42,6 +46,10 @@
 		"BlobLSPractice_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'BlobLSPractice'"
+		},
+		"BlobLSPrep_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'BlobLSPrep'"
 		},
 		"HDIService_password": {
 			"type": "secureString",
@@ -73,13 +81,13 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('workspaceName'), '/CopyPipeline')]",
+			"name": "[concat(parameters('workspaceName'), '/CopyPipelinePrep')]",
 			"type": "Microsoft.Synapse/workspaces/pipelines",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"activities": [
 					{
-						"name": "BlobToSqlCopyPractice",
+						"name": "BlobToSqlCopyPrep",
 						"type": "Copy",
 						"dependsOn": [],
 						"policy": {
@@ -155,14 +163,14 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "SourceBlobDSPractice",
+								"referenceName": "SourceBlobDSPrep",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
 						],
 						"outputs": [
 							{
-								"referenceName": "SqlDSPractice",
+								"referenceName": "SqlDSPrep",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -172,8 +180,8 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('workspaceId'), '/datasets/SourceBlobDSPractice')]",
-				"[concat(variables('workspaceId'), '/datasets/SqlDSPractice')]"
+				"[concat(variables('workspaceId'), '/datasets/SourceBlobDSPrep')]",
+				"[concat(variables('workspaceId'), '/datasets/SqlDSPrep')]"
 			]
 		},
 		{
@@ -452,12 +460,12 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/SourceBlobDSPractice')]",
+			"name": "[concat(parameters('workspaceName'), '/SourceBlobDSPrep')]",
 			"type": "Microsoft.Synapse/workspaces/datasets",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "BlobLSPractice",
+					"referenceName": "BlobLSPrep",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
@@ -475,17 +483,21 @@
 				},
 				"schema": [
 					{
-						"name": "John",
+						"name": "ID",
 						"type": "String"
 					},
 					{
-						"name": " Doe",
+						"name": " FirstName",
+						"type": "String"
+					},
+					{
+						"name": " LastName",
 						"type": "String"
 					}
 				]
 			},
 			"dependsOn": [
-				"[concat(variables('workspaceId'), '/linkedServices/BlobLSPractice')]"
+				"[concat(variables('workspaceId'), '/linkedServices/BlobLSPrep')]"
 			]
 		},
 		{
@@ -525,12 +537,12 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/SqlDSPractice')]",
+			"name": "[concat(parameters('workspaceName'), '/SqlDSPrep')]",
 			"type": "Microsoft.Synapse/workspaces/datasets",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "AzureSqlLSPractice",
+					"referenceName": "AzureSqlLSPrep",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
@@ -556,7 +568,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('workspaceId'), '/linkedServices/AzureSqlLSPractice')]"
+				"[concat(variables('workspaceId'), '/linkedServices/AzureSqlLSPrep')]"
 			]
 		},
 		{
@@ -713,6 +725,25 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/AzureSqlLSPrep')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureSqlLSPrep_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/AzureStorageLinkedService')]",
 			"type": "Microsoft.Synapse/workspaces/linkedServices",
 			"apiVersion": "2019-06-01-preview",
@@ -759,6 +790,25 @@
 				"type": "AzureBlobStorage",
 				"typeProperties": {
 					"connectionString": "[parameters('BlobLSPractice_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/BlobLSPrep')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('BlobLSPrep_connectionString')]"
 				},
 				"connectVia": {
 					"referenceName": "AutoResolveIntegrationRuntime",
@@ -885,7 +935,7 @@
 				"pipelines": [
 					{
 						"pipelineReference": {
-							"referenceName": "CopyPipeline",
+							"referenceName": "CopyPipelinePrep",
 							"type": "PipelineReference"
 						},
 						"parameters": {}
@@ -903,7 +953,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('workspaceId'), '/pipelines/CopyPipeline')]"
+				"[concat(variables('workspaceId'), '/pipelines/CopyPipelinePrep')]"
 			]
 		},
 		{
