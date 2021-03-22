@@ -1,5 +1,5 @@
 {
-	"name": "SourceBlobDSPrep",
+	"name": "SourceBlobDSPractice",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "BlobLSPrep",
