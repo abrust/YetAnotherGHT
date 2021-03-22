@@ -1056,7 +1056,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/Creating a managed Spark Table_f6n')]",
+			"name": "[concat(parameters('workspaceName'), '/Creating a managed Spark Table')]",
 			"type": "Microsoft.Synapse/workspaces/notebooks",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
@@ -1082,59 +1082,11 @@
 					"saveOutput": true,
 					"synapse_widget": {
 						"version": "0.1",
-						"state": {
-							"12e8d6d1-9a93-4c7b-a117-46584046324c": {
-								"type": "Synapse.DataFrame",
-								"sync_state": {
-									"table": {
-										"rows": [
-											{
-												"population": "10540000",
-												"name": "Bangalore"
-											},
-											{
-												"population": "21540000",
-												"name": "Beijing"
-											},
-											{
-												"population": "881549",
-												"name": "San Francisco"
-											},
-											{
-												"population": "730400",
-												"name": "Seattle"
-											}
-										],
-										"schema": {
-											"name": "string",
-											"population": "int"
-										}
-									},
-									"isSummary": false,
-									"language": "scala"
-								},
-								"persist_state": {
-									"view": {
-										"type": "details",
-										"chartOptions": {
-											"chartType": "area",
-											"aggregationType": "sum",
-											"categoryFieldKeys": [
-												"name"
-											],
-											"seriesFieldKeys": [
-												"population"
-											],
-											"isStacked": false
-										}
-									}
-								}
-							}
-						}
+						"state": {}
 					},
 					"kernelspec": {
 						"name": "synapse_sparkdotnet",
-						"display_name": "Synapse SparkDotNet"
+						"display_name": "csharp"
 					},
 					"language_info": {
 						"name": "csharp"
@@ -1151,12 +1103,15 @@
 						"sparkVersion": "2.4",
 						"nodeCount": 3,
 						"cores": 8,
-						"memory": 56
-					}
+						"memory": 56,
+						"automaticScaleJobs": false
+					},
+					"sessionKeepAliveTimeout": 30
 				},
 				"cells": [
 					{
 						"cell_type": "markdown",
+						"metadata": {},
 						"source": [
 							"# Creating a managed Spark table\n",
 							"This notebook describes how to create a managed table from Spark. \n",
@@ -1166,6 +1121,7 @@
 					},
 					{
 						"cell_type": "code",
+						"metadata": {},
 						"source": [
 							"spark.Sql(\"CREATE TABLE cities (name STRING, population INT) USING PARQUET\")"
 						],
@@ -1174,6 +1130,7 @@
 					},
 					{
 						"cell_type": "markdown",
+						"metadata": {},
 						"source": [
 							"Insert a few rows into the table using a list of values.\n",
 							""
@@ -1181,6 +1138,7 @@
 					},
 					{
 						"cell_type": "code",
+						"metadata": {},
 						"source": [
 							"spark.Sql(\"INSERT INTO cities VALUES ('Seattle', 730400), ('San Francisco', 881549), ('Beijing', 21540000), ('Bangalore', 10540000)\")"
 						],
@@ -1189,6 +1147,7 @@
 					},
 					{
 						"cell_type": "markdown",
+						"metadata": {},
 						"source": [
 							"* Retrieve values back. Click on 'Chart' below to review the visualization.\n",
 							""
@@ -1215,11 +1174,7 @@
 								"aggData": "{\"population\":{\"Bangalore\":10540000,\"Beijing\":21540000,\"San Francisco\":881549,\"Seattle\":730400}}",
 								"isSummary": false,
 								"previewData": {
-									"filter": null,
-									"table": {
-										"rows": [],
-										"schema": {}
-									}
+									"filter": null
 								},
 								"isSql": false
 							},
@@ -1233,6 +1188,7 @@
 					},
 					{
 						"cell_type": "markdown",
+						"metadata": {},
 						"source": [
 							"Drop the table. Please note the data will get deleted from the primary storage account associated with this workspace.\n",
 							""
@@ -1240,6 +1196,7 @@
 					},
 					{
 						"cell_type": "code",
+						"metadata": {},
 						"source": [
 							"spark.Sql(\"DROP TABLE cities\")"
 						],
