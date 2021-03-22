@@ -20,11 +20,15 @@
 		},
 		"schema": [
 			{
-				"name": "John",
+				"name": "ID",
 				"type": "String"
 			},
 			{
-				"name": " Doe",
+				"name": " FirstName",
+				"type": "String"
+			},
+			{
+				"name": " LastName",
 				"type": "String"
 			}
 		]
