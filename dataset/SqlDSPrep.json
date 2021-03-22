@@ -1,8 +1,8 @@
 {
-	"name": "SqlDSPractice",
+	"name": "SqlDSPrep",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "AzureSqlLSPractice",
+			"referenceName": "AzureSqlLSPrep",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],

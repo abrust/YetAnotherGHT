@@ -85,7 +85,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "SqlDSPractice",
+						"referenceName": "SqlDSPrep",
 						"type": "DatasetReference"
 					}
 				]
