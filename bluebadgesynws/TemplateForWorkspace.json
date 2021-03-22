@@ -95,7 +95,7 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "Copy data1",
+						"name": "CSVToSQLCopyPractice",
 						"type": "Copy",
 						"dependsOn": [],
 						"policy": {
@@ -282,7 +282,7 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "AzureSqlDSPractice",
+								"referenceName": "OutputSqlDataset",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -293,7 +293,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/datasets/SourceBlobDSPractice')]",
-				"[concat(variables('workspaceId'), '/datasets/AzureSqlDSPractice')]"
+				"[concat(variables('workspaceId'), '/datasets/OutputSqlDataset')]"
 			]
 		},
 		{
