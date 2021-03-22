@@ -79,7 +79,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "empCSVDSprep",
+						"referenceName": "SourceBlobDSPractice2",
 						"type": "DatasetReference"
 					}
 				],

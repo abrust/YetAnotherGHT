@@ -1,0 +1,32 @@
+{
+	"name": "SourceBlobDSPractice2",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "BlobLS2Practice",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "emp.txt",
+				"container": "bluebadgehdisc"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			}
+		]
+	}
+}
