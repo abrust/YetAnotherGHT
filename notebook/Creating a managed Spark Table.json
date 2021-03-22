@@ -1,5 +1,5 @@
 {
-	"name": "Creating a managed Spark Table_f6n",
+	"name": "Creating a managed Spark Table",
 	"properties": {
 		"nbformat": 4,
 		"nbformat_minor": 2,
@@ -22,60 +22,11 @@
 		"metadata": {
 			"saveOutput": true,
 			"synapse_widget": {
-				"version": "0.1",
-				"state": {
-					"12e8d6d1-9a93-4c7b-a117-46584046324c": {
-						"type": "Synapse.DataFrame",
-						"sync_state": {
-							"table": {
-								"rows": [
-									{
-										"population": "10540000",
-										"name": "Bangalore"
-									},
-									{
-										"population": "21540000",
-										"name": "Beijing"
-									},
-									{
-										"population": "881549",
-										"name": "San Francisco"
-									},
-									{
-										"population": "730400",
-										"name": "Seattle"
-									}
-								],
-								"schema": {
-									"name": "string",
-									"population": "int"
-								}
-							},
-							"isSummary": false,
-							"language": "scala"
-						},
-						"persist_state": {
-							"view": {
-								"type": "details",
-								"chartOptions": {
-									"chartType": "area",
-									"aggregationType": "sum",
-									"categoryFieldKeys": [
-										"name"
-									],
-									"seriesFieldKeys": [
-										"population"
-									],
-									"isStacked": false
-								}
-							}
-						}
-					}
-				}
+				"version": "0.1"
 			},
 			"kernelspec": {
 				"name": "synapse_sparkdotnet",
-				"display_name": "Synapse SparkDotNet"
+				"display_name": "csharp"
 			},
 			"language_info": {
 				"name": "csharp"
