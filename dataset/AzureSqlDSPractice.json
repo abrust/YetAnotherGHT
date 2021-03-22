@@ -1,0 +1,16 @@
+{
+	"name": "AzureSqlDSPractice",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlLS2Practice",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "emp"
+		}
+	}
+}

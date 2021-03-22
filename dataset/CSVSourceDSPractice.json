@@ -1,0 +1,23 @@
+{
+	"name": "CSVSourceDSPractice",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "BlobLS2Practice",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "emp.txt",
+				"container": "bluebadgehdisc"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
