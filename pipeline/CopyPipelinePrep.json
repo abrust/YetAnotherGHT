@@ -1,9 +1,9 @@
 {
-	"name": "CopyPipeline",
+	"name": "CopyPipelinePrep",
 	"properties": {
 		"activities": [
 			{
-				"name": "BlobToSqlCopyPractice",
+				"name": "BlobToSqlCopyPrep",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -79,7 +79,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "SourceBlobDSPractice",
+						"referenceName": "SourceBlobDSPrep",
 						"type": "DatasetReference"
 					}
 				],
