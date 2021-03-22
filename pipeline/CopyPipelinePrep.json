@@ -85,7 +85,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "AzureSqlDSPractice",
+						"referenceName": "OutputSqlDataset",
 						"type": "DatasetReference"
 					}
 				]
