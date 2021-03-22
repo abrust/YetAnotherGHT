@@ -7,6 +7,10 @@
 			"metadata": "Workspace name",
 			"defaultValue": "bluebadgesynws"
 		},
+		"ADLSFlowDSPractice_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ADLSFlowDSPractice'"
+		},
 		"ADLSService_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ADLSService'"
@@ -70,6 +74,10 @@
 		"bluebadgesynws-WorkspaceDefaultSqlServer_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'bluebadgesynws-WorkspaceDefaultSqlServer'"
+		},
+		"ADLSFlowDSPractice_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://bluebadgegen22sa.dfs.core.windows.net"
 		},
 		"ADLSService_properties_typeProperties_url": {
 			"type": "string",
@@ -340,6 +348,49 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/DeltaLakeCreatePractice')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "DeltaLakeCreateFlowPractice",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"CDLFlowSourcePractice": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/dataflows/DeltaLakeCreateFlowPractice')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/DeltaLakeUpdate')]",
 			"type": "Microsoft.Synapse/workspaces/pipelines",
 			"apiVersion": "2019-06-01-preview",
@@ -380,6 +431,49 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/dataflows/Dataflow2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/ADLSSourceDSPractice')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ADLSFlowDSPractice",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "MoviesDB.csv",
+						"fileSystem": "adftutorial"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/ADLSFlowDSPractice')]"
 			]
 		},
 		{
@@ -506,6 +600,50 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/CDLFlowSourceDSPractice')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ADLSFlowDSPractice",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "MoviesDB.csv",
+						"fileSystem": "adftutorial"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/ADLSFlowDSPractice')]"
 			]
 		},
 		{
@@ -765,6 +903,29 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/linkedServices/SqlServerLinkedService')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/ADLSFlowDSPractice')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ADLSFlowDSPractice_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('ADLSFlowDSPractice_accountKey')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
 			]
 		},
 		{
@@ -1270,6 +1431,40 @@
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/datasets/MoviesCSV')]",
 				"[concat(variables('workspaceId'), '/linkedServices/ADLSService')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/DeltaLakeCreateFlowPractice')]",
+			"type": "Microsoft.Synapse/workspaces/dataflows",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "CDLFlowSourceDSPractice",
+								"type": "DatasetReference"
+							},
+							"name": "CDLFlowSourcePractice"
+						}
+					],
+					"sinks": [
+						{
+							"linkedService": {
+								"referenceName": "ADLSFlowDSPractice",
+								"type": "LinkedServiceReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [],
+					"script": "source(output(\n\t\tmovies as integer,\n\t\tTitle as string,\n\t\tgenresgenregenre as string,\n\t\tYEAR as short,\n\t\tRating as short\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> CDLFlowSourcePractice\nCDLFlowSourcePractice sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tmovies as integer,\n\t\tTitle as string,\n\t\tgenresgenregenre as string,\n\t\tYEAR as short,\n\t\tRating as short\n\t),\n\tformat: 'delta',\n\tfileSystem: 'adftutorial',\n\tmergeSchema: false,\n\tautoCompact: false,\n\toptimizedWrite: false,\n\tvacuum: 0,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/datasets/CDLFlowSourceDSPractice')]",
+				"[concat(variables('workspaceId'), '/linkedServices/ADLSFlowDSPractice')]"
 			]
 		},
 		{

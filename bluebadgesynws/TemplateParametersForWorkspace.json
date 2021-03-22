@@ -5,6 +5,9 @@
 		"workspaceName": {
 			"value": "bluebadgesynws"
 		},
+		"ADLSFlowDSPractice_accountKey": {
+			"value": ""
+		},
 		"ADLSService_accountKey": {
 			"value": ""
 		},
@@ -52,6 +55,9 @@
 		},
 		"bluebadgesynws-WorkspaceDefaultSqlServer_connectionString": {
 			"value": ""
+		},
+		"ADLSFlowDSPractice_properties_typeProperties_url": {
+			"value": "https://bluebadgegen22sa.dfs.core.windows.net"
 		},
 		"ADLSService_properties_typeProperties_url": {
 			"value": "https://bluebadgegen22sa.dfs.core.windows.net"
