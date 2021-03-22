@@ -163,7 +163,7 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "SourceBlobDSPrep",
+								"referenceName": "SourceBlobDSPractice",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -180,7 +180,7 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('workspaceId'), '/datasets/SourceBlobDSPrep')]",
+				"[concat(variables('workspaceId'), '/datasets/SourceBlobDSPractice')]",
 				"[concat(variables('workspaceId'), '/datasets/SqlDSPrep')]"
 			]
 		},
@@ -460,7 +460,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/SourceBlobDSPrep')]",
+			"name": "[concat(parameters('workspaceName'), '/SourceBlobDSPractice')]",
 			"type": "Microsoft.Synapse/workspaces/datasets",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
