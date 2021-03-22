@@ -896,6 +896,26 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/Create external table populationExternalTable with SQL Serverless')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "CREATE DATABASE SCOPED CREDENTIAL [sqlondemand]\nWITH IDENTITY='SHARED ACCESS SIGNATURE',  \nSECRET = 'sv=2018-03-28&ss=bf&srt=sco&sp=rl&st=2019-10-14T12%3A10%3A25Z&se=2061-12-31T12%3A10%3A00Z&sig=KlSU2ullCscyTS0An0nozEpo4tO5JAgGBvw%2FJX2lguw%3D'\n\nCREATE EXTERNAL DATA SOURCE SqlOnDemandDemo WITH (\n    LOCATION = 'https://sqlondemandstorage.blob.core.windows.net',\n    CREDENTIAL = sqlondemand\n);\nGO\n\nCREATE EXTERNAL FILE FORMAT QuotedCsvWithHeaderFormat\nWITH (  \n    FORMAT_TYPE = DELIMITEDTEXT,\n    FORMAT_OPTIONS ( FIELD_TERMINATOR = ',', STRING_DELIMITER = '\"', FIRST_ROW = 2   )\n);\nGO\n\nCREATE EXTERNAL TABLE populationExternalTable\n(\n    [country_code] VARCHAR (5) COLLATE Latin1_General_BIN2,\n    [country_name] VARCHAR (100) COLLATE Latin1_General_BIN2,\n    [year] smallint,\n    [population] bigint\n)\nWITH (\n    LOCATION = 'csv/population/population.csv',\n    DATA_SOURCE = sqlondemanddemo,\n    FILE_FORMAT = QuotedCSVWithHeaderFormat\n);\n\nSELECT\n    country_name, population\nFROM populationExternalTable\nWHERE\n    [year] = 2019\nORDER BY\n    [population] DESC;\n\n\nDROP EXTERNAL TABLE populationExternalTable\nDROP EXTERNAL FILE FORMAT QuotedCSVWithHeaderFormat\nDROP EXTERNAL DATA SOURCE SqlOnDemandDemo\nDROP DATABASE SCOPED CREDENTIAL [sqlondemand]",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"poolName": "Built-in",
+						"databaseName": "Sample"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/Create external table with SQL Dedicated')]",
 			"type": "Microsoft.Synapse/workspaces/sqlscripts",
 			"apiVersion": "2019-06-01-preview",
@@ -921,7 +941,7 @@
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"content": {
-					"query": "/* Note: this script is filtered on a specific month. You can modify the location to read the entire dataset. */\nIF NOT EXISTS (SELECT * FROM sys.external_file_formats WHERE name = 'SynapseParquetFormat')\n\tCREATE EXTERNAL FILE FORMAT [SynapseParquetFormat]\n\tWITH ( FORMAT_TYPE = PARQUET)\nGO\n\nIF NOT EXISTS (SELECT * FROM sys.external_data_sources WHERE name = 'nyctlc_azureopendatastorage_blob_core_windows_net')\n\tCREATE EXTERNAL DATA SOURCE [nyctlc_azureopendatastorage_blob_core_windows_net]\n\tWITH (\n\t\tLOCATION   = 'https://azureopendatastorage.blob.core.windows.net/nyctlc',\n\t)\nGo\n\nCREATE EXTERNAL TABLE nyc_tlc_yellow_trip_ext (\n\t[vendorID] varchar(8000),\n\t[tpepPickupDateTime] datetime2(7),\n\t[tpepDropoffDateTime] datetime2(7),\n\t[passengerCount] int,\n\t[tripDistance] float,\n\t[puLocationId] varchar(8000),\n\t[doLocationId] varchar(8000),\n\t[startLon] float,\n\t[startLat] float,\n\t[endLon] float,\n\t[endLat] float,\n\t[rateCodeId] int,\n\t[storeAndFwdFlag] varchar(8000),\n\t[paymentType] varchar(8000),\n\t[fareAmount] float,\n\t[extra] float,\n\t[mtaTax] float,\n\t[improvementSurcharge] varchar(8000),\n\t[tipAmount] float,\n\t[tollsAmount] float,\n\t[totalAmount] float\n\t)\n\tWITH (\n    LOCATION = 'yellow/puYear=2014/puMonth=3/*.parquet',\n\t-- LOCATION = 'yellow/puYear=*/puMonth=*/*.parquet'\n\tDATA_SOURCE = [nyctlc_azureopendatastorage_blob_core_windows_net],\n\tFILE_FORMAT = [SynapseParquetFormat]\n\t)\nGO\n\nSELECT TOP 100 * FROM nyc_tlc_yellow_trip_ext\nGO\n",
+					"query": "\tCREATE EXTERNAL FILE FORMAT [SynapseParquetFormat]\n\tWITH ( FORMAT_TYPE = PARQUET)\n\n\tCREATE EXTERNAL DATA SOURCE [nyctlc_azureopendatastorage_blob_core_windows_net]\n\tWITH (\n\t\tLOCATION   = 'https://azureopendatastorage.blob.core.windows.net/nyctlc'\n\t)\n\nCREATE EXTERNAL TABLE nyc_tlc_yellow_trip_ext (\n\t[vendorID] varchar(8000),\n\t[tpepPickupDateTime] datetime2(7),\n\t[tpepDropoffDateTime] datetime2(7),\n\t[passengerCount] int,\n\t[tripDistance] float,\n\t[puLocationId] varchar(8000),\n\t[doLocationId] varchar(8000),\n\t[startLon] float,\n\t[startLat] float,\n\t[endLon] float,\n\t[endLat] float,\n\t[rateCodeId] int,\n\t[storeAndFwdFlag] varchar(8000),\n\t[paymentType] varchar(8000),\n\t[fareAmount] float,\n\t[extra] float,\n\t[mtaTax] float,\n\t[improvementSurcharge] varchar(8000),\n\t[tipAmount] float,\n\t[tollsAmount] float,\n\t[totalAmount] float\n\t)\n\tWITH (\n    LOCATION = 'yellow/puYear=2014/puMonth=3/*.parquet',\n\t-- LOCATION = 'yellow/puYear=*/puMonth=*/*.parquet'\n\tDATA_SOURCE = [nyctlc_azureopendatastorage_blob_core_windows_net],\n\tFILE_FORMAT = [SynapseParquetFormat]\n\t)\nGO\n\nSELECT TOP 100 * FROM nyc_tlc_yellow_trip_ext\nGO\n",
 					"metadata": {
 						"language": "sql"
 					},
@@ -961,7 +981,7 @@
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"content": {
-					"query": "CREATE DATABASE SCOPED CREDENTIAL SynapseSqlCredential\n\tWITH IDENTITY = 'SHARED ACCESS SIGNATURE',\n\tSECRET = 'ePmku2EGnbB0HTYPQFesiqyTKRa6lBWpzw3B89/DGvWk10WVR0kSKZsohvfgFrDtuLlpFoZi44WU+UMqp4fBLQ==';  \nGO\n\nCREATE EXTERNAL DATA SOURCE SynapseSqlDataSource\nWITH  (\n        LOCATION ='https://bluebadgehdisa.blob.core.windows.net/bluebadgehdisc/example/data/',\n    \tCREDENTIAL = SynapseSqlCredential\n);\nGO\n\nCREATE EXTERNAL FILE FORMAT QuotedCsvWithHeaderFormat\nWITH (  \n     FORMAT_TYPE = DELIMITEDTEXT,\n     FORMAT_OPTIONS ( FIELD_TERMINATOR = ',', STRING_DELIMITER = '\"', FIRST_ROW = 2   )\n);\nGO\n\nCREATE EXTERNAL TABLE MoviesDB(\n    id int,\n    title VARCHAR(100),\n    genre VARCHAR(100),\n    year SMALLINT,\n    rating SMALLINT,\n    rottentomato SMALLINT\n)\nWITH ( LOCATION= 'MoviesDBFresh.csv', DATA_SOURCE = SynapseSqlDataSource, FILE_FORMAT = QuotedCsvWithHeaderFormat);\n\nSELECT TOP 100 * FROM MoviesDB\n\nDROP EXTERNAL TABLE MoviesDB\nDROP EXTERNAL DATA SOURCE SynapseSqlDataSource\nDROP DATABASE SCOPED CREDENTIAL SynapseSqlCredential\nDROP EXTERNAL FILE FORMAT QuotedCsvWithHeaderFormat",
+					"query": "CREATE DATABASE SCOPED CREDENTIAL SynapseSqlCredential\n\tWITH IDENTITY = 'SHARED ACCESS SIGNATURE',\n\tSECRET = 'ePmku2EGnbB0HTYPQFesiqyTKRa6lBWpzw3B89/DGvWk10WVR0kSKZsohvfgFrDtuLlpFoZi44WU+UMqp4fBLQ==';  \nGO\n\n\nCREATE EXTERNAL DATA SOURCE SynapseSqlDataSource\nWITH  (\n        LOCATION ='https://bluebadgehdisa.blob.core.windows.net/bluebadgehdisc/example/data',\n    \tCREDENTIAL = SynapseSqlCredential\n);\nGO\n\nCREATE EXTERNAL FILE FORMAT QuotedCsvWithHeaderFormat\nWITH (  \n     FORMAT_TYPE = DELIMITEDTEXT,\n     FORMAT_OPTIONS ( FIELD_TERMINATOR = ',', STRING_DELIMITER = '\"', FIRST_ROW = 2   )\n);\nGO\n\nCREATE EXTERNAL TABLE MoviesDB(\n    id int,\n    title VARCHAR(100),\n    genre VARCHAR(100),\n    year SMALLINT,\n    rating SMALLINT,\n    rottentomato SMALLINT\n)\nWITH (\n    LOCATION= 'MoviesDBFresh.csv',\n    DATA_SOURCE = SynapseSqlDataSource,\n    FILE_FORMAT = QuotedCsvWithHeaderFormat\n    );\n\nSELECT TOP 100 * FROM MoviesDB\n\nDROP EXTERNAL TABLE MoviesDB\nDROP EXTERNAL DATA SOURCE SynapseSqlDataSource\nDROP DATABASE SCOPED CREDENTIAL SynapseSqlCredential\nDROP EXTERNAL FILE FORMAT QuotedCsvWithHeaderFormat",
 					"metadata": {
 						"language": "sql"
 					},
@@ -988,6 +1008,26 @@
 					"currentConnection": {
 						"poolName": "Built-in",
 						"databaseName": "master"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SQL script 2')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "CREATE DATABASE SCOPED CREDENTIAL [sqlondemand]\n--WITH IDENTITY='SHARED ACCESS SIGNATURE',  \n--SECRET = 'ejm+47WgjfejH82fWDCDNE9r19U5NqfuCR3pvyG322AgaM/+qUk46chAQBgi3XxnJd7aJC/vqW/1f9+3K2Ps5Q=='\nWITH IDENTITY='Managed Identity'\nGO\n\nCREATE EXTERNAL DATA SOURCE SqlOnDemandDemo WITH (\n    LOCATION = 'https://bluebadgehdiadls.blob.core.windows.net/bluebadgehdiadls'\n    ,CREDENTIAL = sqlondemand\n);\nGO\n\nCREATE EXTERNAL FILE FORMAT QuotedCsvWithHeaderFormat\nWITH (  \n    FORMAT_TYPE = DELIMITEDTEXT,\n    FORMAT_OPTIONS ( FIELD_TERMINATOR = ',', STRING_DELIMITER = '\"', FIRST_ROW = 2   )\n);\nGO\n\nCREATE EXTERNAL TABLE MovieDB\n(\n    id int,\n    title VARCHAR(100),\n    genre VARCHAR(100),\n    year SMALLINT,\n    rating SMALLINT,\n    rottentomato SMALLINT\n)\nWITH (\n    LOCATION = 'example/data/MoviesDBFresh.csv',\n    DATA_SOURCE = sqlondemanddemo,\n    FILE_FORMAT = QuotedCSVWithHeaderFormat\n);\n\nSELECT TOP 100 * FROM MovieDB\n\nDROP EXTERNAL TABLE MovieDB\nDROP EXTERNAL FILE FORMAT QuotedCSVWithHeaderFormat\nDROP EXTERNAL DATA SOURCE SqlOnDemandDemo\nDROP DATABASE SCOPED CREDENTIAL [sqlondemand]",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"poolName": "Built-in",
+						"databaseName": "Sample"
 					},
 					"resultLimit": 5000
 				},
