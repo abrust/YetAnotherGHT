@@ -20,6 +20,9 @@
 		"AzureSqlDatabaseLinkedService_connectionString": {
 			"value": ""
 		},
+		"AzureSqlLS2Practice_connectionString": {
+			"value": ""
+		},
 		"AzureSqlLSPractice_connectionString": {
 			"value": ""
 		},
@@ -30,6 +33,9 @@
 			"value": ""
 		},
 		"AzureStorageLinkedService2_connectionString": {
+			"value": ""
+		},
+		"BlobLS2Practice_connectionString": {
 			"value": ""
 		},
 		"BlobLSPractice_connectionString": {
