@@ -1,0 +1,36 @@
+{
+	"name": "empCSVDSprep",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "BlobLSPrep",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "emp.txt",
+				"container": "bluebadgehdisc"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "ID",
+				"type": "String"
+			},
+			{
+				"name": " FirstName",
+				"type": "String"
+			},
+			{
+				"name": " LastName",
+				"type": "String"
+			}
+		]
+	}
+}
