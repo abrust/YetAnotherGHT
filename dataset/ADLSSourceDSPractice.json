@@ -1,5 +1,5 @@
 {
-	"name": "SourceBlobDSPractice2",
+	"name": "ADLSSourceDSPractice",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "BlobLS2Practice",
