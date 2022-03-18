@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "59e28030-57c9-4245-8d31-87da5ae3b549"
+				"spark.autotune.trackingId": "327ca054-7d86-424b-8ca0-a6974a9ed50b"
 			}
 		},
 		"metadata": {
@@ -51,6 +51,9 @@
 			{
 				"cell_type": "code",
 				"metadata": {
+					"jupyter": {
+						"outputs_hidden": true
+					},
 					"collapsed": false
 				},
 				"source": [
@@ -98,7 +101,7 @@
 				"source": [
 					"SELECT * FROM `Retail_mil`.`Customer`"
 				],
-				"execution_count": 12
+				"execution_count": 1
 			}
 		]
 	}

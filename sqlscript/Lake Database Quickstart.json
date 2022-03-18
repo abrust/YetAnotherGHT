@@ -1,0 +1,17 @@
+{
+	"name": "Lake Database Quickstart",
+	"properties": {
+		"content": {
+			"query": "SELECT [CustomerId]\n,[CustomerEstablishedDate]\n,[CustomerTypeId]\n,[ResponsibilityCenterId]\n,[LedgerId]\n,[CustomerNote]\n,[PartyId]\n,[GlobalLocationNumber]\n FROM [Retail_mil].[dbo].[Customer]\n\n /* ,[LedgerAccountNumber] */",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "Retail_mil",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
