@@ -1,0 +1,23 @@
+{
+	"name": "Tutorial Sample",
+	"properties": {
+		"Name": "Tutorial Sample",
+		"EntityType": "DATABASE",
+		"Origin": {
+			"Type": "SPARK"
+		},
+		"Properties": {
+			"IsSyMSCDMDatabase": true,
+			"DerivedModelDBInfo": "{\"ModelDirectives\":{\"BaseModel\":{\"Name\":\"Retail\",\"Version\":\"0.1.0\"}}}"
+		},
+		"Source": {
+			"Provider": "ADLS",
+			"Location": "abfss://bluebadgesynadlsfs@bluebadgesynadlsa.dfs.core.windows.net/Tutorial Sample",
+			"Properties": {
+				"FormatType": "csv",
+				"LinkedServiceName": "bluebadgesynws-WorkspaceDefaultStorage"
+			}
+		}
+	},
+	"type": "DATABASE"
+}
