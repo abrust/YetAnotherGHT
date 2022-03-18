@@ -1638,6 +1638,117 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/Lake Database Quickstart')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"bigDataPool": {
+					"referenceName": "SampleSpark",
+					"type": "BigDataPoolReference"
+				},
+				"sessionProperties": {
+					"driverMemory": "28g",
+					"driverCores": 4,
+					"executorMemory": "28g",
+					"executorCores": 4,
+					"numExecutors": 2,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2",
+						"spark.autotune.trackingId": "d78bf427-bd30-4c18-9dd4-70f0ab74bf30"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"enableDebugMode": false,
+					"kernelspec": {
+						"name": "synapse_sparksql",
+						"display_name": "sql"
+					},
+					"language_info": {
+						"name": "sql"
+					},
+					"a365ComputeOptions": {
+						"id": "/subscriptions/be13f18e-e3c7-4e40-a812-bca489b7b4e1/resourceGroups/bluebadgesynrg/providers/Microsoft.Synapse/workspaces/bluebadgesynws/bigDataPools/SampleSpark",
+						"name": "SampleSpark",
+						"type": "Spark",
+						"endpoint": "https://bluebadgesynws.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/SampleSpark",
+						"auth": {
+							"type": "AAD",
+							"authResource": "https://dev.azuresynapse.net"
+						},
+						"sparkVersion": "2.4",
+						"nodeCount": 3,
+						"cores": 8,
+						"memory": 56,
+						"automaticScaleJobs": false
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "code",
+						"metadata": {
+							"collapsed": false
+						},
+						"source": [
+							"INSERT INTO `retail_mil`.`customer` VALUES (1,'2021-02-18',1022,557,101,'Tailspin Toys (Head Office)','Waldemar Fisar',90410,466);"
+						],
+						"outputs": [],
+						"execution_count": 4
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"microsoft": {
+								"language": "python"
+							}
+						},
+						"source": [
+							"%%pyspark\r\n",
+							"df = spark.sql(\"SELECT * FROM `Retail_mil`.`Customer`\")\r\n",
+							"df.show(10)"
+						],
+						"outputs": [],
+						"execution_count": 13
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": false
+						},
+						"source": [
+							"SELECT * FROM `Retail_mil`.`Customer`"
+						],
+						"outputs": [],
+						"execution_count": 12
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/Retail_mil')]",
 			"type": "Microsoft.Synapse/workspaces/databases",
 			"apiVersion": "2019-06-01-preview",
@@ -2190,8 +2301,8 @@
 									"Properties": {
 										"path": "abfss://bluebadgesynadlsfs@bluebadgesynadlsa.dfs.core.windows.net/Retail_mil/Channel",
 										"delimiter": ",",
-										"multiLine": "false",
 										"firstRowAsHeader": "false",
+										"multiLine": "false",
 										"serialization.format": "1",
 										"escape": "\\",
 										"quote": "\"",
@@ -2404,8 +2515,8 @@
 									"Properties": {
 										"path": "abfss://bluebadgesynadlsfs@bluebadgesynadlsa.dfs.core.windows.net/Retail_mil/Customer",
 										"delimiter": ",",
-										"multiLine": "false",
 										"firstRowAsHeader": "false",
+										"multiLine": "false",
 										"serialization.format": "1",
 										"escape": "\\",
 										"quote": "\"",
@@ -2536,8 +2647,8 @@
 									"Properties": {
 										"path": "abfss://bluebadgesynadlsfs@bluebadgesynadlsa.dfs.core.windows.net/Retail_mil/Party",
 										"delimiter": ",",
-										"multiLine": "false",
 										"firstRowAsHeader": "false",
+										"multiLine": "false",
 										"serialization.format": "1",
 										"escape": "\\",
 										"quote": "\"",
@@ -4216,8 +4327,8 @@
 									"Properties": {
 										"path": "abfss://bluebadgesynadlsfs@bluebadgesynadlsa.dfs.core.windows.net/Retail_mil/RetailProduct",
 										"delimiter": ",",
-										"multiLine": "false",
 										"firstRowAsHeader": "false",
+										"multiLine": "false",
 										"serialization.format": "1",
 										"escape": "\\",
 										"quote": "\"",
@@ -5527,8 +5638,8 @@
 									"Properties": {
 										"path": "abfss://bluebadgesynadlsfs@bluebadgesynadlsa.dfs.core.windows.net/Retail_mil/Transaction",
 										"delimiter": ",",
-										"multiLine": "false",
 										"firstRowAsHeader": "false",
+										"multiLine": "false",
 										"serialization.format": "1",
 										"escape": "\\",
 										"quote": "\"",
@@ -6883,8 +6994,8 @@
 									"Properties": {
 										"path": "abfss://bluebadgesynadlsfs@bluebadgesynadlsa.dfs.core.windows.net/Retail_mil/TransactionLineItem",
 										"delimiter": ",",
-										"multiLine": "false",
 										"firstRowAsHeader": "false",
+										"multiLine": "false",
 										"serialization.format": "1",
 										"escape": "\\",
 										"quote": "\"",
@@ -6943,7 +7054,6 @@
 									"ToColumnName": "ProductId"
 								}
 							],
-							"RelationshipType": 0,
 							"Properties": {
 								"DerivedModelRelationshipInfo": "{\"baseRelationship\":{\"fromEntity\":\"RetailProduct.cdm.json/RetailProduct\",\"toEntity\":\"TransactionLineItem.cdm.json/TransactionLineItem\",\"joinPairs\":[{\"fromAttribute\":\"ProductId\",\"toAttribute\":\"ProductId\"}]}}"
 							}
@@ -6972,7 +7082,6 @@
 									"ToColumnName": "CustomerId"
 								}
 							],
-							"RelationshipType": 0,
 							"Properties": {
 								"DerivedModelRelationshipInfo": "{\"baseRelationship\":{\"fromEntity\":\"Customer.cdm.json/Customer\",\"toEntity\":\"Transaction.cdm.json/Transaction\",\"joinPairs\":[{\"fromAttribute\":\"CustomerId\",\"toAttribute\":\"CustomerId\"}]}}"
 							}
@@ -7001,7 +7110,6 @@
 									"ToColumnName": "DistributionChannelId"
 								}
 							],
-							"RelationshipType": 0,
 							"Properties": {
 								"DerivedModelRelationshipInfo": "{\"baseRelationship\":{\"fromEntity\":\"Channel.cdm.json/Channel\",\"toEntity\":\"Transaction.cdm.json/Transaction\",\"joinPairs\":[{\"fromAttribute\":\"ChannelId\",\"toAttribute\":\"DistributionChannelId\"}]}}"
 							}
@@ -7030,7 +7138,6 @@
 									"ToColumnName": "PartyId"
 								}
 							],
-							"RelationshipType": 0,
 							"Properties": {
 								"DerivedModelRelationshipInfo": "{\"baseRelationship\":{\"fromEntity\":\"Party.cdm.json/Party\",\"toEntity\":\"Channel.cdm.json/Channel\",\"joinPairs\":[{\"fromAttribute\":\"PartyId\",\"toAttribute\":\"PartyId\"}]}}"
 							}
@@ -7059,7 +7166,6 @@
 									"ToColumnName": "ReturnOfTransactionId"
 								}
 							],
-							"RelationshipType": 0,
 							"Properties": {
 								"DerivedModelRelationshipInfo": "{\"baseRelationship\":{\"fromEntity\":\"Transaction.cdm.json/Transaction\",\"toEntity\":\"TransactionLineItem.cdm.json/TransactionLineItem\",\"joinPairs\":[{\"fromAttribute\":\"TransactionId\",\"toAttribute\":\"ReturnOfTransactionId\"}]}}"
 							}
@@ -7088,7 +7194,6 @@
 									"ToColumnName": "TransactionId"
 								}
 							],
-							"RelationshipType": 0,
 							"Properties": {
 								"DerivedModelRelationshipInfo": "{\"baseRelationship\":{\"fromEntity\":\"Transaction.cdm.json/Transaction\",\"toEntity\":\"TransactionLineItem.cdm.json/TransactionLineItem\",\"joinPairs\":[{\"fromAttribute\":\"TransactionId\",\"toAttribute\":\"TransactionId\"}]}}"
 							}
@@ -7117,7 +7222,6 @@
 									"ToColumnName": "PartyId"
 								}
 							],
-							"RelationshipType": 0,
 							"Properties": {
 								"DerivedModelRelationshipInfo": "{\"baseRelationship\":{\"fromEntity\":\"Party.cdm.json/Party\",\"toEntity\":\"Customer.cdm.json/Customer\",\"joinPairs\":[{\"fromAttribute\":\"PartyId\",\"toAttribute\":\"PartyId\"}]}}"
 							}
@@ -7146,7 +7250,6 @@
 									"ToColumnName": "SalesChannelId"
 								}
 							],
-							"RelationshipType": 0,
 							"Properties": {
 								"DerivedModelRelationshipInfo": "{\"baseRelationship\":{\"fromEntity\":\"Channel.cdm.json/Channel\",\"toEntity\":\"TransactionLineItem.cdm.json/TransactionLineItem\",\"joinPairs\":[{\"fromAttribute\":\"ChannelId\",\"toAttribute\":\"SalesChannelId\"}]}}"
 							}
@@ -7179,7 +7282,6 @@
 									"ToColumnName": "ReturnOfTransactionLineItemId"
 								}
 							],
-							"RelationshipType": 0,
 							"Properties": {
 								"DerivedModelRelationshipInfo": "{\"baseRelationship\":{\"fromEntity\":\"TransactionLineItem.cdm.json/TransactionLineItem\",\"toEntity\":\"TransactionLineItem.cdm.json/TransactionLineItem\",\"joinPairs\":[{\"fromAttribute\":\"TransactionId\",\"toAttribute\":\"ReturnOfTransactionId\"},{\"fromAttribute\":\"TransactionLineItemId\",\"toAttribute\":\"ReturnOfTransactionLineItemId\"}]}}"
 							}
@@ -7208,7 +7310,6 @@
 									"ToColumnName": "SalesChannelId"
 								}
 							],
-							"RelationshipType": 0,
 							"Properties": {
 								"DerivedModelRelationshipInfo": "{\"baseRelationship\":{\"fromEntity\":\"Channel.cdm.json/Channel\",\"toEntity\":\"Transaction.cdm.json/Transaction\",\"joinPairs\":[{\"fromAttribute\":\"ChannelId\",\"toAttribute\":\"SalesChannelId\"}]}}"
 							}
@@ -7237,7 +7338,6 @@
 									"ToColumnName": "DistributionChannelId"
 								}
 							],
-							"RelationshipType": 0,
 							"Properties": {
 								"DerivedModelRelationshipInfo": "{\"baseRelationship\":{\"fromEntity\":\"Channel.cdm.json/Channel\",\"toEntity\":\"TransactionLineItem.cdm.json/TransactionLineItem\",\"joinPairs\":[{\"fromAttribute\":\"ChannelId\",\"toAttribute\":\"DistributionChannelId\"}]}}"
 							}
@@ -7266,7 +7366,6 @@
 									"ToColumnName": "PurchasingChannelId"
 								}
 							],
-							"RelationshipType": 0,
 							"Properties": {
 								"DerivedModelRelationshipInfo": "{\"baseRelationship\":{\"fromEntity\":\"Channel.cdm.json/Channel\",\"toEntity\":\"Transaction.cdm.json/Transaction\",\"joinPairs\":[{\"fromAttribute\":\"ChannelId\",\"toAttribute\":\"PurchasingChannelId\"}]}}"
 							}
