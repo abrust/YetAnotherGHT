@@ -1455,6 +1455,26 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/Lake Database Quickstart')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "SELECT [CustomerId]\n,[CustomerEstablishedDate]\n,[CustomerTypeId]\n,[ResponsibilityCenterId]\n,[LedgerId]\n,[CustomerNote]\n,[PartyId]\n,[GlobalLocationNumber]\n FROM [Retail_mil].[dbo].[Customer]\n\n /* ,[LedgerAccountNumber] */",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "Retail_mil",
+						"poolName": "Built-in"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/MoviesDB EXTERNAL TABLE script')]",
 			"type": "Microsoft.Synapse/workspaces/sqlscripts",
 			"apiVersion": "2019-06-01-preview",
@@ -1658,15 +1678,15 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "d78bf427-bd30-4c18-9dd4-70f0ab74bf30"
+						"spark.autotune.trackingId": "327ca054-7d86-424b-8ca0-a6974a9ed50b"
 					}
 				},
 				"metadata": {
 					"saveOutput": true,
 					"enableDebugMode": false,
 					"kernelspec": {
-						"name": "synapse_sparksql",
-						"display_name": "sql"
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
 					},
 					"language_info": {
 						"name": "sql"
@@ -1683,8 +1703,7 @@
 						"sparkVersion": "2.4",
 						"nodeCount": 3,
 						"cores": 8,
-						"memory": 56,
-						"automaticScaleJobs": false
+						"memory": 56
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -1692,6 +1711,9 @@
 					{
 						"cell_type": "code",
 						"metadata": {
+							"jupyter": {
+								"outputs_hidden": true
+							},
 							"collapsed": false
 						},
 						"source": [
@@ -1742,7 +1764,7 @@
 							"SELECT * FROM `Retail_mil`.`Customer`"
 						],
 						"outputs": [],
-						"execution_count": 12
+						"execution_count": 1
 					}
 				]
 			},
