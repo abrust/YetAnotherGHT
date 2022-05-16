@@ -284,7 +284,7 @@
 								"parameters": {},
 								"datasetParameters": {
 									"MoviesCSVSourceAddl": {},
-									"MoviesDeltaSinkAddl": {}
+									"MOviesParquetSinkAddl": {}
 								}
 							},
 							"staging": {},
@@ -303,7 +303,8 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('workspaceId'), '/dataflows/DataflowAddl')]"
+				"[concat(variables('workspaceId'), '/dataflows/DataflowAddl')]",
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
 			]
 		},
 		{
@@ -1517,7 +1518,7 @@
 								"referenceName": "ADLSServiceAddl",
 								"type": "LinkedServiceReference"
 							},
-							"name": "MoviesDeltaSinkAddl"
+							"name": "MOviesParquetSinkAddl"
 						}
 					],
 					"transformations": [],
@@ -1548,7 +1549,7 @@
 						"     preCommands: [],",
 						"     postCommands: [],",
 						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> MoviesDeltaSinkAddl"
+						"     skipDuplicateMapOutputs: true) ~> MOviesParquetSinkAddl"
 					]
 				}
 			},
