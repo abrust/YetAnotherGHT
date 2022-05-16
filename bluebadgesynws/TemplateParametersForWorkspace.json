@@ -20,6 +20,9 @@
 		"AzureBlobStorage2_connectionString": {
 			"value": ""
 		},
+		"AzureDataLakeStorage1_accountKey": {
+			"value": ""
+		},
 		"AzureSqlDatabaseLinkedService_connectionString": {
 			"value": ""
 		},
@@ -56,10 +59,16 @@
 		"bluebadgesynws-WorkspaceDefaultSqlServer_connectionString": {
 			"value": ""
 		},
+		"ADLSServiceAddl_accountKey": {
+			"value": ""
+		},
 		"ADLSFlowDSPractice_properties_typeProperties_url": {
 			"value": "https://bluebadgegen22sa.dfs.core.windows.net"
 		},
 		"ADLSService_properties_typeProperties_url": {
+			"value": "https://bluebadgegen22sa.dfs.core.windows.net"
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"value": "https://bluebadgegen22sa.dfs.core.windows.net"
 		},
 		"HDIService_properties_typeProperties_userName": {
@@ -67,6 +76,9 @@
 		},
 		"bluebadgesynws-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"value": "https://bluebadgesynadlsa.dfs.core.windows.net"
+		},
+		"ADLSServiceAddl_properties_typeProperties_url": {
+			"value": "https://bluebadgegen22sa.dfs.core.windows.net"
 		}
 	}
 }
