@@ -18,7 +18,7 @@
 						"referenceName": "ADLSServiceAddl",
 						"type": "LinkedServiceReference"
 					},
-					"name": "MoviesDeltaSinkAddl"
+					"name": "MOviesParquetSinkAddl"
 				}
 			],
 			"transformations": [],
@@ -49,7 +49,7 @@
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> MoviesDeltaSinkAddl"
+				"     skipDuplicateMapOutputs: true) ~> MOviesParquetSinkAddl"
 			]
 		}
 	}
