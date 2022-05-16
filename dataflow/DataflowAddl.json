@@ -9,7 +9,7 @@
 						"referenceName": "DelimitedTextAddl",
 						"type": "DatasetReference"
 					},
-					"name": "source1"
+					"name": "MoviesCSVSourceAddl"
 				}
 			],
 			"sinks": [],
@@ -24,7 +24,7 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> source1"
+				"     ignoreNoFilesFound: false) ~> MoviesCSVSourceAddl"
 			]
 		}
 	}
