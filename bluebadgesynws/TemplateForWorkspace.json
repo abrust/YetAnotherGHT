@@ -454,7 +454,7 @@
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "ADLSFlowDSPractice",
+					"referenceName": "ADLSService",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
@@ -472,24 +472,29 @@
 				},
 				"schema": [
 					{
+						"name": "movies",
 						"type": "String"
 					},
 					{
+						"name": "Title",
 						"type": "String"
 					},
 					{
+						"name": "genresgenregenre",
 						"type": "String"
 					},
 					{
+						"name": "YEAR",
 						"type": "String"
 					},
 					{
+						"name": "Rating",
 						"type": "String"
 					}
 				]
 			},
 			"dependsOn": [
-				"[concat(variables('workspaceId'), '/linkedServices/ADLSFlowDSPractice')]"
+				"[concat(variables('workspaceId'), '/linkedServices/ADLSService')]"
 			]
 		},
 		{
@@ -1446,7 +1451,7 @@
 						}
 					],
 					"transformations": [],
-					"script": "source(output(\n\t\tColumn_1 as string,\n\t\tColumn_2 as string,\n\t\tColumn_3 as string,\n\t\tColumn_4 as string,\n\t\tColumn_5 as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'delta',\n\tfileSystem: 'adftutorial',\n\tmergeSchema: false,\n\tautoCompact: false,\n\toptimizedWrite: false,\n\tvacuum: 0,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
+					"script": "source(output(\n\t\tmovies as integer,\n\t\tTitle as string,\n\t\tgenresgenregenre as string,\n\t\tYEAR as short,\n\t\tRating as short\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'delta',\n\tfileSystem: 'adftutorial',\n\tmergeSchema: false,\n\tautoCompact: false,\n\toptimizedWrite: false,\n\tvacuum: 0,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
 				}
 			},
 			"dependsOn": [
