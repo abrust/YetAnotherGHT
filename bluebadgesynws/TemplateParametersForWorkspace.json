@@ -50,6 +50,9 @@
 		"BlobLSPrep_connectionString": {
 			"value": ""
 		},
+		"Blob_bluebadgehdihdistorage_bluebadgehdisc_connectionString": {
+			"value": ""
+		},
 		"HDIService_password": {
 			"value": ""
 		},
@@ -70,6 +73,9 @@
 		},
 		"HDIService_properties_typeProperties_userName": {
 			"value": "abrust"
+		},
+		"NYCOpenData_properties_typeProperties_url": {
+			"value": "https://data.cityofnewyork.us/api/views/erm2-nwe9/rows.csv?accessType=DOWNLOAD"
 		},
 		"bluebadgesynws-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"value": "https://bluebadgesynadlsa.dfs.core.windows.net"
