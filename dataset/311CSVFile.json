@@ -1,0 +1,24 @@
+{
+	"name": "311CSVFile",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Blob_bluebadgehdihdistorage_bluebadgehdisc",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "311FileFromNYCOpenDataPortal.csv",
+				"folderPath": "example/data",
+				"container": "bluebadgehdisc"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
