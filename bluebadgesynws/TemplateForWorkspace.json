@@ -1893,6 +1893,309 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/311 Data Analysis')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"bigDataPool": {
+					"referenceName": "SampleSpark",
+					"type": "BigDataPoolReference"
+				},
+				"sessionProperties": {
+					"driverMemory": "56g",
+					"driverCores": 8,
+					"executorMemory": "56g",
+					"executorCores": 8,
+					"numExecutors": 2,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2",
+						"spark.autotune.trackingId": "18899d26-193a-456f-8a65-8a68029598c4"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"enableDebugMode": false,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
+					},
+					"language_info": {
+						"name": "python"
+					},
+					"a365ComputeOptions": {
+						"id": "/subscriptions/be13f18e-e3c7-4e40-a812-bca489b7b4e1/resourceGroups/bluebadgesynrg/providers/Microsoft.Synapse/workspaces/bluebadgesynws/bigDataPools/SampleSpark",
+						"name": "SampleSpark",
+						"type": "Spark",
+						"endpoint": "https://bluebadgesynws.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/SampleSpark",
+						"auth": {
+							"type": "AAD",
+							"authResource": "https://dev.azuresynapse.net"
+						},
+						"sparkVersion": "2.4",
+						"nodeCount": 3,
+						"cores": 8,
+						"memory": 56,
+						"automaticScaleJobs": false
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# As a preparatory step, perform a precautionary DROP TABLE operation"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"microsoft": {
+								"language": "sparksql"
+							},
+							"collapsed": false
+						},
+						"source": [
+							"%%sql\r\n",
+							"DROP TABLE 311servicerequests"
+						],
+						"outputs": [],
+						"execution_count": 86
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# Load data from CSV file into DataFrame:"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"storage_account_name = \"bluebadgehdihdistorage\"\r\n",
+							"\r\n",
+							"#Change this to use Azure Key Vault\r\n",
+							"storage_account_access_key = \"HMmxyxBzU91DJwJdzOzvwNbU1NZ9HqeRhBpXf6NWyjlvzevU5qTca7rm8SdwmTpD5qK9jEFPrrSnYX2OZfitsA==\"\r\n",
+							"\r\n",
+							"blob_container = \"bluebadgehdisc\"\r\n",
+							"spark.conf.set(\"fs.azure.account.key.\" + storage_account_name + \".blob.core.windows.net\", storage_account_access_key)\r\n",
+							"\r\n",
+							"filePath = \"wasbs://\" + blob_container + \"@\" + storage_account_name + \".blob.core.windows.net/example/data/311DataFromNYCOpenDataPortal.csv\"\r\n",
+							"threeoneonedf = spark.read.csv(filePath, header = True)"
+						],
+						"outputs": [],
+						"execution_count": 87
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# Update schema to remove spaces from column names"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Unique Key\", \"UniqueKey\")\r\n",
+							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Created Date\", \"CreatedDate\")\r\n",
+							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Closed Date\", \"ClosedDate\")\r\n",
+							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Agency Name\", \"AgencyName\")\r\n",
+							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Complaint Type\", \"ComplaintType\")\r\n",
+							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Location Type\", \"LocationType\")\r\n",
+							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Incident Zip\", \"IncidentZip\")\r\n",
+							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Incident Address\", \"IncidentAddress\")\r\n",
+							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Street Name\", \"StreetName\")\r\n",
+							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Cross Street 1\", \"CrossStreet1\")\r\n",
+							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Cross Street 2\", \"CrossStreet2\")\r\n",
+							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Intersection Street 1\", \"IntersectionStreet1\")\r\n",
+							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Intersection Street 2\", \"IntersectionStreet2\")\r\n",
+							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Address Type\", \"AddressType\")\r\n",
+							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Facility Type\", \"FacilityType\")\r\n",
+							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Due Date\", \"DueDate\")\r\n",
+							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Resolution Description\", \"ResolutionDescription\")\r\n",
+							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Resolution Action Updated Date\", \"ResolutionActionUpdatedDate\")\r\n",
+							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Community Board\", \"CommunityBoard\")\r\n",
+							"threeoneonedf = threeoneonedf.withColumnRenamed(\"X Coordinate (State Plane)\", \"XCoordinate\")\r\n",
+							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Y Coordinate (State Plane)\", \"YCoordinate\")\r\n",
+							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Open Data Channel Type\", \"OpenDataChannelType\")\r\n",
+							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Park Facility Name\", \"ParkFacilityName\")\r\n",
+							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Park Borough\", \"ParkBorough\")\r\n",
+							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Vehicle Type\", \"VehicleType\")\r\n",
+							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Taxi Company Borough\", \"TaxiCompanyBorough\")\r\n",
+							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Taxi Pick Up Location\", \"TaxiPickUpLocation\")\r\n",
+							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Bridge Highway Name\", \"BridgeHighwayName\")\r\n",
+							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Bridge Highway Direction\", \"BridgeHighwayDirection\")\r\n",
+							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Road Ramp\", \"RoadRamp\")\r\n",
+							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Bridge Highway Segment\", \"BridgeHighwaySegment\")"
+						],
+						"outputs": [],
+						"execution_count": 88
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# Double-check the schema"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"threeoneonedf.printSchema"
+						],
+						"outputs": [],
+						"execution_count": 89
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# Create a new, partitioned DataFrame and write it out as a Parquet-formatted managed table called \"311servicerequests\"\r\n",
+							"# (Operation takes 9 minutes and change)"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"threeoneonedf_part = threeoneonedf.repartition(200)\r\n",
+							"threeoneonedf_part.write.partitionBy(\"Borough\", \"CommunityBoard\").format(\"parquet\").saveAsTable(\"311servicerequests\")"
+						],
+						"outputs": [],
+						"execution_count": 91
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# Run Some Queries"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"microsoft": {
+								"language": "sparksql"
+							},
+							"collapsed": false
+						},
+						"source": [
+							"%%sql\r\n",
+							"SELECT Borough, CommunityBoard, COUNT(*) AS RequestCount\r\n",
+							"FROM 311servicerequests \r\n",
+							"WHERE Borough IN (\"MANHATTAN\", \"QUEENS\")\r\n",
+							"GROUP BY Borough, CommunityBoard\r\n",
+							"ORDER BY RequestCount DESC"
+						],
+						"outputs": [],
+						"execution_count": 95
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/Creating a managed Spark Table')]",
 			"type": "Microsoft.Synapse/workspaces/notebooks",
 			"apiVersion": "2019-06-01-preview",
