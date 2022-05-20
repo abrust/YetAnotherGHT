@@ -1,0 +1,10 @@
+{
+	"name": "BlueBadgeAKV",
+	"properties": {
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://bbidatabrickskv.vault.azure.net/"
+		}
+	}
+}
