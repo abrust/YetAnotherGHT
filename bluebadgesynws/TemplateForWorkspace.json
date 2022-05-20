@@ -1930,7 +1930,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "c8f440f3-f281-49e6-9512-a9c8e682a969"
+						"spark.autotune.trackingId": "63b240f1-0962-4a8f-9693-24ae34e64d29"
 					}
 				},
 				"metadata": {
@@ -2028,7 +2028,7 @@
 							"storage_account_name = \"bluebadgehdihdistorage\"\r\n",
 							"\r\n",
 							"#Change this to use Azure Key Vault\r\n",
-							"storage_account_access_key = mssparkutils.credentials.getSecret('bbidatabrickskv','wasbkey','AzureKeyVault1')\r\n",
+							"storage_account_access_key = mssparkutils.credentials.getSecret('bbidatabrickskv','wasbkey','BlueBadgeAKV')\r\n",
 							"\r\n",
 							"blob_container = \"bluebadgehdisc\"\r\n",
 							"spark.conf.set(\"fs.azure.account.key.\" + storage_account_name + \".blob.core.windows.net\", storage_account_access_key)\r\n",
@@ -2037,7 +2037,7 @@
 							"threeoneonedf = spark.read.csv(filePath, header = True)"
 						],
 						"outputs": [],
-						"execution_count": 12
+						"execution_count": 18
 					},
 					{
 						"cell_type": "markdown",
@@ -2099,7 +2099,7 @@
 							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Bridge Highway Segment\", \"BridgeHighwaySegment\")"
 						],
 						"outputs": [],
-						"execution_count": 13
+						"execution_count": 19
 					},
 					{
 						"cell_type": "markdown",
@@ -2131,7 +2131,7 @@
 							"threeoneonedf.printSchema"
 						],
 						"outputs": [],
-						"execution_count": 14
+						"execution_count": 20
 					},
 					{
 						"cell_type": "markdown",
@@ -2165,7 +2165,7 @@
 							"threeoneonedf_part.write.partitionBy(\"Borough\", \"CommunityBoard\").format(\"parquet\").saveAsTable(\"311servicerequests\")"
 						],
 						"outputs": [],
-						"execution_count": 15
+						"execution_count": 21
 					},
 					{
 						"cell_type": "markdown",
