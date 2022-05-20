@@ -71,6 +71,9 @@
 		"ADLSServiceAddl_properties_typeProperties_url": {
 			"value": "https://bluebadgegen22sa.dfs.core.windows.net"
 		},
+		"AzureKeyVault1_properties_typeProperties_baseUrl": {
+			"value": "https://bbidatabrickskv.vault.azure.net/"
+		},
 		"HDIService_properties_typeProperties_userName": {
 			"value": "abrust"
 		},

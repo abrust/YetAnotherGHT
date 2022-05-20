@@ -95,6 +95,10 @@
 			"type": "string",
 			"defaultValue": "https://bluebadgegen22sa.dfs.core.windows.net"
 		},
+		"AzureKeyVault1_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://bbidatabrickskv.vault.azure.net/"
+		},
 		"HDIService_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "abrust"
@@ -1219,6 +1223,19 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/AzureKeyVault1')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "[parameters('AzureKeyVault1_properties_typeProperties_baseUrl')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/AzureSqlDatabaseLinkedService')]",
 			"type": "Microsoft.Synapse/workspaces/linkedServices",
 			"apiVersion": "2019-06-01-preview",
@@ -1913,7 +1930,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "18899d26-193a-456f-8a65-8a68029598c4"
+						"spark.autotune.trackingId": "9a4e9b94-e3dc-401a-a0d1-73ab05546be0"
 					}
 				},
 				"metadata": {
@@ -1979,7 +1996,33 @@
 							"DROP TABLE 311servicerequests"
 						],
 						"outputs": [],
-						"execution_count": 86
+						"execution_count": 1
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"import sys\r\n",
+							"from pyspark.sql import SparkSession\r\n",
+							"\r\n",
+							"sc = SparkSession.builder.getOrCreate()\r\n",
+							"token_library = sc._jvm.com.microsoft.azure.synapse.tokenlibrary.TokenLibrary\r\n",
+							"\r\n",
+							"connection_string = token_library.getSecret(\"bbidatabrickskv\",\"wasbkey\",\"AzureKeyVault1\")\r\n",
+							"print(connection_string)"
+						],
+						"outputs": [],
+						"execution_count": 10
 					},
 					{
 						"cell_type": "markdown",
@@ -2011,7 +2054,8 @@
 							"storage_account_name = \"bluebadgehdihdistorage\"\r\n",
 							"\r\n",
 							"#Change this to use Azure Key Vault\r\n",
-							"storage_account_access_key = \"HMmxyxBzU91DJwJdzOzvwNbU1NZ9HqeRhBpXf6NWyjlvzevU5qTca7rm8SdwmTpD5qK9jEFPrrSnYX2OZfitsA==\"\r\n",
+							"#storage_account_access_key = \"HMmxyxBzU91DJwJdzOzvwNbU1NZ9HqeRhBpXf6NWyjlvzevU5qTca7rm8SdwmTpD5qK9jEFPrrSnYX2OZfitsA==\"\r\n",
+							"storage_account_access_key = mssparkutils.credentials.getSecret('bbidatabrickskv','wasbkey','BlueBadgeAKV')\r\n",
 							"\r\n",
 							"blob_container = \"bluebadgehdisc\"\r\n",
 							"spark.conf.set(\"fs.azure.account.key.\" + storage_account_name + \".blob.core.windows.net\", storage_account_access_key)\r\n",
@@ -2020,7 +2064,7 @@
 							"threeoneonedf = spark.read.csv(filePath, header = True)"
 						],
 						"outputs": [],
-						"execution_count": 87
+						"execution_count": 6
 					},
 					{
 						"cell_type": "markdown",
