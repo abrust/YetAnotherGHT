@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "e9a0c09a-d801-44b8-a8f2-4a46f6a9bf5d"
+				"spark.autotune.trackingId": "024d7f36-2f5b-48de-b9ca-5f586a215170"
 			}
 		},
 		"metadata": {
@@ -114,7 +114,7 @@
 					"storage_account_name = \"bluebadgehdihdistorage\"\r\n",
 					"\r\n",
 					"#Change this to use Azure Key Vault\r\n",
-					"storage_account_access_key = mssparkutils.credentials.getSecret('bbidatabrickskv','wasbkey','AzureKeyVault1')\r\n",
+					"storage_account_access_key = mssparkutils.credentials.getSecret('bbidatabrickskv','wasbkey','BlueBadgeAKV')\r\n",
 					"\r\n",
 					"blob_container = \"bluebadgehdisc\"\r\n",
 					"spark.conf.set(\"fs.azure.account.key.\" + storage_account_name + \".blob.core.windows.net\", storage_account_access_key)\r\n",
@@ -122,7 +122,7 @@
 					"filePath = \"wasbs://\" + blob_container + \"@\" + storage_account_name + \".blob.core.windows.net/example/data/311DataFromNYCOpenDataPortal.csv\"\r\n",
 					"threeoneonedf = spark.read.csv(filePath, header = True)"
 				],
-				"execution_count": 12
+				"execution_count": 18
 			},
 			{
 				"cell_type": "markdown",
@@ -183,7 +183,7 @@
 					"threeoneonedf = threeoneonedf.withColumnRenamed(\"Road Ramp\", \"RoadRamp\")\r\n",
 					"threeoneonedf = threeoneonedf.withColumnRenamed(\"Bridge Highway Segment\", \"BridgeHighwaySegment\")"
 				],
-				"execution_count": 13
+				"execution_count": 19
 			},
 			{
 				"cell_type": "markdown",
@@ -214,7 +214,7 @@
 				"source": [
 					"threeoneonedf.printSchema"
 				],
-				"execution_count": 14
+				"execution_count": 20
 			},
 			{
 				"cell_type": "markdown",
@@ -247,7 +247,7 @@
 					"threeoneonedf_part = threeoneonedf.repartition(200)\r\n",
 					"threeoneonedf_part.write.partitionBy(\"Borough\", \"CommunityBoard\").format(\"parquet\").saveAsTable(\"311servicerequests\")"
 				],
-				"execution_count": 15
+				"execution_count": 21
 			},
 			{
 				"cell_type": "markdown",
