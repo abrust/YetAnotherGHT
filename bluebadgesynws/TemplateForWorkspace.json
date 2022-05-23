@@ -1891,12 +1891,31 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/TestKQLScript')]",
+			"name": "[concat(parameters('workspaceName'), '/Create table StormEvents')]",
 			"type": "Microsoft.Synapse/workspaces/kqlscripts",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"content": {
-					"query": ".create table StormEvents (StartTime: datetime, EndTime: datetime, EpisodeId: int, EventId: int, State: string, EventType: string, InjuriesDirect: int, InjuriesIndirect: int, DeathsDirect: int, DeathsIndirect: int, DamageProperty: int, DamageCrops: int, Source: string, BeginLocation: string, EndLocation: string, BeginLat: real, BeginLon: real, EndLat: real, EndLon: real, EpisodeNarrative: string, EventNarrative: string, StormSummary: dynamic)",
+					"query": ".create table StormEvents (\n    StartTime: datetime,\n    EndTime: datetime,\n    EpisodeId: int,\n    EventId: int,\n    State: string,\n    EventType: string,\n    InjuriesDirect: int,\n    InjuriesIndirect: int,\n    DeathsDirect: int,\n    DeathsIndirect: int,\n    DamageProperty: int,\n    DamageCrops: int,\n    Source: string,\n    BeginLocation: string,\n    EndLocation: string,\n    BeginLat: real,\n    BeginLon: real,\n    EndLat: real,\n    EndLon: real,\n    EpisodeNarrative: string,\n    EventNarrative: string,\n    StormSummary: dynamic\n)",
+					"metadata": {
+						"language": "kql"
+					},
+					"currentConnection": {
+						"poolName": "contosodataexplorer22",
+						"databaseName": "TestDatabase"
+					}
+				},
+				"type": "KqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Query table StormEvents')]",
+			"type": "Microsoft.Synapse/workspaces/kqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "StormEvents\n| extend hour= floor( StartTime % 1d , 1h)\n| where State in (\"GULF OF MEXICO\",\"MAINE\",\"VIRGINIA\",\"WISCONSIN\",\"NORTH DAKOTA\",\"NEW JERSEY\",\"OREGON\")\n| summarize event_count=count() by hour, State\n| render timechart",
 					"metadata": {
 						"language": "kql"
 					},
@@ -2375,7 +2394,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "d62719cf-f501-466b-8813-8a474148c002"
+						"spark.autotune.trackingId": "61119dee-6796-4e5d-9afd-fef116cb0c31"
 					}
 				},
 				"metadata": {
@@ -2431,7 +2450,7 @@
 							""
 						],
 						"outputs": [],
-						"execution_count": 2
+						"execution_count": 1
 					}
 				]
 			},
