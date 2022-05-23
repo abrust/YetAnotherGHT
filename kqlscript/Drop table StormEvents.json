@@ -1,0 +1,16 @@
+{
+	"name": "Drop table StormEvents",
+	"properties": {
+		"content": {
+			"query": ".drop table StormEvents",
+			"metadata": {
+				"language": "kql"
+			},
+			"currentConnection": {
+				"poolName": "contosodataexplorer22",
+				"databaseName": "TestDatabase"
+			}
+		},
+		"type": "KqlQuery"
+	}
+}
