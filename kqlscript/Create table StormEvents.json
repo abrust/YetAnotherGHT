@@ -1,8 +1,8 @@
 {
-	"name": "TestKQLScript",
+	"name": "Create table StormEvents",
 	"properties": {
 		"content": {
-			"query": ".create table StormEvents (StartTime: datetime, EndTime: datetime, EpisodeId: int, EventId: int, State: string, EventType: string, InjuriesDirect: int, InjuriesIndirect: int, DeathsDirect: int, DeathsIndirect: int, DamageProperty: int, DamageCrops: int, Source: string, BeginLocation: string, EndLocation: string, BeginLat: real, BeginLon: real, EndLat: real, EndLon: real, EpisodeNarrative: string, EventNarrative: string, StormSummary: dynamic)",
+			"query": ".create table StormEvents (\n    StartTime: datetime,\n    EndTime: datetime,\n    EpisodeId: int,\n    EventId: int,\n    State: string,\n    EventType: string,\n    InjuriesDirect: int,\n    InjuriesIndirect: int,\n    DeathsDirect: int,\n    DeathsIndirect: int,\n    DamageProperty: int,\n    DamageCrops: int,\n    Source: string,\n    BeginLocation: string,\n    EndLocation: string,\n    BeginLat: real,\n    BeginLon: real,\n    EndLat: real,\n    EndLon: real,\n    EpisodeNarrative: string,\n    EventNarrative: string,\n    StormSummary: dynamic\n)",
 			"metadata": {
 				"language": "kql"
 			},

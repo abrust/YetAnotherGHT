@@ -1,5 +1,5 @@
 {
-	"name": "Query STorm Events",
+	"name": "Query table StormEvents",
 	"properties": {
 		"content": {
 			"query": "StormEvents\n| extend hour= floor( StartTime % 1d , 1h)\n| where State in (\"GULF OF MEXICO\",\"MAINE\",\"VIRGINIA\",\"WISCONSIN\",\"NORTH DAKOTA\",\"NEW JERSEY\",\"OREGON\")\n| summarize event_count=count() by hour, State\n| render timechart",
