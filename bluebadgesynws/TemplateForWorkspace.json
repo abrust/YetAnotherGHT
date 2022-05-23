@@ -1910,6 +1910,25 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/Drop table StormEvents')]",
+			"type": "Microsoft.Synapse/workspaces/kqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": ".drop table StormEvents",
+					"metadata": {
+						"language": "kql"
+					},
+					"currentConnection": {
+						"poolName": "contosodataexplorer22",
+						"databaseName": "TestDatabase"
+					}
+				},
+				"type": "KqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/Load table StormEvents')]",
 			"type": "Microsoft.Synapse/workspaces/kqlscripts",
 			"apiVersion": "2019-06-01-preview",
