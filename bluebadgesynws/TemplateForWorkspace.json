@@ -1987,7 +1987,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "22ca123b-00ac-449e-b165-82a42a4c7834"
+						"spark.autotune.trackingId": "899aa811-dc8c-451d-9ce4-41026c4eb9a6"
 					}
 				},
 				"metadata": {
@@ -2049,10 +2049,10 @@
 						},
 						"source": [
 							"%%sql\r\n",
-							"DROP TABLE 311servicerequests"
+							"DROP TABLE IF EXISTS 311servicerequests"
 						],
 						"outputs": [],
-						"execution_count": 17
+						"execution_count": 1
 					},
 					{
 						"cell_type": "markdown",
@@ -2093,7 +2093,7 @@
 							"threeoneonedf = spark.read.csv(filePath, header = True)"
 						],
 						"outputs": [],
-						"execution_count": 18
+						"execution_count": 2
 					},
 					{
 						"cell_type": "markdown",
@@ -2155,7 +2155,7 @@
 							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Bridge Highway Segment\", \"BridgeHighwaySegment\")"
 						],
 						"outputs": [],
-						"execution_count": 19
+						"execution_count": 3
 					},
 					{
 						"cell_type": "markdown",
@@ -2184,10 +2184,10 @@
 							}
 						},
 						"source": [
-							"threeoneonedf.printSchema"
+							"threeoneonedf.printSchema()"
 						],
 						"outputs": [],
-						"execution_count": 20
+						"execution_count": 5
 					},
 					{
 						"cell_type": "markdown",
@@ -2221,7 +2221,7 @@
 							"threeoneonedf_part.write.partitionBy(\"Borough\", \"CommunityBoard\").format(\"parquet\").saveAsTable(\"311servicerequests\")"
 						],
 						"outputs": [],
-						"execution_count": 21
+						"execution_count": 6
 					},
 					{
 						"cell_type": "markdown",
@@ -2262,7 +2262,7 @@
 							"ORDER BY RequestCount DESC"
 						],
 						"outputs": [],
-						"execution_count": 16
+						"execution_count": 7
 					}
 				]
 			},
@@ -2432,7 +2432,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "d3a58a36-5118-456a-8f7c-2e271c392d4e"
+						"spark.autotune.trackingId": "cd76e6fd-0b09-4ee8-a297-86fe6ac21878"
 					}
 				},
 				"metadata": {
@@ -2457,8 +2457,7 @@
 						"sparkVersion": "2.4",
 						"nodeCount": 3,
 						"cores": 8,
-						"memory": 56,
-						"automaticScaleJobs": false
+						"memory": 56
 					},
 					"sessionKeepAliveTimeout": 30
 				},
