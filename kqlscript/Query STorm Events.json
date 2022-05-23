@@ -1,0 +1,16 @@
+{
+	"name": "Query STorm Events",
+	"properties": {
+		"content": {
+			"query": "StormEvents\n| extend hour= floor( StartTime % 1d , 1h)\n| where State in (\"GULF OF MEXICO\",\"MAINE\",\"VIRGINIA\",\"WISCONSIN\",\"NORTH DAKOTA\",\"NEW JERSEY\",\"OREGON\")\n| summarize event_count=count() by hour, State\n| render timechart",
+			"metadata": {
+				"language": "kql"
+			},
+			"currentConnection": {
+				"poolName": "contosodataexplorer22",
+				"databaseName": "TestDatabase"
+			}
+		},
+		"type": "KqlQuery"
+	}
+}
