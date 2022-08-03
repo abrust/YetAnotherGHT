@@ -2,13 +2,13 @@
 	"name": "MoviesDB EXTERNAL TABLE script",
 	"properties": {
 		"content": {
-			"query": "CREATE DATABASE SCOPED CREDENTIAL SynapseSqlCredential\n\tWITH IDENTITY = 'SHARED ACCESS SIGNATURE',\n\tSECRET = 'ePmku2EGnbB0HTYPQFesiqyTKRa6lBWpzw3B89/DGvWk10WVR0kSKZsohvfgFrDtuLlpFoZi44WU+UMqp4fBLQ==';  \nGO\n\n\nCREATE EXTERNAL DATA SOURCE SynapseSqlDataSource\nWITH  (\n        LOCATION ='https://bluebadgehdisa.blob.core.windows.net/bluebadgehdisc/example/data',\n    \tCREDENTIAL = SynapseSqlCredential\n);\nGO\n\nCREATE EXTERNAL FILE FORMAT QuotedCsvWithHeaderFormat\nWITH (  \n     FORMAT_TYPE = DELIMITEDTEXT,\n     FORMAT_OPTIONS ( FIELD_TERMINATOR = ',', STRING_DELIMITER = '\"', FIRST_ROW = 2   )\n);\nGO\n\nCREATE EXTERNAL TABLE MoviesDB(\n    id int,\n    title VARCHAR(100),\n    genre VARCHAR(100),\n    year SMALLINT,\n    rating SMALLINT,\n    rottentomato SMALLINT\n)\nWITH (\n    LOCATION= 'MoviesDBFresh.csv',\n    DATA_SOURCE = SynapseSqlDataSource,\n    FILE_FORMAT = QuotedCsvWithHeaderFormat\n    );\n\nSELECT TOP 100 * FROM MoviesDB\n\nDROP EXTERNAL TABLE MoviesDB\nDROP EXTERNAL DATA SOURCE SynapseSqlDataSource\nDROP DATABASE SCOPED CREDENTIAL SynapseSqlCredential\nDROP EXTERNAL FILE FORMAT QuotedCsvWithHeaderFormat",
+			"query": "CREATE DATABASE SCOPED CREDENTIAL SynapseSqlCredential\n\tWITH IDENTITY = 'SHARED ACCESS SIGNATURE',\n\tSECRET = 'sv=2020-10-02&st=2022-08-03T16%3A45%3A11Z&se=2022-08-04T16%3A45%3A11Z&sr=b&sp=r&sig=cVK3VpMo7e7LNnC5oU8cYniMQ3N%2BFzcPN%2BJSpPjGQvE%3D';  \nGO\n\n\nCREATE EXTERNAL DATA SOURCE SynapseSqlDataSource\nWITH  (\n        LOCATION ='https://bluebadgehdisa.blob.core.windows.net/bluebadgehdisc/example/data/',\n    \tCREDENTIAL = SynapseSqlCredential\n);\nGO\n\nCREATE EXTERNAL FILE FORMAT QuotedCsvWithHeaderFormat\nWITH (  \n     FORMAT_TYPE = DELIMITEDTEXT,\n     FORMAT_OPTIONS ( FIELD_TERMINATOR = ',', STRING_DELIMITER = '\"', FIRST_ROW = 2   )\n);\nGO\n\nCREATE EXTERNAL TABLE MoviesDB(\n    id int,\n    title VARCHAR(100),\n    genre VARCHAR(100),\n    year SMALLINT,\n    rating SMALLINT,\n    rottentomato SMALLINT\n)\nWITH (\n    LOCATION = 'MoviesDBFresh.csv',\n    DATA_SOURCE = SynapseSqlDataSource,\n    FILE_FORMAT = QuotedCsvWithHeaderFormat\n    );\n\nSELECT TOP 100 * FROM MoviesDB\n\nDROP EXTERNAL TABLE MoviesDB\nDROP EXTERNAL DATA SOURCE SynapseSqlDataSource\nDROP DATABASE SCOPED CREDENTIAL SynapseSqlCredential\nDROP EXTERNAL FILE FORMAT QuotedCsvWithHeaderFormat",
 			"metadata": {
 				"language": "sql"
 			},
 			"currentConnection": {
-				"poolName": "Built-in",
-				"databaseName": "Sample"
+				"databaseName": "Sample",
+				"poolName": "Built-in"
 			},
 			"resultLimit": 5000
 		},
