@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "cd76e6fd-0b09-4ee8-a297-86fe6ac21878"
+				"spark.autotune.trackingId": "eda7132d-0fe7-4a95-9c50-11e2cd41bd10"
 			}
 		},
 		"metadata": {
@@ -73,7 +73,7 @@
 					"display(kustoDf)\n",
 					""
 				],
-				"execution_count": 1
+				"execution_count": 2
 			}
 		]
 	}

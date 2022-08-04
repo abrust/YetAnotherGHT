@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "899aa811-dc8c-451d-9ce4-41026c4eb9a6"
+				"spark.autotune.trackingId": "483aeccb-64a2-406c-96d5-1b9d96bf25a6"
 			}
 		},
 		"metadata": {
@@ -214,7 +214,7 @@
 				"source": [
 					"threeoneonedf.printSchema()"
 				],
-				"execution_count": 5
+				"execution_count": 4
 			},
 			{
 				"cell_type": "markdown",
@@ -247,7 +247,7 @@
 					"threeoneonedf_part = threeoneonedf.repartition(200)\r\n",
 					"threeoneonedf_part.write.partitionBy(\"Borough\", \"CommunityBoard\").format(\"parquet\").saveAsTable(\"311servicerequests\")"
 				],
-				"execution_count": 6
+				"execution_count": 5
 			},
 			{
 				"cell_type": "markdown",
@@ -287,7 +287,7 @@
 					"GROUP BY Borough, CommunityBoard\r\n",
 					"ORDER BY RequestCount DESC"
 				],
-				"execution_count": 7
+				"execution_count": 6
 			}
 		]
 	}
