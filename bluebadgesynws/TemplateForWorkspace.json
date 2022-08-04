@@ -1996,7 +1996,7 @@
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"content": {
-					"query": "CREATE DATABASE SCOPED CREDENTIAL SynapseSqlCredential\n\tWITH IDENTITY = 'SHARED ACCESS SIGNATURE',\n\tSECRET = 'sv=2020-10-02&st=2022-08-03T16%3A45%3A11Z&se=2022-08-04T16%3A45%3A11Z&sr=b&sp=r&sig=cVK3VpMo7e7LNnC5oU8cYniMQ3N%2BFzcPN%2BJSpPjGQvE%3D';  \nGO\n\n\nCREATE EXTERNAL DATA SOURCE SynapseSqlDataSource\nWITH  (\n        LOCATION ='https://bluebadgehdisa.blob.core.windows.net/bluebadgehdisc/example/data/',\n    \tCREDENTIAL = SynapseSqlCredential\n);\nGO\n\nCREATE EXTERNAL FILE FORMAT QuotedCsvWithHeaderFormat\nWITH (  \n     FORMAT_TYPE = DELIMITEDTEXT,\n     FORMAT_OPTIONS ( FIELD_TERMINATOR = ',', STRING_DELIMITER = '\"', FIRST_ROW = 2   )\n);\nGO\n\nCREATE EXTERNAL TABLE MoviesDB(\n    id int,\n    title VARCHAR(100),\n    genre VARCHAR(100),\n    year SMALLINT,\n    rating SMALLINT,\n    rottentomato SMALLINT\n)\nWITH (\n    LOCATION = 'MoviesDBFresh.csv',\n    DATA_SOURCE = SynapseSqlDataSource,\n    FILE_FORMAT = QuotedCsvWithHeaderFormat\n    );\n\nSELECT TOP 100 * FROM MoviesDB\n\nDROP EXTERNAL TABLE MoviesDB\nDROP EXTERNAL DATA SOURCE SynapseSqlDataSource\nDROP DATABASE SCOPED CREDENTIAL SynapseSqlCredential\nDROP EXTERNAL FILE FORMAT QuotedCsvWithHeaderFormat",
+					"query": "CREATE DATABASE SCOPED CREDENTIAL SynapseSqlCredential\n\tWITH IDENTITY = 'SHARED ACCESS SIGNATURE',\n\tSECRET = '?sv=2020-10-02&st=2022-08-03T17%3A12%3A15Z&se=2022-08-04T17%3A12%3A15Z&sr=b&sp=r&sig=JEVq%2B4iEFk0snnRAMljOhoJQ2QnCM%2FE25TLMg2J40jw%3D';  \nGO\n\n\nCREATE EXTERNAL DATA SOURCE SynapseSqlDataSource\nWITH  (\n        LOCATION ='https://bluebadgehdisa.blob.core.windows.net',\n    \tCREDENTIAL = SynapseSqlCredential\n);\nGO\n\nCREATE EXTERNAL FILE FORMAT QuotedCsvWithHeaderFormat\nWITH (  \n     FORMAT_TYPE = DELIMITEDTEXT,\n     FORMAT_OPTIONS ( FIELD_TERMINATOR = ',', STRING_DELIMITER = '\"', FIRST_ROW = 2   )\n);\nGO\n\nCREATE EXTERNAL TABLE MoviesDB(\n    id int,\n    title VARCHAR(100),\n    genre VARCHAR(100),\n    year SMALLINT,\n    rating SMALLINT,\n    rottentomato SMALLINT\n)\nWITH (\n    LOCATION = 'bluebadgehdisc/example/data/MoviesDBFresh.csv',\n    DATA_SOURCE = SynapseSqlDataSource,\n    FILE_FORMAT = QuotedCsvWithHeaderFormat\n    );\n\nSELECT TOP 100 * FROM MoviesDB\n\nDROP EXTERNAL TABLE MoviesDB\nDROP EXTERNAL DATA SOURCE SynapseSqlDataSource\nDROP DATABASE SCOPED CREDENTIAL SynapseSqlCredential\nDROP EXTERNAL FILE FORMAT QuotedCsvWithHeaderFormat",
 					"metadata": {
 						"language": "sql"
 					},
@@ -2127,7 +2127,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "899aa811-dc8c-451d-9ce4-41026c4eb9a6"
+						"spark.autotune.trackingId": "1a8292c4-0d26-4e25-b5ce-e5663ab27468"
 					}
 				},
 				"metadata": {
@@ -2152,7 +2152,8 @@
 						"sparkVersion": "2.4",
 						"nodeCount": 3,
 						"cores": 8,
-						"memory": 56
+						"memory": 56,
+						"automaticScaleJobs": false
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -2327,7 +2328,7 @@
 							"threeoneonedf.printSchema()"
 						],
 						"outputs": [],
-						"execution_count": 5
+						"execution_count": 4
 					},
 					{
 						"cell_type": "markdown",
@@ -2361,7 +2362,7 @@
 							"threeoneonedf_part.write.partitionBy(\"Borough\", \"CommunityBoard\").format(\"parquet\").saveAsTable(\"311servicerequests\")"
 						],
 						"outputs": [],
-						"execution_count": 6
+						"execution_count": 5
 					},
 					{
 						"cell_type": "markdown",
@@ -2402,7 +2403,7 @@
 							"ORDER BY RequestCount DESC"
 						],
 						"outputs": [],
-						"execution_count": 7
+						"execution_count": 6
 					}
 				]
 			},
@@ -2428,17 +2429,16 @@
 					"conf": {
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
-						"spark.dynamicAllocation.maxExecutors": "2"
+						"spark.dynamicAllocation.maxExecutors": "2",
+						"spark.autotune.trackingId": "2ff6d823-e5bc-47db-b598-3ecd84ef5122"
 					}
 				},
 				"metadata": {
 					"saveOutput": true,
-					"synapse_widget": {
-						"version": "0.1"
-					},
+					"enableDebugMode": false,
 					"kernelspec": {
-						"name": "synapse_sparkdotnet",
-						"display_name": "csharp"
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
 					},
 					"language_info": {
 						"name": "csharp"
@@ -2455,13 +2455,15 @@
 						"sparkVersion": "2.4",
 						"nodeCount": 3,
 						"cores": 8,
-						"memory": 56
+						"memory": 56,
+						"automaticScaleJobs": false
 					},
 					"sessionKeepAliveTimeout": 30
 				},
 				"cells": [
 					{
 						"cell_type": "markdown",
+						"metadata": {},
 						"source": [
 							"# Creating a managed Spark table\n",
 							"This notebook describes how to create a managed table from Spark. \n",
@@ -2471,14 +2473,16 @@
 					},
 					{
 						"cell_type": "code",
+						"metadata": {},
 						"source": [
 							"spark.Sql(\"CREATE TABLE cities (name STRING, population INT) USING PARQUET\")"
 						],
 						"outputs": [],
-						"execution_count": 1
+						"execution_count": 4
 					},
 					{
 						"cell_type": "markdown",
+						"metadata": {},
 						"source": [
 							"Insert a few rows into the table using a list of values.\n",
 							""
@@ -2486,14 +2490,16 @@
 					},
 					{
 						"cell_type": "code",
+						"metadata": {},
 						"source": [
 							"spark.Sql(\"INSERT INTO cities VALUES ('Seattle', 730400), ('San Francisco', 881549), ('Beijing', 21540000), ('Bangalore', 10540000)\")"
 						],
 						"outputs": [],
-						"execution_count": 2
+						"execution_count": 5
 					},
 					{
 						"cell_type": "markdown",
+						"metadata": {},
 						"source": [
 							"* Retrieve values back. Click on 'Chart' below to review the visualization.\n",
 							""
@@ -2530,10 +2536,35 @@
 							"Display(spark.Sql(\"SELECT * FROM cities ORDER BY name\"));"
 						],
 						"outputs": [],
-						"execution_count": 3
+						"execution_count": 6
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"microsoft": {
+								"language": "sparksql"
+							},
+							"collapsed": false
+						},
+						"source": [
+							"%%sql\r\n",
+							"SELECT * FROM cities ORDER BY name"
+						],
+						"outputs": [],
+						"execution_count": 7
 					},
 					{
 						"cell_type": "markdown",
+						"metadata": {},
 						"source": [
 							"Drop the table. Please note the data will get deleted from the primary storage account associated with this workspace.\n",
 							""
@@ -2541,11 +2572,12 @@
 					},
 					{
 						"cell_type": "code",
+						"metadata": {},
 						"source": [
 							"spark.Sql(\"DROP TABLE cities\")"
 						],
 						"outputs": [],
-						"execution_count": 4
+						"execution_count": 8
 					}
 				]
 			},
@@ -2572,7 +2604,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "cd76e6fd-0b09-4ee8-a297-86fe6ac21878"
+						"spark.autotune.trackingId": "49f5ccb4-36a6-4783-a787-674ad9db202b"
 					}
 				},
 				"metadata": {
@@ -2597,7 +2629,8 @@
 						"sparkVersion": "2.4",
 						"nodeCount": 3,
 						"cores": 8,
-						"memory": 56
+						"memory": 56,
+						"automaticScaleJobs": false
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -2628,7 +2661,7 @@
 							""
 						],
 						"outputs": [],
-						"execution_count": 1
+						"execution_count": 2
 					}
 				]
 			},
