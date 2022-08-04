@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "1e705768-cb40-4108-8d34-a7658f1a12bf"
+				"spark.autotune.trackingId": "fc57023f-7bad-4c6c-b22c-a98129713008"
 			}
 		},
 		"metadata": {
@@ -82,31 +82,12 @@
 					"collapsed": false
 				},
 				"source": [
-					"SELECT * FROM df LIMIT 10"
-				],
-				"execution_count": 4
-			},
-			{
-				"cell_type": "code",
-				"metadata": {
-					"jupyter": {
-						"source_hidden": false,
-						"outputs_hidden": false
-					},
-					"nteract": {
-						"transient": {
-							"deleting": false
-						}
-					},
-					"collapsed": false
-				},
-				"source": [
 					"SELECT Year, Title, Rating\r\n",
 					"FROM df\r\n",
 					"WHERE Year = 1988\r\n",
 					"ORDER BY Title"
 				],
-				"execution_count": 3
+				"execution_count": 2
 			},
 			{
 				"cell_type": "code",
