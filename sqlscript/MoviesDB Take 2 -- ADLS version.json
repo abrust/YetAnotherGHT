@@ -1,5 +1,5 @@
 {
-	"name": "MoviesDB Take 2",
+	"name": "MoviesDB Take 2 -- ADLS version",
 	"properties": {
 		"content": {
 			"query": "CREATE DATABASE SCOPED CREDENTIAL [sqlondemand]\nWITH IDENTITY='SHARED ACCESS SIGNATURE',  \nSECRET = 'sv=2021-04-10&st=2022-08-03T15%3A56%3A25Z&se=2022-08-04T15%3A56%3A25Z&sr=b&sp=r&sig=ielrG%2BIqTZMlMoqfIWi0adJkoxuW7r0Rkyer5XhS%2Bnk%3D'\nGO\n\nCREATE EXTERNAL DATA SOURCE SqlOnDemandDemo WITH (\n    LOCATION = 'https://bluebadgehdiadls.blob.core.windows.net'\n    ,CREDENTIAL = sqlondemand\n);\nGO\n\nCREATE EXTERNAL FILE FORMAT QuotedCsvWithHeaderFormat\nWITH (  \n    FORMAT_TYPE = DELIMITEDTEXT,\n    FORMAT_OPTIONS ( FIELD_TERMINATOR = ',', STRING_DELIMITER = '\"', FIRST_ROW = 2   )\n);\nGO\n\nCREATE EXTERNAL TABLE MovieDB\n(\n    id int,\n    title VARCHAR(100),\n    genre VARCHAR(100),\n    year SMALLINT,\n    rating SMALLINT,\n    rottentomato SMALLINT\n)\nWITH (\n    LOCATION = 'bluebadgehdiadls/example/data/MoviesDBFresh.csv',\n    DATA_SOURCE = sqlondemanddemo,\n    FILE_FORMAT = QuotedCSVWithHeaderFormat\n);\n\nSELECT TOP 100 * FROM MovieDB\n\nDROP EXTERNAL TABLE MovieDB\nDROP EXTERNAL FILE FORMAT QuotedCSVWithHeaderFormat\nDROP EXTERNAL DATA SOURCE SqlOnDemandDemo\nDROP DATABASE SCOPED CREDENTIAL [sqlondemand]",
