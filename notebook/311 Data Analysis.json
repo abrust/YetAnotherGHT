@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "7ac84854-6a32-4c41-b6ee-57cd5ae610b9"
+				"spark.autotune.trackingId": "32262b9d-4bd1-4053-92a5-8eb045157bea"
 			}
 		},
 		"metadata": {
@@ -82,7 +82,7 @@
 					"%%sql\r\n",
 					"DROP TABLE IF EXISTS 311servicerequests"
 				],
-				"execution_count": 2
+				"execution_count": 3
 			},
 			{
 				"cell_type": "markdown",

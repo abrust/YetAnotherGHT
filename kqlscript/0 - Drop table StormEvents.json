@@ -1,5 +1,5 @@
 {
-	"name": "Drop table StormEvents",
+	"name": "0 - Drop table StormEvents",
 	"properties": {
 		"content": {
 			"query": ".drop table StormEvents",
