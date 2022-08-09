@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "bdb1887d-91d8-4940-b17e-68845e0e6b73"
+				"spark.autotune.trackingId": "22c83f6c-15ab-469f-bf1a-9fa7d0b0aa55"
 			}
 		},
 		"metadata": {
@@ -62,7 +62,7 @@
 				"source": [
 					"spark.Sql(\"CREATE TABLE cities (name STRING, population INT) USING PARQUET\")"
 				],
-				"execution_count": 2
+				"execution_count": 7
 			},
 			{
 				"cell_type": "markdown",
@@ -152,7 +152,7 @@
 				"source": [
 					"spark.Sql(\"DROP TABLE cities\")"
 				],
-				"execution_count": 6
+				"execution_count": 8
 			}
 		]
 	}
