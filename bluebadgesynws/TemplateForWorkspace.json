@@ -272,7 +272,8 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('workspaceId'), '/dataflows/Dataflow1')]"
+				"[concat(variables('workspaceId'), '/dataflows/Dataflow1')]",
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
 			]
 		},
 		{
@@ -319,7 +320,8 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('workspaceId'), '/dataflows/Dataflow2')]"
+				"[concat(variables('workspaceId'), '/dataflows/Dataflow2')]",
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
 			]
 		},
 		{
@@ -1916,7 +1918,7 @@
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"content": {
-					"query": "-- CSV file contains header row; query uses HEADER_ROW = TRUE:\nSELECT \n\t*\nFROM OPENROWSET(\n    BULK 'https://pandemicdatalake.blob.core.windows.net/public/curated/covid-19/ecdc_cases/latest/ecdc_cases.csv',\n    FORMAT = 'CSV',\n    PARSER_VERSION = '2.0',\n\tHEADER_ROW = TRUE) as [r]\n\n-- CSV file query doesn't use HEADER_ROW = TRUE, so set FIRSTROW to 2, and deal with generic column names\nSELECT \n\t*\nFROM OPENROWSET(\n    BULK 'https://pandemicdatalake.blob.core.windows.net/public/curated/covid-19/ecdc_cases/latest/ecdc_cases.csv',\n    FORMAT = 'CSV',\n    FIRSTROW = 2,\n    PARSER_VERSION = '2.0') as [r]\n\n-- Parquet file (schema inside):\nSELECT \n    TOP 1 *\nFROM  \n    OPENROWSET(\n        BULK 'https://azureopendatastorage.blob.core.windows.net/censusdatacontainer/release/us_population_county/year=20*/*.parquet',\n        FORMAT='PARQUET'\n    ) AS [r]\n\n-- CSV with no header row, but with schema (for two columns) specified\n-- Note the 1 and 4 at the end of the two column definitions, which indicate the ordinal of the corresponding column\n-- Query fails due to bad filespec\nSELECT \n\t* \nFROM OPENROWSET(\n        BULK 'https://sqlondemandstorage.blob.core.windows.net/csv/population/population*.csv',\n        FORMAT = 'CSV',\n        FIRSTROW = 1\n    )\nWITH (\n    [country_code] VARCHAR (5) COLLATE Latin1_General_BIN2 1,\n    [population] bigint 4\n) AS [r]\n\n-- Schema specification for certain columns from Parquet file:\nSELECT \n    TOP 1 *\nFROM  \n    OPENROWSET(\n        BULK 'https://azureopendatastorage.blob.core.windows.net/censusdatacontainer/release/us_population_county/year=20*/*.parquet',\n        FORMAT='PARQUET'\n    )\nWITH (\n\t[stateName] VARCHAR (50),\n\t[population] bigint\n) AS [r]\n\n-- Read JSON file and specifcy schema\n-- Note use of lax and strict path modes\nSELECT \n    TOP 1 *\nFROM  \n    OPENROWSET(\n        BULK 'https://azureopendatastorage.blob.core.windows.net/censusdatacontainer/release/us_population_county/year=20*/*.parquet',\n        FORMAT='PARQUET'\n    )\nWITH (\n\t--lax path mode samples\n\t[stateName] VARCHAR (50), -- this one works as column name casing is valid - it targets the same column as the next one\n\t[stateName_explicit_path] VARCHAR (50) '$.stateName', -- this one works as column name casing is valid\n\t[COUNTYNAME] VARCHAR (50), -- COUNTYname column will contain NULLs only because of wrong casing - it targets the same column as the next one\n\t[countyName_explicit_path] VARCHAR (50) '$.COUNTYNAME', -- COUNTYname column will contain NULLS only because of wrong casing and default path mode being lax\n\n\t--strict path mode samples\n\t[population] bigint 'strict $.population' -- this one works as column name casing is valid\n\t--,[population2] bigint 'strict $.POPULATION' -- this one fails because of wrong casing and strict path mode\n)\nAS [r]",
+					"query": "-- CSV file contains header row; query uses HEADER_ROW = TRUE:\nSELECT \n\t*\nFROM OPENROWSET(\n    BULK 'https://pandemicdatalake.blob.core.windows.net/public/curated/covid-19/ecdc_cases/latest/ecdc_cases.csv',\n    FORMAT = 'CSV',\n    PARSER_VERSION = '2.0',\n\tHEADER_ROW = TRUE) as [r]\n\n-- CSV file query doesn't use HEADER_ROW = TRUE, so set FIRSTROW to 2, and deal with generic column names\nSELECT \n\t*\nFROM OPENROWSET(\n    BULK 'https://pandemicdatalake.blob.core.windows.net/public/curated/covid-19/ecdc_cases/latest/ecdc_cases.csv',\n    FORMAT = 'CSV',\n    FIRSTROW = 2,\n    PARSER_VERSION = '2.0') as [r]\n\n-- Parquet file (schema inside):\nSELECT \n    TOP 1 *\nFROM  \n    OPENROWSET(\n        BULK 'https://azureopendatastorage.blob.core.windows.net/censusdatacontainer/release/us_population_county/year=20*/*.parquet',\n        FORMAT='PARQUET'\n    ) AS [r]\n\n-- CSV with no header row, but with schema (for two columns) specified\n-- Note the 1 and 4 at the end of the two column definitions, which indicate the ordinal of the corresponding column\n-- Query fails due to bad filespec\nSELECT \n\t* \nFROM OPENROWSET(\n        BULK 'https://sqlondemandstorage.blob.core.windows.net/csv/population/population*.csv',\n        FORMAT = 'CSV',\n        FIRSTROW = 1\n    )\nWITH (\n    [country_code] VARCHAR (5) COLLATE Latin1_General_BIN2 1,\n    [population] bigint 4\n) AS [r]\n\n-- Schema specification for certain columns from Parquet file:\nSELECT \n    TOP 1 *\nFROM  \n    OPENROWSET(\n        BULK 'https://azureopendatastorage.blob.core.windows.net/censusdatacontainer/release/us_population_county/year=20*/*.parquet',\n        FORMAT='PARQUET'\n    )\nWITH (\n\t[stateName] VARCHAR (50),\n\t[population] bigint\n) AS [r]\n\n-- Read JSON file and specifcy schema\n-- Note use of lax and strict path modes\n-- SELECT \n--     TOP 1 *\n-- FROM  \n--     OPENROWSET(\n--         BULK 'https://azureopendatastorage.blob.core.windows.net/censusdatacontainer/release/us_population_county/year=20*/*.parquet',\n--         FORMAT='PARQUET'\n--     )\n-- WITH (\n-- \t--lax path mode samples\n-- \t[stateName] VARCHAR (50), -- this one works as column name casing is valid - it targets the same column as the next one\n-- \t[stateName_explicit_path] VARCHAR (50) '$.stateName', -- this one works as column name casing is valid\n-- \t[COUNTYNAME] VARCHAR (50), --  will contain NULLs only because of wrong casing - it targets the same column as the next one\n-- \t[countyName_explicit_path] VARCHAR (50) '$.COUNTYNAME', -- will contain NULLS  because of wrong casing and default path mode being lax\n\n-- \t--strict path mode samples\n-- \t[population] bigint 'strict $.population' -- this one works as column name casing is valid\n-- \t--,[population2] bigint 'strict $.POPULATION' -- this one fails because of wrong casing and strict path mode\n-- )\n-- AS [r]",
 					"metadata": {
 						"language": "sql"
 					},
@@ -1956,12 +1958,12 @@
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"content": {
-					"query": "-- Drop database if it exists\nDROP DATABASE IF EXISTS Demo\nGO\n\n-- Create new database\nCREATE DATABASE [Demo];\nGO\n\nUSE Demo\n\n-- There is no credential in data surce. We are using public storage account which doesn't need a secret.\nCREATE EXTERNAL DATA SOURCE AzureOpenData\nWITH ( LOCATION = 'https://azureopendatastorage.blob.core.windows.net/')\n\nDROP VIEW IF EXISTS usPopulationView;\nGO\n\nCREATE VIEW usPopulationView AS\nSELECT\n    *\nFROM\n    OPENROWSET(\n        BULK 'censusdatacontainer/release/us_population_county/year=20*/*.parquet',\n        DATA_SOURCE = 'AzureOpenData',\n        FORMAT='PARQUET'\n    ) AS uspv;\n\nSELECT * FROM usPopulationView",
+					"query": "-- Drop database if it exists\nDROP DATABASE IF EXISTS Demo\nGO\n\n-- Create new database\nCREATE DATABASE [Demo];\nGO\n\nUSE Demo\n\n-- There is no credential in data surce. We are using public storage account which doesn't need a secret.\nCREATE EXTERNAL DATA SOURCE AzureOpenData\nWITH ( LOCATION = 'https://azureopendatastorage.blob.core.windows.net/')\n\nDROP VIEW IF EXISTS usPopulationView;\nGO\n\nCREATE VIEW usPopulationView AS\nSELECT\n    *\nFROM\n    OPENROWSET(\n        BULK 'censusdatacontainer/release/us_population_county/year=20*/*.parquet',\n        DATA_SOURCE = 'AzureOpenData',\n        FORMAT='PARQUET'\n    ) AS uspv;\nGO\n\nSELECT COUNT(*) FROM usPopulationView",
 					"metadata": {
 						"language": "sql"
 					},
 					"currentConnection": {
-						"databaseName": "Demo",
+						"databaseName": "default",
 						"poolName": "Built-in"
 					},
 					"resultLimit": 5000
@@ -1976,7 +1978,7 @@
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"content": {
-					"query": "SELECT [CustomerId]\n,[CustomerEstablishedDate]\n,[CustomerTypeId]\n,[ResponsibilityCenterId]\n,[LedgerId]\n,[CustomerNote]\n,[PartyId]\n,[GlobalLocationNumber]\n FROM [Retail_mil].[dbo].[Customer]\n\n /* ,[LedgerAccountNumber] */",
+					"query": "SELECT [CustomerId]\n,[CustomerEstablishedDate]\n,[CustomerTypeId]\n,[ResponsibilityCenterId]\n,[LedgerId]\n,[CustomerNote]\n,[PartyId]\n,[GlobalLocationNumber]\n FROM Customer\n\n /* ,[LedgerAccountNumber] */",
 					"metadata": {
 						"language": "sql"
 					},
@@ -1991,12 +1993,12 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/MoviesDB EXTERNAL TABLE script')]",
+			"name": "[concat(parameters('workspaceName'), '/MoviesDB EXTERNAL TABLE script - Blob version')]",
 			"type": "Microsoft.Synapse/workspaces/sqlscripts",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"content": {
-					"query": "CREATE DATABASE SCOPED CREDENTIAL SynapseSqlCredential\n\tWITH IDENTITY = 'SHARED ACCESS SIGNATURE',\n\tSECRET = '?sv=2020-10-02&st=2022-08-03T17%3A12%3A15Z&se=2022-08-04T17%3A12%3A15Z&sr=b&sp=r&sig=JEVq%2B4iEFk0snnRAMljOhoJQ2QnCM%2FE25TLMg2J40jw%3D';  \nGO\n\n\nCREATE EXTERNAL DATA SOURCE SynapseSqlDataSource\nWITH  (\n        LOCATION ='https://bluebadgehdisa.blob.core.windows.net',\n    \tCREDENTIAL = SynapseSqlCredential\n);\nGO\n\nCREATE EXTERNAL FILE FORMAT QuotedCsvWithHeaderFormat\nWITH (  \n     FORMAT_TYPE = DELIMITEDTEXT,\n     FORMAT_OPTIONS ( FIELD_TERMINATOR = ',', STRING_DELIMITER = '\"', FIRST_ROW = 2   )\n);\nGO\n\nCREATE EXTERNAL TABLE MoviesDB(\n    id int,\n    title VARCHAR(100),\n    genre VARCHAR(100),\n    year SMALLINT,\n    rating SMALLINT,\n    rottentomato SMALLINT\n)\nWITH (\n    LOCATION = 'bluebadgehdisc/example/data/MoviesDBFresh.csv',\n    DATA_SOURCE = SynapseSqlDataSource,\n    FILE_FORMAT = QuotedCsvWithHeaderFormat\n    );\n\nSELECT TOP 100 * FROM MoviesDB\n\nDROP EXTERNAL TABLE MoviesDB\nDROP EXTERNAL DATA SOURCE SynapseSqlDataSource\nDROP DATABASE SCOPED CREDENTIAL SynapseSqlCredential\nDROP EXTERNAL FILE FORMAT QuotedCsvWithHeaderFormat",
+					"query": "CREATE DATABASE SCOPED CREDENTIAL SynapseSqlCredential\n\tWITH IDENTITY = 'SHARED ACCESS SIGNATURE',\n\tSECRET = 'sv=2020-10-02&ss=btqf&srt=sco&st=2022-08-09T01%3A15%3A21Z&se=2022-08-10T01%3A15%3A21Z&sp=rl&sig=iyAAYBpMM5xFjRyV7IUwsq3HYjI2Qr74HVihEEmPQO8%3D';  \nGO\n\nCREATE EXTERNAL DATA SOURCE SynapseSqlDataSource\nWITH  (\n        LOCATION ='https://bluebadgehdisa.blob.core.windows.net',\n    \tCREDENTIAL = SynapseSqlCredential\n);\nGO\n\nCREATE EXTERNAL FILE FORMAT QuotedCsvWithHeaderFormat\nWITH (  \n     FORMAT_TYPE = DELIMITEDTEXT,\n     FORMAT_OPTIONS ( FIELD_TERMINATOR = ',', STRING_DELIMITER = '\"', FIRST_ROW = 2   )\n);\nGO\n\nCREATE EXTERNAL TABLE MoviesDB(\n    id int,\n    title VARCHAR(100),\n    genre VARCHAR(100),\n    year SMALLINT,\n    rating SMALLINT,\n    rottentomato SMALLINT\n)\nWITH (\n    LOCATION = 'bluebadgehdisc/example/data/MoviesDBFresh.csv',\n    DATA_SOURCE = SynapseSqlDataSource,\n    FILE_FORMAT = QuotedCsvWithHeaderFormat\n    );\n\nSELECT TOP 100 * FROM MoviesDB\n\nDROP EXTERNAL TABLE MoviesDB\nDROP EXTERNAL DATA SOURCE SynapseSqlDataSource\nDROP DATABASE SCOPED CREDENTIAL SynapseSqlCredential\nDROP EXTERNAL FILE FORMAT QuotedCsvWithHeaderFormat",
 					"metadata": {
 						"language": "sql"
 					},
@@ -2011,32 +2013,12 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/MoviesDB Take 2')]",
-			"type": "Microsoft.Synapse/workspaces/sqlscripts",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"content": {
-					"query": "CREATE DATABASE SCOPED CREDENTIAL [sqlondemand]\nWITH IDENTITY='SHARED ACCESS SIGNATURE',  \nSECRET = 'sv=2021-04-10&st=2022-08-03T15%3A56%3A25Z&se=2022-08-04T15%3A56%3A25Z&sr=b&sp=r&sig=ielrG%2BIqTZMlMoqfIWi0adJkoxuW7r0Rkyer5XhS%2Bnk%3D'\nGO\n\nCREATE EXTERNAL DATA SOURCE SqlOnDemandDemo WITH (\n    LOCATION = 'https://bluebadgehdiadls.blob.core.windows.net'\n    ,CREDENTIAL = sqlondemand\n);\nGO\n\nCREATE EXTERNAL FILE FORMAT QuotedCsvWithHeaderFormat\nWITH (  \n    FORMAT_TYPE = DELIMITEDTEXT,\n    FORMAT_OPTIONS ( FIELD_TERMINATOR = ',', STRING_DELIMITER = '\"', FIRST_ROW = 2   )\n);\nGO\n\nCREATE EXTERNAL TABLE MovieDB\n(\n    id int,\n    title VARCHAR(100),\n    genre VARCHAR(100),\n    year SMALLINT,\n    rating SMALLINT,\n    rottentomato SMALLINT\n)\nWITH (\n    LOCATION = 'bluebadgehdiadls/example/data/MoviesDBFresh.csv',\n    DATA_SOURCE = sqlondemanddemo,\n    FILE_FORMAT = QuotedCSVWithHeaderFormat\n);\n\nSELECT TOP 100 * FROM MovieDB\n\nDROP EXTERNAL TABLE MovieDB\nDROP EXTERNAL FILE FORMAT QuotedCSVWithHeaderFormat\nDROP EXTERNAL DATA SOURCE SqlOnDemandDemo\nDROP DATABASE SCOPED CREDENTIAL [sqlondemand]",
-					"metadata": {
-						"language": "sql"
-					},
-					"currentConnection": {
-						"databaseName": "Sample",
-						"poolName": "Built-in"
-					},
-					"resultLimit": 5000
-				},
-				"type": "SqlQuery"
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/Create table StormEvents')]",
+			"name": "[concat(parameters('workspaceName'), '/0 - Drop table StormEvents')]",
 			"type": "Microsoft.Synapse/workspaces/kqlscripts",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"content": {
-					"query": ".create table StormEvents (\n    StartTime: datetime,\n    EndTime: datetime,\n    EpisodeId: int,\n    EventId: int,\n    State: string,\n    EventType: string,\n    InjuriesDirect: int,\n    InjuriesIndirect: int,\n    DeathsDirect: int,\n    DeathsIndirect: int,\n    DamageProperty: int,\n    DamageCrops: int,\n    Source: string,\n    BeginLocation: string,\n    EndLocation: string,\n    BeginLat: real,\n    BeginLon: real,\n    EndLat: real,\n    EndLon: real,\n    EpisodeNarrative: string,\n    EventNarrative: string,\n    StormSummary: dynamic\n)",
+					"query": ".drop table StormEvents",
 					"metadata": {
 						"language": "kql"
 					},
@@ -2050,12 +2032,12 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/Drop table StormEvents')]",
+			"name": "[concat(parameters('workspaceName'), '/Create table StormEvents')]",
 			"type": "Microsoft.Synapse/workspaces/kqlscripts",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"content": {
-					"query": ".drop table StormEvents",
+					"query": ".create table StormEvents (\n    StartTime: datetime,\n    EndTime: datetime,\n    EpisodeId: int,\n    EventId: int,\n    State: string,\n    EventType: string,\n    InjuriesDirect: int,\n    InjuriesIndirect: int,\n    DeathsDirect: int,\n    DeathsIndirect: int,\n    DamageProperty: int,\n    DamageCrops: int,\n    Source: string,\n    BeginLocation: string,\n    EndLocation: string,\n    BeginLat: real,\n    BeginLon: real,\n    EndLat: real,\n    EndLon: real,\n    EpisodeNarrative: string,\n    EventNarrative: string,\n    StormSummary: dynamic\n)",
 					"metadata": {
 						"language": "kql"
 					},
@@ -2127,7 +2109,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "483aeccb-64a2-406c-96d5-1b9d96bf25a6"
+						"spark.autotune.trackingId": "32262b9d-4bd1-4053-92a5-8eb045157bea"
 					}
 				},
 				"metadata": {
@@ -2192,7 +2174,7 @@
 							"DROP TABLE IF EXISTS 311servicerequests"
 						],
 						"outputs": [],
-						"execution_count": 1
+						"execution_count": 3
 					},
 					{
 						"cell_type": "markdown",
@@ -2233,7 +2215,7 @@
 							"threeoneonedf = spark.read.csv(filePath, header = True)"
 						],
 						"outputs": [],
-						"execution_count": 2
+						"execution_count": 3
 					},
 					{
 						"cell_type": "markdown",
@@ -2295,7 +2277,7 @@
 							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Bridge Highway Segment\", \"BridgeHighwaySegment\")"
 						],
 						"outputs": [],
-						"execution_count": 3
+						"execution_count": 4
 					},
 					{
 						"cell_type": "markdown",
@@ -2327,7 +2309,7 @@
 							"threeoneonedf.printSchema()"
 						],
 						"outputs": [],
-						"execution_count": 4
+						"execution_count": 5
 					},
 					{
 						"cell_type": "markdown",
@@ -2361,7 +2343,7 @@
 							"threeoneonedf_part.write.partitionBy(\"Borough\", \"CommunityBoard\").format(\"parquet\").saveAsTable(\"311servicerequests\")"
 						],
 						"outputs": [],
-						"execution_count": 5
+						"execution_count": 6
 					},
 					{
 						"cell_type": "markdown",
@@ -2402,7 +2384,7 @@
 							"ORDER BY RequestCount DESC"
 						],
 						"outputs": [],
-						"execution_count": 6
+						"execution_count": 7
 					}
 				]
 			},
@@ -2429,7 +2411,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "13f41452-447a-432d-85ac-9fc53b025d20"
+						"spark.autotune.trackingId": "22c83f6c-15ab-469f-bf1a-9fa7d0b0aa55"
 					}
 				},
 				"metadata": {
@@ -2474,7 +2456,7 @@
 							"spark.Sql(\"CREATE TABLE cities (name STRING, population INT) USING PARQUET\")"
 						],
 						"outputs": [],
-						"execution_count": 4
+						"execution_count": 7
 					},
 					{
 						"cell_type": "markdown",
@@ -2489,7 +2471,7 @@
 							"spark.Sql(\"INSERT INTO cities VALUES ('Seattle', 730400), ('San Francisco', 881549), ('Beijing', 21540000), ('Bangalore', 10540000)\")"
 						],
 						"outputs": [],
-						"execution_count": 5
+						"execution_count": 3
 					},
 					{
 						"cell_type": "markdown",
@@ -2519,7 +2501,11 @@
 								"aggData": "{\"population\":{\"Bangalore\":10540000,\"Beijing\":21540000,\"San Francisco\":881549,\"Seattle\":730400}}",
 								"isSummary": false,
 								"previewData": {
-									"filter": null
+									"filter": null,
+									"table": {
+										"rows": [],
+										"schema": {}
+									}
 								},
 								"isSql": false
 							},
@@ -2529,7 +2515,7 @@
 							"Display(spark.Sql(\"SELECT * FROM cities ORDER BY name\"));"
 						],
 						"outputs": [],
-						"execution_count": 6
+						"execution_count": 4
 					},
 					{
 						"cell_type": "code",
@@ -2553,7 +2539,7 @@
 							"SELECT * FROM cities ORDER BY name"
 						],
 						"outputs": [],
-						"execution_count": 7
+						"execution_count": 5
 					},
 					{
 						"cell_type": "markdown",
@@ -2791,15 +2777,15 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "672909f4-86a9-4d74-b462-d6b68f1a5497"
+						"spark.autotune.trackingId": "fc57023f-7bad-4c6c-b22c-a98129713008"
 					}
 				},
 				"metadata": {
 					"saveOutput": true,
 					"enableDebugMode": false,
 					"kernelspec": {
-						"name": "synapse_sparksql",
-						"display_name": "sql"
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
 					},
 					"language_info": {
 						"name": "sql"
@@ -2816,8 +2802,7 @@
 						"sparkVersion": "2.4",
 						"nodeCount": 3,
 						"cores": 8,
-						"memory": 56,
-						"automaticScaleJobs": false
+						"memory": 56
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -2857,33 +2842,13 @@
 							"collapsed": false
 						},
 						"source": [
-							"SELECT * FROM df LIMIT 10"
-						],
-						"outputs": [],
-						"execution_count": 4
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							},
-							"collapsed": false
-						},
-						"source": [
 							"SELECT Year, Title, Rating\r\n",
 							"FROM df\r\n",
 							"WHERE Year = 1988\r\n",
 							"ORDER BY Title"
 						],
 						"outputs": [],
-						"execution_count": 3
+						"execution_count": 2
 					},
 					{
 						"cell_type": "code",
@@ -8607,7 +8572,7 @@
 			"properties": {
 				"autoPause": {
 					"enabled": true,
-					"delayInMinutes": 15
+					"delayInMinutes": 90
 				},
 				"autoScale": {
 					"enabled": false,
