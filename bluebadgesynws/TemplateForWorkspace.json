@@ -272,8 +272,7 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('workspaceId'), '/dataflows/Dataflow1')]",
-				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+				"[concat(variables('workspaceId'), '/dataflows/Dataflow1')]"
 			]
 		},
 		{
@@ -320,8 +319,7 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('workspaceId'), '/dataflows/Dataflow2')]",
-				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+				"[concat(variables('workspaceId'), '/dataflows/Dataflow2')]"
 			]
 		},
 		{
@@ -1998,7 +1996,7 @@
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"content": {
-					"query": "CREATE DATABASE SCOPED CREDENTIAL SynapseSqlCredential\n\tWITH IDENTITY = 'SHARED ACCESS SIGNATURE',\n\tSECRET = 'sv=2020-10-02&ss=btqf&srt=sco&st=2022-08-09T01%3A15%3A21Z&se=2022-08-10T01%3A15%3A21Z&sp=rl&sig=iyAAYBpMM5xFjRyV7IUwsq3HYjI2Qr74HVihEEmPQO8%3D';  \nGO\n\nCREATE EXTERNAL DATA SOURCE SynapseSqlDataSource\nWITH  (\n        LOCATION ='https://bluebadgehdisa.blob.core.windows.net',\n    \tCREDENTIAL = SynapseSqlCredential\n);\nGO\n\nCREATE EXTERNAL FILE FORMAT QuotedCsvWithHeaderFormat\nWITH (  \n     FORMAT_TYPE = DELIMITEDTEXT,\n     FORMAT_OPTIONS ( FIELD_TERMINATOR = ',', STRING_DELIMITER = '\"', FIRST_ROW = 2   )\n);\nGO\n\nCREATE EXTERNAL TABLE MoviesDB(\n    id int,\n    title VARCHAR(100),\n    genre VARCHAR(100),\n    year SMALLINT,\n    rating SMALLINT,\n    rottentomato SMALLINT\n)\nWITH (\n    LOCATION = 'bluebadgehdisc/example/data/MoviesDBFresh.csv',\n    DATA_SOURCE = SynapseSqlDataSource,\n    FILE_FORMAT = QuotedCsvWithHeaderFormat\n    );\n\nSELECT TOP 100 * FROM MoviesDB\n\nDROP EXTERNAL TABLE MoviesDB\nDROP EXTERNAL DATA SOURCE SynapseSqlDataSource\nDROP DATABASE SCOPED CREDENTIAL SynapseSqlCredential\nDROP EXTERNAL FILE FORMAT QuotedCsvWithHeaderFormat",
+					"query": "CREATE DATABASE SCOPED CREDENTIAL SynapseSqlCredential\n\tWITH IDENTITY = 'SHARED ACCESS SIGNATURE',\n\tSECRET = 'sv=2020-10-02&ss=btqf&srt=sco&st=2022-08-10T17%3A43%3A18Z&se=2026-08-11T17%3A43%3A00Z&sp=rl&sig=iYb2G7dcikkkEPocB7WGdJCfvw0nlDCAv4Io0qSv4%2FE%3D';  \nGO\n\nCREATE EXTERNAL DATA SOURCE SynapseSqlDataSource\nWITH  (\n        LOCATION ='https://bluebadgehdisa.blob.core.windows.net',\n    \tCREDENTIAL = SynapseSqlCredential\n);\nGO\n\nCREATE EXTERNAL FILE FORMAT QuotedCsvWithHeaderFormat\nWITH (  \n     FORMAT_TYPE = DELIMITEDTEXT,\n     FORMAT_OPTIONS ( FIELD_TERMINATOR = ',', STRING_DELIMITER = '\"', FIRST_ROW = 2   )\n);\nGO\n\nCREATE EXTERNAL TABLE MoviesDB(\n    id int,\n    title VARCHAR(100),\n    genre VARCHAR(100),\n    year SMALLINT,\n    rating SMALLINT,\n    rottentomato SMALLINT\n)\nWITH (\n    LOCATION = 'bluebadgehdisc/example/data/MoviesDBFresh.csv',\n    DATA_SOURCE = SynapseSqlDataSource,\n    FILE_FORMAT = QuotedCsvWithHeaderFormat\n    );\n\nSELECT TOP 100 * FROM MoviesDB\n\nDROP EXTERNAL TABLE MoviesDB\nDROP EXTERNAL DATA SOURCE SynapseSqlDataSource\nDROP DATABASE SCOPED CREDENTIAL SynapseSqlCredential\nDROP EXTERNAL FILE FORMAT QuotedCsvWithHeaderFormat",
 					"metadata": {
 						"language": "sql"
 					},
@@ -2501,11 +2499,7 @@
 								"aggData": "{\"population\":{\"Bangalore\":10540000,\"Beijing\":21540000,\"San Francisco\":881549,\"Seattle\":730400}}",
 								"isSummary": false,
 								"previewData": {
-									"filter": null,
-									"table": {
-										"rows": [],
-										"schema": {}
-									}
+									"filter": null
 								},
 								"isSql": false
 							},
