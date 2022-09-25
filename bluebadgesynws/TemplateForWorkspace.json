@@ -2594,7 +2594,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "e8599259-f1c2-4703-90a5-93a4db78ee40"
+						"spark.autotune.trackingId": "ece0ecae-f07a-4d47-ad4b-261fc38808ec"
 					}
 				},
 				"metadata": {
@@ -2619,7 +2619,8 @@
 						"sparkVersion": "2.4",
 						"nodeCount": 3,
 						"cores": 8,
-						"memory": 56
+						"memory": 56,
+						"automaticScaleJobs": false
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -2643,14 +2644,14 @@
 							"    .option(\"spark.synapse.linkedService\", \"kustoPool\") \\\n",
 							"    .option(\"kustoCluster\", \"https://contosodataexplorer22.bluebadgesynws.kusto.azuresynapse.net\") \\\n",
 							"    .option(\"kustoDatabase\", \"TestDatabase\") \\\n",
-							"    .option(\"kustoQuery\", \"IngestedData | take 20\") \\\n",
+							"    .option(\"kustoQuery\", \"IngestedData | take 1000\") \\\n",
 							"    .load()\n",
 							"\n",
 							"display(kustoDf)\n",
 							""
 						],
 						"outputs": [],
-						"execution_count": 1
+						"execution_count": 5
 					}
 				]
 			},
