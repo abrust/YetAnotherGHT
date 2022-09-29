@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "e839c26d-2a78-4f8b-87ff-1c32004b0afa"
+				"spark.autotune.trackingId": "7c07f73a-59f8-46cb-a343-a0cacd0825ce"
 			}
 		},
 		"metadata": {
@@ -122,7 +122,7 @@
 					"filePath = \"wasbs://\" + blob_container + \"@\" + storage_account_name + \".blob.core.windows.net/example/data/311DataFromNYCOpenDataPortal.csv\"\r\n",
 					"threeoneonedf = spark.read.csv(filePath, header = True)"
 				],
-				"execution_count": 4
+				"execution_count": 3
 			},
 			{
 				"cell_type": "markdown",
@@ -183,7 +183,7 @@
 					"threeoneonedf = threeoneonedf.withColumnRenamed(\"Road Ramp\", \"RoadRamp\")\r\n",
 					"threeoneonedf = threeoneonedf.withColumnRenamed(\"Bridge Highway Segment\", \"BridgeHighwaySegment\")"
 				],
-				"execution_count": 5
+				"execution_count": null
 			},
 			{
 				"cell_type": "markdown",
@@ -214,7 +214,7 @@
 				"source": [
 					"threeoneonedf.printSchema()"
 				],
-				"execution_count": 6
+				"execution_count": null
 			},
 			{
 				"cell_type": "markdown",
@@ -244,8 +244,8 @@
 					}
 				},
 				"source": [
-					"#threeoneonedf_part = threeoneonedf.repartition(200)\r\n",
-					"#threeoneonedf_part.write.partitionBy(\"Borough\", \"CommunityBoard\").format(\"parquet\").saveAsTable(\"311servicerequests\")"
+					"threeoneonedf_part = threeoneonedf.repartition(200)\r\n",
+					"threeoneonedf_part.write.partitionBy(\"Borough\", \"CommunityBoard\").format(\"parquet\").saveAsTable(\"311servicerequests\")"
 				],
 				"execution_count": 7
 			},
