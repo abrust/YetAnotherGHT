@@ -2428,7 +2428,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "12211c1a-59b9-4d77-88c3-f709c8fa120c"
+						"spark.autotune.trackingId": "7829190a-3c81-42bd-9d86-f787e81a2d08"
 					}
 				},
 				"metadata": {
@@ -2518,7 +2518,11 @@
 								"aggData": "{\"population\":{\"Bangalore\":10540000,\"Beijing\":21540000,\"San Francisco\":881549,\"Seattle\":730400}}",
 								"isSummary": false,
 								"previewData": {
-									"filter": null
+									"filter": null,
+									"table": {
+										"rows": [],
+										"schema": {}
+									}
 								},
 								"isSql": false
 							},
