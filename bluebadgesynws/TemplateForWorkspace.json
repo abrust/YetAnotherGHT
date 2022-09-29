@@ -1896,7 +1896,7 @@
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"content": {
-					"query": "CREATE EXTERNAL FILE FORMAT [SynapseParquetFormat]\nWITH ( FORMAT_TYPE = PARQUET)\n\nCREATE EXTERNAL DATA SOURCE [nyctlc_azureopendatastorage_blob_core_windows_net]\nWITH (\n\tLOCATION   = 'https://azureopendatastorage.blob.core.windows.net/nyctlc'\n)\n\nCREATE EXTERNAL TABLE nyc_tlc_yellow_trip_ext (\n\t[vendorID] varchar(8000),\n\t[tpepPickupDateTime] datetime2(7),\n\t[tpepDropoffDateTime] datetime2(7),\n\t[passengerCount] int,\n\t[tripDistance] float,\n\t[puLocationId] varchar(8000),\n\t[doLocationId] varchar(8000),\n\t[startLon] float,\n\t[startLat] float,\n\t[endLon] float,\n\t[endLat] float,\n\t[rateCodeId] int,\n\t[storeAndFwdFlag] varchar(8000),\n\t[paymentType] varchar(8000),\n\t[fareAmount] float,\n\t[extra] float,\n\t[mtaTax] float,\n\t[improvementSurcharge] varchar(8000),\n\t[tipAmount] float,\n\t[tollsAmount] float,\n\t[totalAmount] float\n\t)\n\tWITH (\n    LOCATION = 'yellow/puYear=2014/puMonth=3/*.parquet',\n\t-- LOCATION = 'yellow/puYear=*/puMonth=*/*.parquet'\n\tDATA_SOURCE = [nyctlc_azureopendatastorage_blob_core_windows_net],\n\tFILE_FORMAT = [SynapseParquetFormat]\n\t)\nGO\n\nSELECT TOP 100 * FROM nyc_tlc_yellow_trip_ext\nGO\n\nDROP EXTERNAL TABLE nyc_tlc_yellow_trip_ext\nDROP EXTERNAL FILE FORMAT [SynapseParquetFormat]\nDROP EXTERNAL DATA SOURCE [nyctlc_azureopendatastorage_blob_core_windows_net]",
+					"query": "/* This is essentially the same as script #1, but uses serverless pool instead of dedicated pool*/\nCREATE EXTERNAL FILE FORMAT [SynapseParquetFormat]\nWITH ( FORMAT_TYPE = PARQUET)\n\nCREATE EXTERNAL DATA SOURCE [nyctlc_azureopendatastorage_blob_core_windows_net]\nWITH (\n\tLOCATION   = 'https://azureopendatastorage.blob.core.windows.net/nyctlc'\n)\n\nCREATE EXTERNAL TABLE nyc_tlc_yellow_trip_ext (\n\t[vendorID] varchar(8000),\n\t[tpepPickupDateTime] datetime2(7),\n\t[tpepDropoffDateTime] datetime2(7),\n\t[passengerCount] int,\n\t[tripDistance] float,\n\t[puLocationId] varchar(8000),\n\t[doLocationId] varchar(8000),\n\t[startLon] float,\n\t[startLat] float,\n\t[endLon] float,\n\t[endLat] float,\n\t[rateCodeId] int,\n\t[storeAndFwdFlag] varchar(8000),\n\t[paymentType] varchar(8000),\n\t[fareAmount] float,\n\t[extra] float,\n\t[mtaTax] float,\n\t[improvementSurcharge] varchar(8000),\n\t[tipAmount] float,\n\t[tollsAmount] float,\n\t[totalAmount] float\n\t)\n\tWITH (\n    LOCATION = 'yellow/puYear=2014/puMonth=3/*.parquet',\n\t-- LOCATION = 'yellow/puYear=*/puMonth=*/*.parquet'\n\tDATA_SOURCE = [nyctlc_azureopendatastorage_blob_core_windows_net],\n\tFILE_FORMAT = [SynapseParquetFormat]\n\t)\nGO\n\nSELECT TOP 100 * FROM nyc_tlc_yellow_trip_ext\nGO\n\nDROP EXTERNAL TABLE nyc_tlc_yellow_trip_ext\nDROP EXTERNAL FILE FORMAT [SynapseParquetFormat]\nDROP EXTERNAL DATA SOURCE [nyctlc_azureopendatastorage_blob_core_windows_net]",
 					"metadata": {
 						"language": "sql"
 					},
@@ -2126,7 +2126,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "958afe82-e626-4e64-96e3-060ead1346d8"
+						"spark.autotune.trackingId": "e839c26d-2a78-4f8b-87ff-1c32004b0afa"
 					}
 				},
 				"metadata": {
@@ -2151,8 +2151,7 @@
 						"sparkVersion": "2.4",
 						"nodeCount": 3,
 						"cores": 8,
-						"memory": 56,
-						"automaticScaleJobs": false
+						"memory": 56
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -2429,7 +2428,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "9679fafb-b2d2-4ee4-8fc8-5375cb723f5e"
+						"spark.autotune.trackingId": "b4f6d853-b084-4ae2-82e0-22a53652804c"
 					}
 				},
 				"metadata": {
@@ -2682,15 +2681,15 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "f6556be2-79eb-4a0d-aa28-c98cfecee3bb"
+						"spark.autotune.trackingId": "327ca054-7d86-424b-8ca0-a6974a9ed50b"
 					}
 				},
 				"metadata": {
 					"saveOutput": true,
 					"enableDebugMode": false,
 					"kernelspec": {
-						"name": "synapse_sparksql",
-						"display_name": "sql"
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
 					},
 					"language_info": {
 						"name": "sql"
@@ -2707,8 +2706,7 @@
 						"sparkVersion": "2.4",
 						"nodeCount": 3,
 						"cores": 8,
-						"memory": 56,
-						"automaticScaleJobs": false
+						"memory": 56
 					},
 					"sessionKeepAliveTimeout": 30
 				},
