@@ -2126,7 +2126,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "7c07f73a-59f8-46cb-a343-a0cacd0825ce"
+						"spark.autotune.trackingId": "3509ab5e-6ea5-4a5a-8a33-772f204e06d9"
 					}
 				},
 				"metadata": {
@@ -2151,8 +2151,7 @@
 						"sparkVersion": "2.4",
 						"nodeCount": 3,
 						"cores": 8,
-						"memory": 56,
-						"automaticScaleJobs": false
+						"memory": 56
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -2192,7 +2191,7 @@
 							"--DROP TABLE IF EXISTS 311servicerequests"
 						],
 						"outputs": [],
-						"execution_count": 3
+						"execution_count": 6
 					},
 					{
 						"cell_type": "markdown",
@@ -2233,7 +2232,7 @@
 							"threeoneonedf = spark.read.csv(filePath, header = True)"
 						],
 						"outputs": [],
-						"execution_count": 3
+						"execution_count": 7
 					},
 					{
 						"cell_type": "markdown",
@@ -2295,7 +2294,7 @@
 							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Bridge Highway Segment\", \"BridgeHighwaySegment\")"
 						],
 						"outputs": [],
-						"execution_count": null
+						"execution_count": 9
 					},
 					{
 						"cell_type": "markdown",
@@ -2327,7 +2326,7 @@
 							"threeoneonedf.printSchema()"
 						],
 						"outputs": [],
-						"execution_count": null
+						"execution_count": 10
 					},
 					{
 						"cell_type": "markdown",
@@ -2357,11 +2356,11 @@
 							}
 						},
 						"source": [
-							"threeoneonedf_part = threeoneonedf.repartition(200)\r\n",
-							"threeoneonedf_part.write.partitionBy(\"Borough\", \"CommunityBoard\").format(\"parquet\").saveAsTable(\"311servicerequests\")"
+							"#threeoneonedf_part = threeoneonedf.repartition(200)\r\n",
+							"#threeoneonedf_part.write.partitionBy(\"Borough\", \"CommunityBoard\").format(\"parquet\").saveAsTable(\"311servicerequests\")"
 						],
 						"outputs": [],
-						"execution_count": 7
+						"execution_count": 11
 					},
 					{
 						"cell_type": "markdown",
@@ -2402,7 +2401,7 @@
 							"ORDER BY RequestCount DESC"
 						],
 						"outputs": [],
-						"execution_count": 8
+						"execution_count": 12
 					}
 				]
 			},
@@ -2519,11 +2518,7 @@
 								"aggData": "{\"population\":{\"Bangalore\":10540000,\"Beijing\":21540000,\"San Francisco\":881549,\"Seattle\":730400}}",
 								"isSummary": false,
 								"previewData": {
-									"filter": null,
-									"table": {
-										"rows": [],
-										"schema": {}
-									}
+									"filter": null
 								},
 								"isSql": false
 							},
