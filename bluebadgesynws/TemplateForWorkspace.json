@@ -2126,7 +2126,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "e839c26d-2a78-4f8b-87ff-1c32004b0afa"
+						"spark.autotune.trackingId": "7c07f73a-59f8-46cb-a343-a0cacd0825ce"
 					}
 				},
 				"metadata": {
@@ -2151,7 +2151,8 @@
 						"sparkVersion": "2.4",
 						"nodeCount": 3,
 						"cores": 8,
-						"memory": 56
+						"memory": 56,
+						"automaticScaleJobs": false
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -2232,7 +2233,7 @@
 							"threeoneonedf = spark.read.csv(filePath, header = True)"
 						],
 						"outputs": [],
-						"execution_count": 4
+						"execution_count": 3
 					},
 					{
 						"cell_type": "markdown",
@@ -2294,7 +2295,7 @@
 							"threeoneonedf = threeoneonedf.withColumnRenamed(\"Bridge Highway Segment\", \"BridgeHighwaySegment\")"
 						],
 						"outputs": [],
-						"execution_count": 5
+						"execution_count": null
 					},
 					{
 						"cell_type": "markdown",
@@ -2326,7 +2327,7 @@
 							"threeoneonedf.printSchema()"
 						],
 						"outputs": [],
-						"execution_count": 6
+						"execution_count": null
 					},
 					{
 						"cell_type": "markdown",
@@ -2356,8 +2357,8 @@
 							}
 						},
 						"source": [
-							"#threeoneonedf_part = threeoneonedf.repartition(200)\r\n",
-							"#threeoneonedf_part.write.partitionBy(\"Borough\", \"CommunityBoard\").format(\"parquet\").saveAsTable(\"311servicerequests\")"
+							"threeoneonedf_part = threeoneonedf.repartition(200)\r\n",
+							"threeoneonedf_part.write.partitionBy(\"Borough\", \"CommunityBoard\").format(\"parquet\").saveAsTable(\"311servicerequests\")"
 						],
 						"outputs": [],
 						"execution_count": 7
