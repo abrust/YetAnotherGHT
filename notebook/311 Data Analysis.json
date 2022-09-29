@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "87df63f4-880d-414a-acfb-253ec71d577c"
+				"spark.autotune.trackingId": "e839c26d-2a78-4f8b-87ff-1c32004b0afa"
 			}
 		},
 		"metadata": {
@@ -80,7 +80,7 @@
 				},
 				"source": [
 					"%%sql\r\n",
-					"DROP TABLE IF EXISTS 311servicerequests"
+					"--DROP TABLE IF EXISTS 311servicerequests"
 				],
 				"execution_count": 3
 			},
@@ -244,8 +244,8 @@
 					}
 				},
 				"source": [
-					"threeoneonedf_part = threeoneonedf.repartition(200)\r\n",
-					"threeoneonedf_part.write.partitionBy(\"Borough\", \"CommunityBoard\").format(\"parquet\").saveAsTable(\"311servicerequests\")"
+					"#threeoneonedf_part = threeoneonedf.repartition(200)\r\n",
+					"#threeoneonedf_part.write.partitionBy(\"Borough\", \"CommunityBoard\").format(\"parquet\").saveAsTable(\"311servicerequests\")"
 				],
 				"execution_count": 7
 			},
