@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "3509ab5e-6ea5-4a5a-8a33-772f204e06d9"
+				"spark.autotune.trackingId": "dde3d20f-8ad3-4ec7-b671-35b91fe8f69b"
 			}
 		},
 		"metadata": {
@@ -58,42 +58,6 @@
 					}
 				},
 				"source": [
-					"# As a preparatory step, perform a precautionary DROP TABLE operation"
-				]
-			},
-			{
-				"cell_type": "code",
-				"metadata": {
-					"jupyter": {
-						"source_hidden": false,
-						"outputs_hidden": false
-					},
-					"nteract": {
-						"transient": {
-							"deleting": false
-						}
-					},
-					"microsoft": {
-						"language": "sparksql"
-					},
-					"collapsed": false
-				},
-				"source": [
-					"%%sql\r\n",
-					"--DROP TABLE IF EXISTS 311servicerequests"
-				],
-				"execution_count": 6
-			},
-			{
-				"cell_type": "markdown",
-				"metadata": {
-					"nteract": {
-						"transient": {
-							"deleting": false
-						}
-					}
-				},
-				"source": [
 					"# Load data from CSV file into DataFrame:"
 				]
 			},
@@ -122,7 +86,7 @@
 					"filePath = \"wasbs://\" + blob_container + \"@\" + storage_account_name + \".blob.core.windows.net/example/data/311DataFromNYCOpenDataPortal.csv\"\r\n",
 					"threeoneonedf = spark.read.csv(filePath, header = True)"
 				],
-				"execution_count": 7
+				"execution_count": 2
 			},
 			{
 				"cell_type": "markdown",
@@ -288,6 +252,42 @@
 					"ORDER BY RequestCount DESC"
 				],
 				"execution_count": 12
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Drop the table"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "sparksql"
+					},
+					"collapsed": false
+				},
+				"source": [
+					"%%sql\r\n",
+					"--DROP TABLE IF EXISTS 311servicerequests"
+				],
+				"execution_count": 1
 			}
 		]
 	}
