@@ -35,6 +35,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage3'"
 		},
+		"AzureSqlDatabase1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase1'"
+		},
 		"AzureSqlDatabaseLinkedService_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabaseLinkedService'"
@@ -1363,6 +1367,25 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/AzureSqlDatabase1')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureSqlDatabase1_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/AzureSqlDatabaseLinkedService')]",
 			"type": "Microsoft.Synapse/workspaces/linkedServices",
 			"apiVersion": "2019-06-01-preview",
@@ -1962,6 +1985,26 @@
 					},
 					"currentConnection": {
 						"databaseName": "default",
+						"poolName": "Built-in"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/FlightDataExternalServerless')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "USE Demo\n\nCREATE MASTER KEY ENCRYPTION BY PASSWORD='BoobooBooboo!';\n\nCREATE DATABASE SCOPED CREDENTIAL BlobCred \nWITH \n  IDENTITY = 'SHARED ACCESS SIGNATURE',\n  SECRET = 'sv=2021-06-08&st=2022-11-20T21%3A06%3A29Z&se=2022-11-21T21%3A06%3A29Z&sr=c&sp=rl&sig=UdUZPLP1tLFIqNuRh8LVnb0zGBGHtJhj%2FgE8hEIzkF0%3D';\n\nCREATE EXTERNAL DATA SOURCE BlueBadge\nWITH \n  (LOCATION = 'https://bluebadgegen22sa.dfs.core.windows.net/bluebadgegen2fs',\n  CREDENTIAL = BlobCred)\n\nCREATE EXTERNAL FILE FORMAT BBIParquet\nWITH\n    (FORMAT_TYPE = PARQUET)\n\nCREATE EXTERNAL TABLE FlightData(\n    ActualElapsedTime INTEGER,\n    AirTime INTEGER, \n    ArrDelay INTEGER,\n    ArrTime VARCHAR(50),\n    Cancelled VARCHAR(50),\n    CancelledCode VARCHAR(50),\n    CarrierDelay VARCHAR(50),\n    CRSArrTime VARCHAR(50),\n    CRSDepTime VARCHAR(50),\n    CRSElapsedTime INTEGER,\n    DayOfMonth INTEGER,\n    DayOfWeek INTEGER,\n    DepDelay INTEGER,\n    DepTime VARCHAR(50),\n    Destination VARCHAR(50),\n    Distance INTEGER,\n    Diverted VARCHAR(50),\n    FlightNum VARCHAR(50),\n    IsArrDelayed VARCHAR(50),\n    IsDepDelayed VARCHAR(50),\n    LateAircraftDelay VARCHAR(50),\n    Month INTEGER,\n    NASDelay VARCHAR(50),\n    Origin VARCHAR(50),\n    SecurityDelay VARCHAR(50),\n    TailNum VARCHAR(50),\n    TaxiIn INTEGER,\n    TaxiOut INTEGER,\n    UniqueCarrier VARCHAR(50),\n    WeatherDelay VARCHAR(50),\n    Year INTEGER\n)\nWITH\n  LOCATION = 'flightpq4',\n  DATA_SOURCE = BlueBadge,\n  FILE_FORMAT = BBIParquet\n",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "Demo",
 						"poolName": "Built-in"
 					},
 					"resultLimit": 5000
