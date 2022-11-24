@@ -1,5 +1,5 @@
 {
-	"name": "Creating a managed Spark Table",
+	"name": "1 - Creating a managed Spark Table",
 	"properties": {
 		"nbformat": 4,
 		"nbformat_minor": 2,
@@ -17,15 +17,15 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "7829190a-3c81-42bd-9d86-f787e81a2d08"
+				"spark.autotune.trackingId": "339a8c53-911c-47c2-aa50-c695abf127f2"
 			}
 		},
 		"metadata": {
 			"saveOutput": true,
 			"enableDebugMode": false,
 			"kernelspec": {
-				"name": "synapse_pyspark",
-				"display_name": "Synapse PySpark"
+				"name": "synapse_sparkdotnet",
+				"display_name": "csharp"
 			},
 			"language_info": {
 				"name": "csharp"
