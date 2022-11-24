@@ -1914,26 +1914,6 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/2 - Create external table populationExternalTable with SQL Serverless')]",
-			"type": "Microsoft.Synapse/workspaces/sqlscripts",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"content": {
-					"query": "CREATE DATABASE SCOPED CREDENTIAL [sqlondemand]\nWITH IDENTITY='SHARED ACCESS SIGNATURE',  \nSECRET = 'sv=2018-03-28&ss=bf&srt=sco&sp=rl&st=2019-10-14T12%3A10%3A25Z&se=2061-12-31T12%3A10%3A00Z&sig=KlSU2ullCscyTS0An0nozEpo4tO5JAgGBvw%2FJX2lguw%3D'\n\nCREATE EXTERNAL DATA SOURCE SqlOnDemandDemo WITH (\n    LOCATION = 'https://sqlondemandstorage.blob.core.windows.net',\n    CREDENTIAL = sqlondemand\n);\nGO\n\nCREATE EXTERNAL FILE FORMAT QuotedCsvWithHeaderFormat\nWITH (  \n    FORMAT_TYPE = DELIMITEDTEXT,\n    FORMAT_OPTIONS ( FIELD_TERMINATOR = ',', STRING_DELIMITER = '\"', FIRST_ROW = 2   )\n);\nGO\n\nCREATE EXTERNAL TABLE populationExternalTable\n(\n    [country_code] VARCHAR (5) COLLATE Latin1_General_BIN2,\n    [country_name] VARCHAR (100) COLLATE Latin1_General_BIN2,\n    [year] smallint,\n    [population] bigint\n)\nWITH (\n    LOCATION = 'csv/population/population.csv',\n    DATA_SOURCE = sqlondemanddemo,\n    FILE_FORMAT = QuotedCSVWithHeaderFormat\n);\n\nSELECT\n    country_name, population\nFROM populationExternalTable\nWHERE\n    [year] = 2019\nORDER BY\n    [population] DESC;\n\n\nDROP EXTERNAL TABLE populationExternalTable\nDROP EXTERNAL FILE FORMAT QuotedCSVWithHeaderFormat\nDROP EXTERNAL DATA SOURCE SqlOnDemandDemo\nDROP DATABASE SCOPED CREDENTIAL [sqlondemand]",
-					"metadata": {
-						"language": "sql"
-					},
-					"currentConnection": {
-						"databaseName": "Sample",
-						"poolName": "Built-in"
-					},
-					"resultLimit": 5000
-				},
-				"type": "SqlQuery"
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('workspaceName'), '/3 - Create external table with SQL Serveless')]",
 			"type": "Microsoft.Synapse/workspaces/sqlscripts",
 			"apiVersion": "2019-06-01-preview",
@@ -2005,6 +1985,26 @@
 					},
 					"currentConnection": {
 						"databaseName": "default",
+						"poolName": "Built-in"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Create external table populationExternalTable with SQL Serverless')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "CREATE DATABASE SCOPED CREDENTIAL [sqlondemand]\nWITH IDENTITY='SHARED ACCESS SIGNATURE',  \nSECRET = 'sv=2018-03-28&ss=bf&srt=sco&sp=rl&st=2019-10-14T12%3A10%3A25Z&se=2061-12-31T12%3A10%3A00Z&sig=KlSU2ullCscyTS0An0nozEpo4tO5JAgGBvw%2FJX2lguw%3D'\n\nCREATE EXTERNAL DATA SOURCE SqlOnDemandDemo WITH (\n    LOCATION = 'https://sqlondemandstorage.blob.core.windows.net',\n    CREDENTIAL = sqlondemand\n);\nGO\n\nCREATE EXTERNAL FILE FORMAT QuotedCsvWithHeaderFormat\nWITH (  \n    FORMAT_TYPE = DELIMITEDTEXT,\n    FORMAT_OPTIONS ( FIELD_TERMINATOR = ',', STRING_DELIMITER = '\"', FIRST_ROW = 2   )\n);\nGO\n\nCREATE EXTERNAL TABLE populationExternalTable\n(\n    [country_code] VARCHAR (5) COLLATE Latin1_General_BIN2,\n    [country_name] VARCHAR (100) COLLATE Latin1_General_BIN2,\n    [year] smallint,\n    [population] bigint\n)\nWITH (\n    LOCATION = 'csv/population/population.csv',\n    DATA_SOURCE = sqlondemanddemo,\n    FILE_FORMAT = QuotedCSVWithHeaderFormat\n);\n\nSELECT\n    country_name, population\nFROM populationExternalTable\nWHERE\n    [year] = 2019\nORDER BY\n    [population] DESC;\n\n\nDROP EXTERNAL TABLE populationExternalTable\nDROP EXTERNAL FILE FORMAT QuotedCSVWithHeaderFormat\nDROP EXTERNAL DATA SOURCE SqlOnDemandDemo\nDROP DATABASE SCOPED CREDENTIAL [sqlondemand]",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "Sample",
 						"poolName": "Built-in"
 					},
 					"resultLimit": 5000
@@ -2561,11 +2561,7 @@
 								"aggData": "{\"population\":{\"Bangalore\":10540000,\"Beijing\":21540000,\"San Francisco\":881549,\"Seattle\":730400}}",
 								"isSummary": false,
 								"previewData": {
-									"filter": null,
-									"table": {
-										"rows": [],
-										"schema": {}
-									}
+									"filter": null
 								},
 								"isSql": false
 							},
@@ -2641,7 +2637,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "6bca8ebd-9693-4d4e-bfa0-94803c508726"
+						"spark.autotune.trackingId": "ab170511-f776-43a0-9e88-059aedfc9353"
 					}
 				},
 				"metadata": {
@@ -2666,8 +2662,7 @@
 						"sparkVersion": "2.4",
 						"nodeCount": 3,
 						"cores": 8,
-						"memory": 56,
-						"automaticScaleJobs": false
+						"memory": 56
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -8627,6 +8622,30 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/SampleSQL')]",
+			"type": "Microsoft.Synapse/workspaces/sqlPools",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"collation": "SQL_Latin1_General_CP1_CI_AS",
+				"maxSizeBytes": 263882790666240,
+				"annotations": []
+			},
+			"dependsOn": [],
+			"location": "eastus"
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SampleSQL1')]",
+			"type": "Microsoft.Synapse/workspaces/sqlPools",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"collation": "SQL_Latin1_General_CP1_CI_AS",
+				"maxSizeBytes": 263882790666240,
+				"annotations": []
+			},
+			"dependsOn": [],
+			"location": "eastus"
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/SampleSpark')]",
 			"type": "Microsoft.Synapse/workspaces/bigDataPools",
 			"apiVersion": "2019-06-01-preview",
@@ -8646,30 +8665,6 @@
 				"sparkVersion": "2.4",
 				"isComputeIsolationEnabled": false,
 				"sessionLevelPackagesEnabled": false,
-				"annotations": []
-			},
-			"dependsOn": [],
-			"location": "eastus"
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/SampleSQL')]",
-			"type": "Microsoft.Synapse/workspaces/sqlPools",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"collation": "SQL_Latin1_General_CP1_CI_AS",
-				"maxSizeBytes": 263882790666240,
-				"annotations": []
-			},
-			"dependsOn": [],
-			"location": "eastus"
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/SampleSQL1')]",
-			"type": "Microsoft.Synapse/workspaces/sqlPools",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"collation": "SQL_Latin1_General_CP1_CI_AS",
-				"maxSizeBytes": 263882790666240,
 				"annotations": []
 			},
 			"dependsOn": [],
