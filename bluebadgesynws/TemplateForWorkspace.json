@@ -2149,7 +2149,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/311 Data Analysis')]",
+			"name": "[concat(parameters('workspaceName'), '/0 - 311 Data Analysis')]",
 			"type": "Microsoft.Synapse/workspaces/notebooks",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
@@ -2169,7 +2169,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "dde3d20f-8ad3-4ec7-b671-35b91fe8f69b"
+						"spark.autotune.trackingId": "f9c93e17-c4a9-4dcd-a911-79b9ab1df511"
 					}
 				},
 				"metadata": {
@@ -2451,7 +2451,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/Creating a managed Spark Table')]",
+			"name": "[concat(parameters('workspaceName'), '/1 - Creating a managed Spark Table')]",
 			"type": "Microsoft.Synapse/workspaces/notebooks",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
@@ -2471,15 +2471,15 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "7829190a-3c81-42bd-9d86-f787e81a2d08"
+						"spark.autotune.trackingId": "339a8c53-911c-47c2-aa50-c695abf127f2"
 					}
 				},
 				"metadata": {
 					"saveOutput": true,
 					"enableDebugMode": false,
 					"kernelspec": {
-						"name": "synapse_pyspark",
-						"display_name": "Synapse PySpark"
+						"name": "synapse_sparkdotnet",
+						"display_name": "csharp"
 					},
 					"language_info": {
 						"name": "csharp"
@@ -2561,7 +2561,11 @@
 								"aggData": "{\"population\":{\"Bangalore\":10540000,\"Beijing\":21540000,\"San Francisco\":881549,\"Seattle\":730400}}",
 								"isSummary": false,
 								"previewData": {
-									"filter": null
+									"filter": null,
+									"table": {
+										"rows": [],
+										"schema": {}
+									}
 								},
 								"isSql": false
 							},
@@ -2611,6 +2615,120 @@
 						],
 						"outputs": [],
 						"execution_count": 8
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/2 - Lake Database Quickstart')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"bigDataPool": {
+					"referenceName": "SampleSpark",
+					"type": "BigDataPoolReference"
+				},
+				"sessionProperties": {
+					"driverMemory": "28g",
+					"driverCores": 4,
+					"executorMemory": "28g",
+					"executorCores": 4,
+					"numExecutors": 2,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2",
+						"spark.autotune.trackingId": "6bca8ebd-9693-4d4e-bfa0-94803c508726"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"enableDebugMode": false,
+					"kernelspec": {
+						"name": "synapse_sparksql",
+						"display_name": "sql"
+					},
+					"language_info": {
+						"name": "sql"
+					},
+					"a365ComputeOptions": {
+						"id": "/subscriptions/be13f18e-e3c7-4e40-a812-bca489b7b4e1/resourceGroups/bluebadgesynrg/providers/Microsoft.Synapse/workspaces/bluebadgesynws/bigDataPools/SampleSpark",
+						"name": "SampleSpark",
+						"type": "Spark",
+						"endpoint": "https://bluebadgesynws.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/SampleSpark",
+						"auth": {
+							"type": "AAD",
+							"authResource": "https://dev.azuresynapse.net"
+						},
+						"sparkVersion": "2.4",
+						"nodeCount": 3,
+						"cores": 8,
+						"memory": 56,
+						"automaticScaleJobs": false
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"outputs_hidden": true
+							},
+							"collapsed": false
+						},
+						"source": [
+							"INSERT INTO `retail_mil`.`customer` VALUES (1,'2021-02-18',1022,557,101,'Tailspin Toys (Head Office)','Waldemar Fisar',90410,466);"
+						],
+						"outputs": [],
+						"execution_count": 4
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"microsoft": {
+								"language": "python"
+							}
+						},
+						"source": [
+							"%%pyspark\r\n",
+							"df = spark.sql(\"SELECT * FROM `Retail_mil`.`Customer`\")\r\n",
+							"df.show(10)"
+						],
+						"outputs": [],
+						"execution_count": 13
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": false
+						},
+						"source": [
+							"SELECT * FROM `Retail_mil`.`Customer`"
+						],
+						"outputs": [],
+						"execution_count": 1
 					}
 				]
 			},
@@ -2694,119 +2812,6 @@
 						],
 						"outputs": [],
 						"execution_count": 6
-					}
-				]
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/Lake Database Quickstart')]",
-			"type": "Microsoft.Synapse/workspaces/notebooks",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"nbformat": 4,
-				"nbformat_minor": 2,
-				"bigDataPool": {
-					"referenceName": "SampleSpark",
-					"type": "BigDataPoolReference"
-				},
-				"sessionProperties": {
-					"driverMemory": "28g",
-					"driverCores": 4,
-					"executorMemory": "28g",
-					"executorCores": 4,
-					"numExecutors": 2,
-					"conf": {
-						"spark.dynamicAllocation.enabled": "false",
-						"spark.dynamicAllocation.minExecutors": "2",
-						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "327ca054-7d86-424b-8ca0-a6974a9ed50b"
-					}
-				},
-				"metadata": {
-					"saveOutput": true,
-					"enableDebugMode": false,
-					"kernelspec": {
-						"name": "synapse_pyspark",
-						"display_name": "Synapse PySpark"
-					},
-					"language_info": {
-						"name": "sql"
-					},
-					"a365ComputeOptions": {
-						"id": "/subscriptions/be13f18e-e3c7-4e40-a812-bca489b7b4e1/resourceGroups/bluebadgesynrg/providers/Microsoft.Synapse/workspaces/bluebadgesynws/bigDataPools/SampleSpark",
-						"name": "SampleSpark",
-						"type": "Spark",
-						"endpoint": "https://bluebadgesynws.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/SampleSpark",
-						"auth": {
-							"type": "AAD",
-							"authResource": "https://dev.azuresynapse.net"
-						},
-						"sparkVersion": "2.4",
-						"nodeCount": 3,
-						"cores": 8,
-						"memory": 56
-					},
-					"sessionKeepAliveTimeout": 30
-				},
-				"cells": [
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"outputs_hidden": true
-							},
-							"collapsed": false
-						},
-						"source": [
-							"INSERT INTO `retail_mil`.`customer` VALUES (1,'2021-02-18',1022,557,101,'Tailspin Toys (Head Office)','Waldemar Fisar',90410,466);"
-						],
-						"outputs": [],
-						"execution_count": 4
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							},
-							"microsoft": {
-								"language": "python"
-							}
-						},
-						"source": [
-							"%%pyspark\r\n",
-							"df = spark.sql(\"SELECT * FROM `Retail_mil`.`Customer`\")\r\n",
-							"df.show(10)"
-						],
-						"outputs": [],
-						"execution_count": 13
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							},
-							"collapsed": false
-						},
-						"source": [
-							"SELECT * FROM `Retail_mil`.`Customer`"
-						],
-						"outputs": [],
-						"execution_count": 1
 					}
 				]
 			},
