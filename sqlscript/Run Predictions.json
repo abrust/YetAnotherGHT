@@ -1,0 +1,17 @@
+{
+	"name": "Run Predictions",
+	"properties": {
+		"content": {
+			"query": "-- Create a stored procedure for storing the scoring script.\nCREATE PROCEDURE dbo.predict_rentals\nAS\nBEGIN\n-- Select input scoring data and assign aliases.\nWITH InputData AS\n(\n    SELECT\n        [season],\n        [mnth],\n        [holiday],\n        [weekday],\n        [workingday],\n        [weathersit],\n        [temp],\n        [atemp],\n        [hum],\n        [windspeed]\n    FROM [dbo].[weather_forecast]\n)\n-- Using T-SQL Predict command to score machine learning models. \nSELECT *\nFROM PREDICT (MODEL = (SELECT [model] FROM dbo.rental_prediction_model WHERE [ID] = 'rental-prediction-model:1'),\n              DATA = InputData,\n              RUNTIME = ONNX) WITH ([variable_out1] [real])\nEND\nGO\n\n-- Execute the above stored procedure.\nEXEC dbo.predict_rentals",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SampleSQL",
+				"poolName": "SampleSQL"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
