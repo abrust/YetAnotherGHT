@@ -2911,7 +2911,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "f61707cd-5fe7-4b4e-a654-102453a8a85b"
+						"spark.autotune.trackingId": "a0002091-d1b9-45f7-b494-79efb57df977"
 					}
 				},
 				"metadata": {
@@ -2954,7 +2954,7 @@
 							"from azureml.data.dataset_factory import TabularDatasetFactory"
 						],
 						"outputs": [],
-						"execution_count": null
+						"execution_count": 4
 					},
 					{
 						"cell_type": "code",
@@ -2967,7 +2967,7 @@
 							"experiment = Experiment(ws, experiment_name)"
 						],
 						"outputs": [],
-						"execution_count": null
+						"execution_count": 5
 					},
 					{
 						"cell_type": "code",
@@ -2979,7 +2979,7 @@
 							"dataset = TabularDatasetFactory.register_spark_dataframe(df, datastore, name = experiment_name + \"-dataset\")"
 						],
 						"outputs": [],
-						"execution_count": null
+						"execution_count": 6
 					},
 					{
 						"cell_type": "code",
@@ -2995,7 +2995,7 @@
 							"                             enable_onnx_compatible_models = True)"
 						],
 						"outputs": [],
-						"execution_count": null
+						"execution_count": 7
 					},
 					{
 						"cell_type": "code",
@@ -3004,7 +3004,7 @@
 							"run = experiment.submit(automl_config)"
 						],
 						"outputs": [],
-						"execution_count": null
+						"execution_count": 8
 					},
 					{
 						"cell_type": "code",
@@ -3013,7 +3013,7 @@
 							"displayHTML(\"<a href={} target='_blank'>Your experiment in Azure Machine Learning portal: {}</a>\".format(run.get_portal_url(), run.id))"
 						],
 						"outputs": [],
-						"execution_count": null
+						"execution_count": 9
 					},
 					{
 						"cell_type": "code",
@@ -3076,7 +3076,7 @@
 							"    mlflow.register_model(\"runs:/\" + run.info.run_id + \"/\" + artifact_path, \"rental-prediction-model\")"
 						],
 						"outputs": [],
-						"execution_count": null
+						"execution_count": 10
 					}
 				]
 			},
@@ -9128,6 +9128,26 @@
 			},
 			"dependsOn": [],
 			"location": "eastus"
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Run Predictions')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "-- Create a stored procedure for storing the scoring script.\nCREATE PROCEDURE dbo.predict_rentals\nAS\nBEGIN\n-- Select input scoring data and assign aliases.\nWITH InputData AS\n(\n    SELECT\n        [season],\n        [mnth],\n        [holiday],\n        [weekday],\n        [workingday],\n        [weathersit],\n        [temp],\n        [atemp],\n        [hum],\n        [windspeed]\n    FROM [dbo].[weather_forecast]\n)\n-- Using T-SQL Predict command to score machine learning models. \nSELECT *\nFROM PREDICT (MODEL = (SELECT [model] FROM dbo.rental_prediction_model WHERE [ID] = 'rental-prediction-model:1'),\n              DATA = InputData,\n              RUNTIME = ONNX) WITH ([variable_out1] [real])\nEND\nGO\n\n-- Execute the above stored procedure.\nEXEC dbo.predict_rentals",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "SampleSQL",
+						"poolName": "SampleSQL"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
 		}
 	]
 }
