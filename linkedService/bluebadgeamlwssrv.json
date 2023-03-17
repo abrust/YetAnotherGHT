@@ -1,0 +1,17 @@
+{
+	"name": "bluebadgeamlwssrv",
+	"properties": {
+		"annotations": [],
+		"type": "AzureMLService",
+		"typeProperties": {
+			"subscriptionId": "be13f18e-e3c7-4e40-a812-bca489b7b4e1",
+			"resourceGroupName": "bluebadgeamlrg",
+			"mlWorkspaceName": "bluebadgeamlws",
+			"authentication": "MSI"
+		},
+		"connectVia": {
+			"referenceName": "AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
