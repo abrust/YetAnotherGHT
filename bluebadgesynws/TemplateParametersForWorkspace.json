@@ -86,6 +86,12 @@
 		"NYCOpenData_properties_typeProperties_url": {
 			"value": "https://data.cityofnewyork.us/api/views/erm2-nwe9/rows.csv?accessType=DOWNLOAD"
 		},
+		"bluebadgeamlwssrv_properties_typeProperties_subscriptionId": {
+			"value": "be13f18e-e3c7-4e40-a812-bca489b7b4e1"
+		},
+		"bluebadgeamlwssrv_properties_typeProperties_resourceGroupName": {
+			"value": "bluebadgeamlrg"
+		},
 		"bluebadgesynws-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"value": "https://bluebadgesynadlsa.dfs.core.windows.net"
 		}

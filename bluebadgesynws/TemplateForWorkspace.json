@@ -116,6 +116,14 @@
 			"type": "string",
 			"defaultValue": "https://data.cityofnewyork.us/api/views/erm2-nwe9/rows.csv?accessType=DOWNLOAD"
 		},
+		"bluebadgeamlwssrv_properties_typeProperties_subscriptionId": {
+			"type": "string",
+			"defaultValue": "be13f18e-e3c7-4e40-a812-bca489b7b4e1"
+		},
+		"bluebadgeamlwssrv_properties_typeProperties_resourceGroupName": {
+			"type": "string",
+			"defaultValue": "bluebadgeamlrg"
+		},
 		"bluebadgesynws-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://bluebadgesynadlsa.dfs.core.windows.net"
@@ -1674,6 +1682,28 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/bluebadgeamlwssrv')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureMLService",
+				"typeProperties": {
+					"subscriptionId": "[parameters('bluebadgeamlwssrv_properties_typeProperties_subscriptionId')]",
+					"resourceGroupName": "[parameters('bluebadgeamlwssrv_properties_typeProperties_resourceGroupName')]",
+					"mlWorkspaceName": "bluebadgeamlws",
+					"authentication": "MSI"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/bluebadgesynws-WorkspaceDefaultSqlServer')]",
 			"type": "Microsoft.Synapse/workspaces/linkedServices",
 			"apiVersion": "2019-06-01-preview",
@@ -2731,6 +2761,137 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/AML Integration Demo')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"bigDataPool": {
+					"referenceName": "SampleSpark",
+					"type": "BigDataPoolReference"
+				},
+				"sessionProperties": {
+					"driverMemory": "56g",
+					"driverCores": 8,
+					"executorMemory": "56g",
+					"executorCores": 8,
+					"numExecutors": 2,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2",
+						"spark.autotune.trackingId": "7a6d3acb-1e91-482e-b366-8b53c7c7f0df"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"enableDebugMode": false,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
+					},
+					"language_info": {
+						"name": "python"
+					},
+					"a365ComputeOptions": {
+						"id": "/subscriptions/be13f18e-e3c7-4e40-a812-bca489b7b4e1/resourceGroups/bluebadgesynrg/providers/Microsoft.Synapse/workspaces/bluebadgesynws/bigDataPools/SampleSpark",
+						"name": "SampleSpark",
+						"type": "Spark",
+						"endpoint": "https://bluebadgesynws.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/SampleSpark",
+						"auth": {
+							"type": "AAD",
+							"authResource": "https://dev.azuresynapse.net"
+						},
+						"sparkVersion": "2.4",
+						"nodeCount": 3,
+						"cores": 8,
+						"memory": 56,
+						"automaticScaleJobs": false
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "code",
+						"metadata": {
+							"microsoft": {
+								"language": "python"
+							},
+							"collapsed": false
+						},
+						"source": [
+							" %%pyspark\r\n",
+							" df = spark.read.load('abfss://bluebadgesynadlsfs@bluebadgesynadlsa.dfs.core.windows.net/bikerentals/bike-rentals-training.csv', format='csv'\r\n",
+							"  ## If header exists uncomment line below\r\n",
+							" , header=True\r\n",
+							" , inferSchema=True\r\n",
+							" )\r\n",
+							" display(df.limit(10))"
+						],
+						"outputs": [],
+						"execution_count": 1
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							" bike_df = df.select(\"season\", \r\n",
+							"                     \"mnth\", \r\n",
+							"                     \"holiday\", \r\n",
+							"                     \"weekday\", \r\n",
+							"                     \"workingday\", \r\n",
+							"                     \"weathersit\", \r\n",
+							"                     \"temp\", \r\n",
+							"                     \"atemp\", \r\n",
+							"                     \"hum\", \r\n",
+							"                     \"windspeed\", \r\n",
+							"                     \"rentals\")\r\n",
+							" bike_df.write.saveAsTable(\"bike_data\")"
+						],
+						"outputs": [],
+						"execution_count": 2
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"microsoft": {
+								"language": "sparksql"
+							},
+							"collapsed": false
+						},
+						"source": [
+							"%%sql\r\n",
+							"\r\n",
+							"SELECT * FROM bike_data"
+						],
+						"outputs": [],
+						"execution_count": 3
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/Data_Explorer_Sample')]",
 			"type": "Microsoft.Synapse/workspaces/notebooks",
 			"apiVersion": "2019-06-01-preview",
@@ -2834,7 +2995,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "3b244253-ff15-49c3-846f-ea644077e88b"
+						"spark.autotune.trackingId": "8b6907c4-d284-4063-9cbd-7954ce020404"
 					}
 				},
 				"metadata": {
@@ -2859,15 +3020,13 @@
 						"sparkVersion": "2.4",
 						"nodeCount": 3,
 						"cores": 8,
-						"memory": 56,
-						"automaticScaleJobs": false
+						"memory": 56
 					},
 					"sessionKeepAliveTimeout": 30
 				},
 				"cells": [
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"#https://onelake.pbidedicated.windows.net/ca5d9fa3-b3d1-4ec8-8050-e98e10da8a12/cfd31242-df2a-4d69-a09e-1a5c60eb4457/Files/Demo Data\r\n",
 							"oneLakePath = \"https://ca5d9fa3-b3d1-4ec8-8050-e98e10da8a12@onelakeeastus2.pbidedicated.windows.net/cfd31242-df2a-4d69-a09e-1a5c60eb4457/Files/Demo Data\""
