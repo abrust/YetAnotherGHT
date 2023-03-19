@@ -1,0 +1,15 @@
+{
+	"name": "DestinationDataset_aqb",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"table": "MoviesDBFresh"
+		}
+	}
+}
