@@ -820,6 +820,26 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/DestinationDataset_aqb')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"table": "MoviesDBFresh"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/AzureSqlDatabase1')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/EmpTxtFile')]",
 			"type": "Microsoft.Synapse/workspaces/datasets",
 			"apiVersion": "2019-06-01-preview",
@@ -1117,6 +1137,60 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/linkedServices/AzureStorageLinkedService')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SourceDataset_aqb')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage3",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "MoviesDBFresh.csv",
+						"folderPath": "example/data",
+						"container": "bluebadgehdisc"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "movie",
+						"type": "String"
+					},
+					{
+						"name": "title",
+						"type": "String"
+					},
+					{
+						"name": "genres",
+						"type": "String"
+					},
+					{
+						"name": "year",
+						"type": "String"
+					},
+					{
+						"name": "Rating",
+						"type": "String"
+					},
+					{
+						"name": "Rotton Tomato",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/AzureBlobStorage3')]"
 			]
 		},
 		{
@@ -1925,7 +1999,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/1 - Create external table with SQL Dedicated')]",
+			"name": "[concat(parameters('workspaceName'), '/01 - Create external table with SQL Dedicated')]",
 			"type": "Microsoft.Synapse/workspaces/sqlscripts",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
@@ -1945,7 +2019,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/3 - Create external table with SQL Serveless')]",
+			"name": "[concat(parameters('workspaceName'), '/03 - Create external table with SQL Serveless')]",
 			"type": "Microsoft.Synapse/workspaces/sqlscripts",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
@@ -1965,12 +2039,12 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/4 - PANDEMIC OPENROWSET queries')]",
+			"name": "[concat(parameters('workspaceName'), '/05 - Yellow Taxi OPENROWSET queries')]",
 			"type": "Microsoft.Synapse/workspaces/sqlscripts",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"content": {
-					"query": "-- CSV file contains header row; query uses HEADER_ROW = TRUE:\n-- FILE TAKEN DOWN -- Query will not run\nSELECT \n\t*\nFROM OPENROWSET(\n    BULK 'https://pandemicdatalake.blob.core.windows.net/public/curated/covid-19/ecdc_cases/latest/ecdc_cases.csv',\n    FORMAT = 'CSV',\n    PARSER_VERSION = '2.0',\n\tHEADER_ROW = TRUE) as [r]\n\n-- CSV file query doesn't use HEADER_ROW = TRUE, so set FIRSTROW to 2, and deal with generic column names\n-- FILE TAKEN DOWN -- Query will not run\nSELECT \n\t*\nFROM OPENROWSET(\n    BULK 'https://pandemicdatalake.blob.core.windows.net/public/curated/covid-19/ecdc_cases/latest/ecdc_cases.csv',\n    FORMAT = 'CSV',\n    FIRSTROW = 2,\n    PARSER_VERSION = '2.0') as [r]\n\n-- Parquet file (schema inside):\nSELECT \n    TOP 1 *\nFROM  \n    OPENROWSET(\n        BULK 'https://azureopendatastorage.blob.core.windows.net/censusdatacontainer/release/us_population_county/year=20*/*.parquet',\n        FORMAT='PARQUET'\n    ) AS [r]\n\n-- CSV with no header row, but with schema (for two columns) specified\n-- Note the 1 and 4 at the end of the two column definitions, which indicate the ordinals of the corresponding columns\n-- Authtiction supplied through shared access signature, database scoped credential and external data source,\n-- the last of which is referenced in the DATA_SOURCE parameter of the OPENROWSET comamand\nCREATE DATABASE SCOPED CREDENTIAL [sqlondemand]\nWITH IDENTITY='SHARED ACCESS SIGNATURE',  \nSECRET = 'sv=2018-03-28&ss=bf&srt=sco&sp=rl&st=2019-10-14T12%3A10%3A25Z&se=2061-12-31T12%3A10%3A00Z&sig=KlSU2ullCscyTS0An0nozEpo4tO5JAgGBvw%2FJX2lguw%3D'\n\nCREATE EXTERNAL DATA SOURCE SqlOnDemandDemo WITH (\n    LOCATION = 'https://sqlondemandstorage.blob.core.windows.net',\n    CREDENTIAL = sqlondemand\n);\nGO;\n\nSELECT \n\t* \nFROM OPENROWSET(\n        BULK 'csv/population/population*.csv',\n        DATA_SOURCE = 'SqlOnDemandDemo',\n        FORMAT = 'CSV',\n        FIRSTROW = 1\n    )\nWITH (\n    [country_code] VARCHAR (5) COLLATE Latin1_General_BIN2 1,\n    [population] bigint 4\n) AS [r]\nGO;\n\n-- Schema specification for certain columns from Parquet file:\nSELECT \n    TOP 1 *\nFROM  \n    OPENROWSET(\n        BULK 'https://azureopendatastorage.blob.core.windows.net/censusdatacontainer/release/us_population_county/year=20*/*.parquet',\n        FORMAT='PARQUET'\n    )\nWITH (\n\t[stateName] VARCHAR (50),\n\t[population] bigint\n) AS [r]\n\n-- Read JSON file and specifcy schema\n-- Note use of lax and strict path modes\n-- SELECT \n--     TOP 1 *\n-- FROM  \n--     OPENROWSET(\n--         BULK 'https://azureopendatastorage.blob.core.windows.net/censusdatacontainer/release/us_population_county/year=20*/*.parquet',\n--         FORMAT='PARQUET'\n--     )\n-- WITH (\n-- \t--lax path mode samples\n-- \t[stateName] VARCHAR (50), -- this one works as column name casing is valid - it targets the same column as the next one\n-- \t[stateName_explicit_path] VARCHAR (50) '$.stateName', -- this one works as column name casing is valid\n-- \t[COUNTYNAME] VARCHAR (50), --  will contain NULLs only because of wrong casing - it targets the same column as the next one\n-- \t[countyName_explicit_path] VARCHAR (50) '$.COUNTYNAME', -- will contain NULLS  because of wrong casing and default path mode being lax\n\n-- \t--strict path mode samples\n-- \t[population] bigint 'strict $.population' -- this one works as column name casing is valid\n-- \t--,[population2] bigint 'strict $.POPULATION' -- this one fails because of wrong casing and strict path mode\n-- )\n-- AS [r]\n\nDROP EXTERNAL DATA SOURCE SqlOnDemandDemo\nDROP DATABASE SCOPED CREDENTIAL [sqlondemand]",
+					"query": "--SELECT TOP 100 * FROM\n--    OPENROWSET(\n--        BULK 'https://azureopendatastorage.blob.core.windows.net/nyctlc/yellow/puYear=*/puMonth=*/*.parquet',\n--        FORMAT='PARQUET'\n--    ) AS [nyc]\n\n--SELECT TOP 100 * FROM\n--\tOPENROWSET(\n--\t\tBULK 'https://azureopendatastorage.blob.core.windows.net/holidaydatacontainer/Processed/*.parquet',\n--\t\tFORMAT='PARQUET'\n--\t) AS [holidays]\n\n--SELECT\n--    TOP 100 *\n--FROM  \n--    OPENROWSET(\n--        BULK 'https://azureopendatastorage.blob.core.windows.net/isdweatherdatacontainer/ISDWeather/year=*/month=*/*.parquet',\n--        FORMAT='PARQUET'\n--    ) AS [weather]\n\n/* Filepath condition in WHERE clause; yields data from 2009-2019 incliusive */\nSELECT\n    YEAR(tpepPickupDateTime) AS current_year,\n    COUNT(*) AS rides_per_year\nFROM\n    OPENROWSET(\n        BULK 'https://azureopendatastorage.blob.core.windows.net/nyctlc/yellow/puYear=*/puMonth=*/*.parquet',\n        FORMAT='PARQUET'\n    ) AS [nyc]\nWHERE nyc.filepath(1) >= '2009' AND nyc.filepath(1) <= '2019'\nGROUP BY YEAR(tpepPickupDateTime)\nORDER BY 1 ASC\n\n/* Same but for 2016 only */\nSELECT\n    CAST([tpepPickupDateTime] AS DATE) AS [current_day],\n    COUNT(*) as rides_per_day\nFROM\n    OPENROWSET(\n        BULK 'https://azureopendatastorage.blob.core.windows.net/nyctlc/yellow/puYear=*/puMonth=*/*.parquet',\n        FORMAT='PARQUET'\n    ) AS [nyc]\nWHERE nyc.filepath(1) = '2016'\nGROUP BY CAST([tpepPickupDateTime] AS DATE)\nORDER BY 1 ASC\n\n/* Join of two subselects */\nWITH taxi_rides AS\n(\n    SELECT\n        CAST([tpepPickupDateTime] AS DATE) AS [current_day],\n        COUNT(*) as rides_per_day\n    FROM  \n        OPENROWSET(\n            BULK 'https://azureopendatastorage.blob.core.windows.net/nyctlc/yellow/puYear=*/puMonth=*/*.parquet',\n            FORMAT='PARQUET'\n        ) AS [nyc]\n    WHERE nyc.filepath(1) = '2016'\n    GROUP BY CAST([tpepPickupDateTime] AS DATE)\n),\npublic_holidays AS\n(\n    SELECT\n        holidayname as holiday,\n        date\n    FROM\n        OPENROWSET(\n            BULK 'https://azureopendatastorage.blob.core.windows.net/holidaydatacontainer/Processed/*.parquet',\n            FORMAT='PARQUET'\n        ) AS [holidays]\n    WHERE countryorregion = 'United States' AND YEAR(date) = 2016\n)\nSELECT\n*\nFROM taxi_rides t\nLEFT OUTER JOIN public_holidays p on t.current_day = p.date\nORDER BY current_day ASC\n\n/* Aggregations and column aliasing */\nSELECT\n    AVG(windspeed) AS avg_windspeed,\n    MIN(windspeed) AS min_windspeed,\n    MAX(windspeed) AS max_windspeed,\n    AVG(temperature) AS avg_temperature,\n    MIN(temperature) AS min_temperature,\n    MAX(temperature) AS max_temperature,\n    AVG(sealvlpressure) AS avg_sealvlpressure,\n    MIN(sealvlpressure) AS min_sealvlpressure,\n    MAX(sealvlpressure) AS max_sealvlpressure,\n    AVG(precipdepth) AS avg_precipdepth,\n    MIN(precipdepth) AS min_precipdepth,\n    MAX(precipdepth) AS max_precipdepth,\n    AVG(snowdepth) AS avg_snowdepth,\n    MIN(snowdepth) AS min_snowdepth,\n    MAX(snowdepth) AS max_snowdepth\nFROM\n    OPENROWSET(\n        BULK 'https://azureopendatastorage.blob.core.windows.net/isdweatherdatacontainer/ISDWeather/year=*/month=*/*.parquet',\n        FORMAT='PARQUET'\n    ) AS [weather]\nWHERE countryorregion = 'US' AND CAST([datetime] AS DATE) = '2016-01-23' AND stationname = 'JOHN F KENNEDY INTERNATIONAL AIRPORT'",
 					"metadata": {
 						"language": "sql"
 					},
@@ -1985,12 +2059,12 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/5 - Yellow Taxi OPENROWSET queries')]",
+			"name": "[concat(parameters('workspaceName'), '/4 - PANDEMIC OPENROWSET queries')]",
 			"type": "Microsoft.Synapse/workspaces/sqlscripts",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"content": {
-					"query": "--SELECT TOP 100 * FROM\n--    OPENROWSET(\n--        BULK 'https://azureopendatastorage.blob.core.windows.net/nyctlc/yellow/puYear=*/puMonth=*/*.parquet',\n--        FORMAT='PARQUET'\n--    ) AS [nyc]\n\n--SELECT TOP 100 * FROM\n--\tOPENROWSET(\n--\t\tBULK 'https://azureopendatastorage.blob.core.windows.net/holidaydatacontainer/Processed/*.parquet',\n--\t\tFORMAT='PARQUET'\n--\t) AS [holidays]\n\n--SELECT\n--    TOP 100 *\n--FROM  \n--    OPENROWSET(\n--        BULK 'https://azureopendatastorage.blob.core.windows.net/isdweatherdatacontainer/ISDWeather/year=*/month=*/*.parquet',\n--        FORMAT='PARQUET'\n--    ) AS [weather]\n\n/* Filepath condition in WHERE clause; yields data from 2009-2019 incliusive */\nSELECT\n    YEAR(tpepPickupDateTime) AS current_year,\n    COUNT(*) AS rides_per_year\nFROM\n    OPENROWSET(\n        BULK 'https://azureopendatastorage.blob.core.windows.net/nyctlc/yellow/puYear=*/puMonth=*/*.parquet',\n        FORMAT='PARQUET'\n    ) AS [nyc]\nWHERE nyc.filepath(1) >= '2009' AND nyc.filepath(1) <= '2019'\nGROUP BY YEAR(tpepPickupDateTime)\nORDER BY 1 ASC\n\n/* Same but for 2016 only */\nSELECT\n    CAST([tpepPickupDateTime] AS DATE) AS [current_day],\n    COUNT(*) as rides_per_day\nFROM\n    OPENROWSET(\n        BULK 'https://azureopendatastorage.blob.core.windows.net/nyctlc/yellow/puYear=*/puMonth=*/*.parquet',\n        FORMAT='PARQUET'\n    ) AS [nyc]\nWHERE nyc.filepath(1) = '2016'\nGROUP BY CAST([tpepPickupDateTime] AS DATE)\nORDER BY 1 ASC\n\n/* Join of two subselects */\nWITH taxi_rides AS\n(\n    SELECT\n        CAST([tpepPickupDateTime] AS DATE) AS [current_day],\n        COUNT(*) as rides_per_day\n    FROM  \n        OPENROWSET(\n            BULK 'https://azureopendatastorage.blob.core.windows.net/nyctlc/yellow/puYear=*/puMonth=*/*.parquet',\n            FORMAT='PARQUET'\n        ) AS [nyc]\n    WHERE nyc.filepath(1) = '2016'\n    GROUP BY CAST([tpepPickupDateTime] AS DATE)\n),\npublic_holidays AS\n(\n    SELECT\n        holidayname as holiday,\n        date\n    FROM\n        OPENROWSET(\n            BULK 'https://azureopendatastorage.blob.core.windows.net/holidaydatacontainer/Processed/*.parquet',\n            FORMAT='PARQUET'\n        ) AS [holidays]\n    WHERE countryorregion = 'United States' AND YEAR(date) = 2016\n)\nSELECT\n*\nFROM taxi_rides t\nLEFT OUTER JOIN public_holidays p on t.current_day = p.date\nORDER BY current_day ASC\n\n/* Aggregations and column aliasing */\nSELECT\n    AVG(windspeed) AS avg_windspeed,\n    MIN(windspeed) AS min_windspeed,\n    MAX(windspeed) AS max_windspeed,\n    AVG(temperature) AS avg_temperature,\n    MIN(temperature) AS min_temperature,\n    MAX(temperature) AS max_temperature,\n    AVG(sealvlpressure) AS avg_sealvlpressure,\n    MIN(sealvlpressure) AS min_sealvlpressure,\n    MAX(sealvlpressure) AS max_sealvlpressure,\n    AVG(precipdepth) AS avg_precipdepth,\n    MIN(precipdepth) AS min_precipdepth,\n    MAX(precipdepth) AS max_precipdepth,\n    AVG(snowdepth) AS avg_snowdepth,\n    MIN(snowdepth) AS min_snowdepth,\n    MAX(snowdepth) AS max_snowdepth\nFROM\n    OPENROWSET(\n        BULK 'https://azureopendatastorage.blob.core.windows.net/isdweatherdatacontainer/ISDWeather/year=*/month=*/*.parquet',\n        FORMAT='PARQUET'\n    ) AS [weather]\nWHERE countryorregion = 'US' AND CAST([datetime] AS DATE) = '2016-01-23' AND stationname = 'JOHN F KENNEDY INTERNATIONAL AIRPORT'",
+					"query": "-- CSV file contains header row; query uses HEADER_ROW = TRUE:\n-- FILE TAKEN DOWN -- Query will not run\nSELECT \n\t*\nFROM OPENROWSET(\n    BULK 'https://pandemicdatalake.blob.core.windows.net/public/curated/covid-19/ecdc_cases/latest/ecdc_cases.csv',\n    FORMAT = 'CSV',\n    PARSER_VERSION = '2.0',\n\tHEADER_ROW = TRUE) as [r]\n\n-- CSV file query doesn't use HEADER_ROW = TRUE, so set FIRSTROW to 2, and deal with generic column names\n-- FILE TAKEN DOWN -- Query will not run\nSELECT \n\t*\nFROM OPENROWSET(\n    BULK 'https://pandemicdatalake.blob.core.windows.net/public/curated/covid-19/ecdc_cases/latest/ecdc_cases.csv',\n    FORMAT = 'CSV',\n    FIRSTROW = 2,\n    PARSER_VERSION = '2.0') as [r]\n\n-- Parquet file (schema inside):\nSELECT \n    TOP 1 *\nFROM  \n    OPENROWSET(\n        BULK 'https://azureopendatastorage.blob.core.windows.net/censusdatacontainer/release/us_population_county/year=20*/*.parquet',\n        FORMAT='PARQUET'\n    ) AS [r]\n\n-- CSV with no header row, but with schema (for two columns) specified\n-- Note the 1 and 4 at the end of the two column definitions, which indicate the ordinals of the corresponding columns\n-- Authtiction supplied through shared access signature, database scoped credential and external data source,\n-- the last of which is referenced in the DATA_SOURCE parameter of the OPENROWSET comamand\nCREATE DATABASE SCOPED CREDENTIAL [sqlondemand]\nWITH IDENTITY='SHARED ACCESS SIGNATURE',  \nSECRET = 'sv=2018-03-28&ss=bf&srt=sco&sp=rl&st=2019-10-14T12%3A10%3A25Z&se=2061-12-31T12%3A10%3A00Z&sig=KlSU2ullCscyTS0An0nozEpo4tO5JAgGBvw%2FJX2lguw%3D'\n\nCREATE EXTERNAL DATA SOURCE SqlOnDemandDemo WITH (\n    LOCATION = 'https://sqlondemandstorage.blob.core.windows.net',\n    CREDENTIAL = sqlondemand\n);\nGO;\n\nSELECT \n\t* \nFROM OPENROWSET(\n        BULK 'csv/population/population*.csv',\n        DATA_SOURCE = 'SqlOnDemandDemo',\n        FORMAT = 'CSV',\n        FIRSTROW = 1\n    )\nWITH (\n    [country_code] VARCHAR (5) COLLATE Latin1_General_BIN2 1,\n    [population] bigint 4\n) AS [r]\nGO;\n\n-- Schema specification for certain columns from Parquet file:\nSELECT \n    TOP 1 *\nFROM  \n    OPENROWSET(\n        BULK 'https://azureopendatastorage.blob.core.windows.net/censusdatacontainer/release/us_population_county/year=20*/*.parquet',\n        FORMAT='PARQUET'\n    )\nWITH (\n\t[stateName] VARCHAR (50),\n\t[population] bigint\n) AS [r]\n\n-- Read JSON file and specifcy schema\n-- Note use of lax and strict path modes\n-- SELECT \n--     TOP 1 *\n-- FROM  \n--     OPENROWSET(\n--         BULK 'https://azureopendatastorage.blob.core.windows.net/censusdatacontainer/release/us_population_county/year=20*/*.parquet',\n--         FORMAT='PARQUET'\n--     )\n-- WITH (\n-- \t--lax path mode samples\n-- \t[stateName] VARCHAR (50), -- this one works as column name casing is valid - it targets the same column as the next one\n-- \t[stateName_explicit_path] VARCHAR (50) '$.stateName', -- this one works as column name casing is valid\n-- \t[COUNTYNAME] VARCHAR (50), --  will contain NULLs only because of wrong casing - it targets the same column as the next one\n-- \t[countyName_explicit_path] VARCHAR (50) '$.COUNTYNAME', -- will contain NULLS  because of wrong casing and default path mode being lax\n\n-- \t--strict path mode samples\n-- \t[population] bigint 'strict $.population' -- this one works as column name casing is valid\n-- \t--,[population2] bigint 'strict $.POPULATION' -- this one fails because of wrong casing and strict path mode\n-- )\n-- AS [r]\n\nDROP EXTERNAL DATA SOURCE SqlOnDemandDemo\nDROP DATABASE SCOPED CREDENTIAL [sqlondemand]",
 					"metadata": {
 						"language": "sql"
 					},
@@ -2077,6 +2151,26 @@
 					"currentConnection": {
 						"databaseName": "Sample",
 						"poolName": "Built-in"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Run Predictions')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "-- Create a stored procedure for storing the scoring script.\nCREATE PROCEDURE dbo.predict_rentals\nAS\nBEGIN\n-- Select input scoring data and assign aliases.\nWITH InputData AS\n(\n    SELECT\n        [season],\n        [mnth],\n        [holiday],\n        [weekday],\n        [workingday],\n        [weathersit],\n        [temp],\n        [atemp],\n        [hum],\n        [windspeed]\n    FROM [dbo].[weather_forecast]\n)\n-- Using T-SQL Predict command to score machine learning models. \nSELECT *\nFROM PREDICT (MODEL = (SELECT [model] FROM dbo.rental_prediction_model WHERE [ID] = 'rental-prediction-model:1'),\n              DATA = InputData,\n              RUNTIME = ONNX) WITH ([variable_out1] [real])\nEND\nGO\n\n-- Execute the above stored procedure.\nEXEC dbo.predict_rentals",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "SampleSQL",
+						"poolName": "SampleSQL"
 					},
 					"resultLimit": 5000
 				},
@@ -2936,15 +3030,13 @@
 						"sparkVersion": "2.4",
 						"nodeCount": 3,
 						"cores": 8,
-						"memory": 56,
-						"automaticScaleJobs": false
+						"memory": 56
 					},
 					"sessionKeepAliveTimeout": 30
 				},
 				"cells": [
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"import azureml.core\n",
 							"\n",
@@ -2958,7 +3050,6 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"linkedService_name = \"bluebadgeamlwssrv\"\n",
 							"experiment_name = \"vslive-bike-rentals\"\n",
@@ -2971,7 +3062,6 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"df = spark.sql(\"SELECT * FROM default.bike_data\")\n",
 							"\n",
@@ -2983,7 +3073,6 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"automl_config = AutoMLConfig(spark_context = sc,\n",
 							"                             task = \"regression\",\n",
@@ -2999,7 +3088,6 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"run = experiment.submit(automl_config)"
 						],
@@ -3008,7 +3096,6 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"displayHTML(\"<a href={} target='_blank'>Your experiment in Azure Machine Learning portal: {}</a>\".format(run.get_portal_url(), run.id))"
 						],
@@ -3017,7 +3104,6 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"run.wait_for_completion()\n",
 							"\n",
@@ -9128,26 +9214,6 @@
 			},
 			"dependsOn": [],
 			"location": "eastus"
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/Run Predictions')]",
-			"type": "Microsoft.Synapse/workspaces/sqlscripts",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"content": {
-					"query": "-- Create a stored procedure for storing the scoring script.\nCREATE PROCEDURE dbo.predict_rentals\nAS\nBEGIN\n-- Select input scoring data and assign aliases.\nWITH InputData AS\n(\n    SELECT\n        [season],\n        [mnth],\n        [holiday],\n        [weekday],\n        [workingday],\n        [weathersit],\n        [temp],\n        [atemp],\n        [hum],\n        [windspeed]\n    FROM [dbo].[weather_forecast]\n)\n-- Using T-SQL Predict command to score machine learning models. \nSELECT *\nFROM PREDICT (MODEL = (SELECT [model] FROM dbo.rental_prediction_model WHERE [ID] = 'rental-prediction-model:1'),\n              DATA = InputData,\n              RUNTIME = ONNX) WITH ([variable_out1] [real])\nEND\nGO\n\n-- Execute the above stored procedure.\nEXEC dbo.predict_rentals",
-					"metadata": {
-						"language": "sql"
-					},
-					"currentConnection": {
-						"databaseName": "SampleSQL",
-						"poolName": "SampleSQL"
-					},
-					"resultLimit": 5000
-				},
-				"type": "SqlQuery"
-			},
-			"dependsOn": []
 		}
 	]
 }
