@@ -1,0 +1,17 @@
+{
+	"name": "Create External Table for Flights",
+	"properties": {
+		"content": {
+			"query": "CREATE MASTER KEY\n\nCREATE DATABASE SCOPED CREDENTIAL [FlightsCred]\nWITH IDENTITY='SHARED ACCESS SIGNATURE',  \nSECRET = 'sv=2020-02-10&st=2023-11-05T03%3A11%3A28Z&se=2023-11-06T04%3A11%3A28Z&sr=d&sp=rl&sig=KnmCTbh548K2UUvHdXpnEvQtUNxaLCdMKevHWgSrfl8%3D&sdd=1'\n\nCREATE EXTERNAL FILE FORMAT [SynapseParquetFormat]\nWITH ( FORMAT_TYPE = PARQUET )\n\nCREATE EXTERNAL DATA SOURCE [myGen2FS]\nWITH (\n\tLOCATION   = 'abfs://bluebadgegen2fs@bluebadgegen22sa.dfs.core.windows.net/',\n\tCREDENTIAL = FlightsCred\n)\n\nCREATE EXTERNAL TABLE Flights\n ([DayofMonth]\n,[DayOfWeek]\n,[DepTime]\n,[CRSDepTime]\n,[ArrTime]\n,[CRSArrTime]\n,[UniqueCarrier]\n,[FlightNum]\n,[TailNum]\n,[ActualElapsedTime]\n,[CRSElapsedTime]\n,[AirTime]\n,[ArrDelay]\n,[DepDelay]\n,[Origin]\n,[Destination]\n,[Distance]\n,[TaxiIn]\n,[TaxiOut]\n,[Cancelled]\n,[CancelledCode]\n,[Diverted]\n,[CarrierDelay]\n,[WeatherDelay]\n,[NASDelay]\n,[SecurityDelay]\n,[LateAircraftDelay]\n,[IsArrDelayed]\n,[IsDepDelayed]\n,[Year]\n,[Month]\nWITH\n(\n\tLOCATION = '/flightpq4',\n\tDATA_SOURCE = [myGen2FS],\n\tFILE_FORMAT = [SynapseParquetFormat]\n)\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "FlightsData",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
