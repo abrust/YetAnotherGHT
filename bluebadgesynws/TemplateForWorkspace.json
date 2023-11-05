@@ -231,8 +231,7 @@
 					}
 				],
 				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
+					"elapsedTimeMetric": {}
 				},
 				"annotations": []
 			},
@@ -279,8 +278,7 @@
 					}
 				],
 				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
+					"elapsedTimeMetric": {}
 				},
 				"annotations": []
 			},
@@ -326,8 +324,7 @@
 					}
 				],
 				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
+					"elapsedTimeMetric": {}
 				},
 				"annotations": []
 			},
@@ -402,8 +399,7 @@
 					}
 				],
 				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
+					"elapsedTimeMetric": {}
 				},
 				"annotations": []
 			},
@@ -1916,7 +1912,7 @@
 						}
 					],
 					"transformations": [],
-					"script": "source(output(\n\t\tmovies as integer,\n\t\tTitle as string,\n\t\tgenresgenregenre as string,\n\t\tYEAR as short,\n\t\tRating as short\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'delta',\n\tfileSystem: 'adftutorial',\n\tmergeSchema: false,\n\tautoCompact: false,\n\toptimizedWrite: false,\n\tvacuum: 0,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
+					"script": "source(output(\n\t\tmovies as integer,\n\t\tTitle as string,\n\t\tgenresgenregenre as string,\n\t\tYEAR as short,\n\t\tRating as short\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'delta',\n\tfileSystem: 'adftutorial',\n\tmergeSchema: false,\n\tautoCompact: false,\n\toptimizedWrite: false,\n\tvacuum: 0,\n\tdeletable: false,\n\tinsertable: true,\n\tupdateable: false,\n\tupsertable: false,\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
 				}
 			},
 			"dependsOn": [
@@ -1960,7 +1956,7 @@
 							"name": "AlterRow1"
 						}
 					],
-					"script": "source(output(\n\t\tmovies as integer,\n\t\tTitle as string,\n\t\tgenresgenregenre as string,\n\t\tYEAR as integer,\n\t\tRating as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 filter(contains([1950, 1988, 1960], #item == YEAR)) ~> Filter1\nFilter1 derive(Rating = iif(YEAR==1988,1,toInteger(Rating)),\n\t\tYEAR = iif(YEAR==1960,2021,toInteger(YEAR)),\n\t\tTitle = iif(YEAR==1960,Title+\"1000\",Title)) ~> DerivedColumn1\nDerivedColumn1 alterRow(updateIf(YEAR==1988),\n\tinsertIf(YEAR==2021),\n\tdeleteIf(YEAR==1950)) ~> AlterRow1\nAlterRow1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tmovies as integer,\n\t\tTitle as string,\n\t\tgenresgenregenre as string,\n\t\tYEAR as short,\n\t\tRating as short\n\t),\n\tformat: 'delta',\n\tfileSystem: 'adftutorial',\n\tmergeSchema: false,\n\tautoCompact: false,\n\toptimizedWrite: false,\n\tvacuum: 0,\n\tdeletable:true,\n\tinsertable:true,\n\tupdateable:true,\n\tupsertable:false,\n\tkeys:['Title','YEAR'],\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tmapColumn(\n\t\tmovies,\n\t\tTitle,\n\t\tgenresgenregenre,\n\t\tYEAR,\n\t\tRating\n\t)) ~> sink1"
+					"script": "source(output(\n\t\tmovies as integer,\n\t\tTitle as string,\n\t\tgenresgenregenre as string,\n\t\tYEAR as integer,\n\t\tRating as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 filter(contains([1950, 1988, 1960], #item == YEAR)) ~> Filter1\nFilter1 derive(Rating = iif(YEAR==1988,1,toInteger(Rating)),\n\t\tYEAR = iif(YEAR==1960,2021,toInteger(YEAR)),\n\t\tTitle = iif(YEAR==1960,Title+\"1000\",Title)) ~> DerivedColumn1\nDerivedColumn1 alterRow(updateIf(YEAR==1988),\n\tinsertIf(YEAR==2021),\n\tdeleteIf(YEAR==1950)) ~> AlterRow1\nAlterRow1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tmovies as integer,\n\t\tTitle as string,\n\t\tgenresgenregenre as string,\n\t\tYEAR as short,\n\t\tRating as short\n\t),\n\tformat: 'delta',\n\tfileSystem: 'adftutorial',\n\tmergeSchema: false,\n\tautoCompact: false,\n\toptimizedWrite: false,\n\tvacuum: 0,\n\tdeletable: true,\n\tinsertable: true,\n\tupdateable: true,\n\tupsertable: false,\n\tkeys:['Title','YEAR'],\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tmapColumn(\n\t\tmovies,\n\t\tTitle,\n\t\tgenresgenregenre,\n\t\tYEAR,\n\t\tRating\n\t)) ~> sink1"
 				}
 			},
 			"dependsOn": [
@@ -2044,7 +2040,7 @@
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"content": {
-					"query": "--SELECT TOP 100 * FROM\n--    OPENROWSET(\n--        BULK 'https://azureopendatastorage.blob.core.windows.net/nyctlc/yellow/puYear=*/puMonth=*/*.parquet',\n--        FORMAT='PARQUET'\n--    ) AS [nyc]\n\n--SELECT TOP 100 * FROM\n--\tOPENROWSET(\n--\t\tBULK 'https://azureopendatastorage.blob.core.windows.net/holidaydatacontainer/Processed/*.parquet',\n--\t\tFORMAT='PARQUET'\n--\t) AS [holidays]\n\n--SELECT\n--    TOP 100 *\n--FROM  \n--    OPENROWSET(\n--        BULK 'https://azureopendatastorage.blob.core.windows.net/isdweatherdatacontainer/ISDWeather/year=*/month=*/*.parquet',\n--        FORMAT='PARQUET'\n--    ) AS [weather]\n\n/* Filepath condition in WHERE clause; yields data from 2009-2019 incliusive */\nSELECT\n    YEAR(tpepPickupDateTime) AS current_year,\n    COUNT(*) AS rides_per_year\nFROM\n    OPENROWSET(\n        BULK 'https://azureopendatastorage.blob.core.windows.net/nyctlc/yellow/puYear=*/puMonth=*/*.parquet',\n        FORMAT='PARQUET'\n    ) AS [nyc]\nWHERE nyc.filepath(1) >= '2009' AND nyc.filepath(1) <= '2019'\nGROUP BY YEAR(tpepPickupDateTime)\nORDER BY 1 ASC\n\n/* Same but for 2016 only */\nSELECT\n    CAST([tpepPickupDateTime] AS DATE) AS [current_day],\n    COUNT(*) as rides_per_day\nFROM\n    OPENROWSET(\n        BULK 'https://azureopendatastorage.blob.core.windows.net/nyctlc/yellow/puYear=*/puMonth=*/*.parquet',\n        FORMAT='PARQUET'\n    ) AS [nyc]\nWHERE nyc.filepath(1) = '2016'\nGROUP BY CAST([tpepPickupDateTime] AS DATE)\nORDER BY 1 ASC\n\n/* Join of two subselects */\nWITH taxi_rides AS\n(\n    SELECT\n        CAST([tpepPickupDateTime] AS DATE) AS [current_day],\n        COUNT(*) as rides_per_day\n    FROM  \n        OPENROWSET(\n            BULK 'https://azureopendatastorage.blob.core.windows.net/nyctlc/yellow/puYear=*/puMonth=*/*.parquet',\n            FORMAT='PARQUET'\n        ) AS [nyc]\n    WHERE nyc.filepath(1) = '2016'\n    GROUP BY CAST([tpepPickupDateTime] AS DATE)\n),\npublic_holidays AS\n(\n    SELECT\n        holidayname as holiday,\n        date\n    FROM\n        OPENROWSET(\n            BULK 'https://azureopendatastorage.blob.core.windows.net/holidaydatacontainer/Processed/*.parquet',\n            FORMAT='PARQUET'\n        ) AS [holidays]\n    WHERE countryorregion = 'United States' AND YEAR(date) = 2016\n)\nSELECT\n*\nFROM taxi_rides t\nLEFT OUTER JOIN public_holidays p on t.current_day = p.date\nORDER BY current_day ASC\n\n/* Aggregations and column aliasing */\nSELECT\n    AVG(windspeed) AS avg_windspeed,\n    MIN(windspeed) AS min_windspeed,\n    MAX(windspeed) AS max_windspeed,\n    AVG(temperature) AS avg_temperature,\n    MIN(temperature) AS min_temperature,\n    MAX(temperature) AS max_temperature,\n    AVG(sealvlpressure) AS avg_sealvlpressure,\n    MIN(sealvlpressure) AS min_sealvlpressure,\n    MAX(sealvlpressure) AS max_sealvlpressure,\n    AVG(precipdepth) AS avg_precipdepth,\n    MIN(precipdepth) AS min_precipdepth,\n    MAX(precipdepth) AS max_precipdepth,\n    AVG(snowdepth) AS avg_snowdepth,\n    MIN(snowdepth) AS min_snowdepth,\n    MAX(snowdepth) AS max_snowdepth\nFROM\n    OPENROWSET(\n        BULK 'https://azureopendatastorage.blob.core.windows.net/isdweatherdatacontainer/ISDWeather/year=*/month=*/*.parquet',\n        FORMAT='PARQUET'\n    ) AS [weather]\nWHERE countryorregion = 'US' AND CAST([datetime] AS DATE) = '2016-01-23' AND stationname = 'JOHN F KENNEDY INTERNATIONAL AIRPORT'",
+					"query": "--SELECT TOP 100 * FROM\n--    OPENROWSET(\n--        BULK 'https://azureopendatastorage.blob.core.windows.net/nyctlc/yellow/puYear=*/puMonth=*/*.parquet',\n--        FORMAT='PARQUET'\n--    ) AS [nyc]\n\n--SELECT TOP 100 * FROM\n--\tOPENROWSET(\n--\t\tBULK 'https://azureopendatastorage.blob.core.windows.net/holidaydatacontainer/Processed/*.parquet',\n--\t\tFORMAT='PARQUET'\n--\t) AS [holidays]\n\n--SELECT\n--    TOP 100 *\n--FROM  \n--    OPENROWSET(\n--        BULK 'https://azureopendatastorage.blob.core.windows.net/isdweatherdatacontainer/ISDWeather/year=*/month=*/*.parquet',\n--        FORMAT='PARQUET'\n--    ) AS [weather]\n\n/* Filepath condition in WHERE clause; yields data from 2009-2019 incliusive */\nSELECT\n    YEAR(tpepPickupDateTime) AS current_year,\n    COUNT(*) AS rides_per_year\nFROM\n    OPENROWSET(\n        BULK 'https://azureopendatastorage.blob.core.windows.net/nyctlc/yellow/puYear=*/puMonth=*/*.parquet',\n        FORMAT='PARQUET'\n    ) AS [nyc]\nWHERE nyc.filepath(1) >= '2009' AND nyc.filepath(1) <= '2019'\nGROUP BY YEAR(tpepPickupDateTime)\nORDER BY 1 ASC\n\n/* Same but for 2016 only */\nSELECT\n    CAST([tpepPickupDateTime] AS DATE) AS [current_day],\n    COUNT(*) as rides_per_day\nFROM\n    OPENROWSET(\n        BULK 'https://azureopendatastorage.blob.core.windows.net/nyctlc/yellow/puYear=*/puMonth=*/*.parquet',\n        FORMAT='PARQUET'\n    ) AS [nyc]\nWHERE nyc.filepath(1) = '2016'\nGROUP BY CAST([tpepPickupDateTime] AS DATE)\nORDER BY 1 ASC\n\n/* Join of two subselects */\nWITH taxi_rides AS\n(\n    SELECT\n        CAST([tpepPickupDateTime] AS DATE) AS [current_day],\n        COUNT(*) as rides_per_day\n    FROM  \n        OPENROWSET(\n            BULK 'https://azureopendatastorage.blob.core.windows.net/nyctlc/yellow/puYear=*/puMonth=*/*.parquet',\n            FORMAT='PARQUET'\n        ) AS [nyc]\n    WHERE nyc.filepath(1) = '2016'\n    GROUP BY CAST([tpepPickupDateTime] AS DATE)\n),\npublic_holidays AS\n(\n    SELECT\n        holidayname as holiday,\n        date\n    FROM\n        OPENROWSET(\n            BULK 'https://azureopendatastorage.blob.core.windows.net/holidaydatacontainer/Processed/*.parquet',\n            FORMAT='PARQUET'\n        ) AS [holidays]\n    WHERE countryorregion = 'United States' AND YEAR(date) = 2016\n)\nSELECT\n*\nFROM taxi_rides t\nINNER JOIN public_holidays p on t.current_day = p.date\nORDER BY current_day ASC\n\n/* Aggregations and column aliasing */\nSELECT\n    AVG(windspeed) AS avg_windspeed,\n    MIN(windspeed) AS min_windspeed,\n    MAX(windspeed) AS max_windspeed,\n    AVG(temperature) AS avg_temperature,\n    MIN(temperature) AS min_temperature,\n    MAX(temperature) AS max_temperature,\n    AVG(sealvlpressure) AS avg_sealvlpressure,\n    MIN(sealvlpressure) AS min_sealvlpressure,\n    MAX(sealvlpressure) AS max_sealvlpressure,\n    AVG(precipdepth) AS avg_precipdepth,\n    MIN(precipdepth) AS min_precipdepth,\n    MAX(precipdepth) AS max_precipdepth,\n    AVG(snowdepth) AS avg_snowdepth,\n    MIN(snowdepth) AS min_snowdepth,\n    MAX(snowdepth) AS max_snowdepth\nFROM\n    OPENROWSET(\n        BULK 'https://azureopendatastorage.blob.core.windows.net/isdweatherdatacontainer/ISDWeather/year=*/month=*/*.parquet',\n        FORMAT='PARQUET'\n    ) AS [weather]\nWHERE countryorregion = 'US' AND CAST([datetime] AS DATE) = '2016-01-23' AND stationname = 'JOHN F KENNEDY INTERNATIONAL AIRPORT'",
 					"metadata": {
 						"language": "sql"
 					},
@@ -2099,6 +2095,26 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/Create External Table for Flights')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "--Run on(c)e and done:\n--CREATE MASTER KEY\n\n-- Make sure SAS token still valid/not expired\nCREATE DATABASE SCOPED CREDENTIAL [FlightsCred]\nWITH IDENTITY='SHARED ACCESS SIGNATURE',  \nSECRET = 'sv=2020-02-10&st=2023-11-05T04%3A09%3A45Z&se=2023-11-06T05%3A09%3A45Z&sr=d&sp=rl&sig=cEFLbhg8ggXcU4XWXEukRgXBDngAaNywDtZkUWFWBFY%3D&sdd=1'\n\nCREATE EXTERNAL FILE FORMAT [SynapseParquetFormat]\nWITH ( FORMAT_TYPE = PARQUET )\n\nCREATE EXTERNAL DATA SOURCE [myGen2FS]\nWITH (\n\tLOCATION   = 'abfss://bluebadgegen2fs@bluebadgegen22sa.dfs.core.windows.net' ,\n\tCREDENTIAL = FlightsCred\n)\n\nCREATE EXTERNAL TABLE Flights\n ([Year] INT\n,[Month] INT\n,[DayofMonth] INT\n,[DayOfWeek] INT\n,[DepTime] VARCHAR(50)\n,[CRSDepTime] VARCHAR(50)\n,[ArrTime]  VARCHAR(50)\n,[CRSArrTime]  VARCHAR(50)\n,[UniqueCarrier] VARCHAR(50)\n,[FlightNum] VARCHAR(50)\n,[TailNum] VARCHAR(50)\n,[ActualElapsedTime] INT\n,[CRSElapsedTime] INT\n,[AirTime] INT\n,[ArrDelay] INT\n,[DepDelay] INT\n,[Origin] VARCHAR(50)\n,[Destination] VARCHAR(50)\n,[Distance] INT\n,[TaxiIn] INT\n,[TaxiOut] INT\n,[Cancelled] BIT\n,[CancelledCode] VARCHAR(50)\n,[Diverted] BIT\n,[CarrierDelay] VARCHAR(50)\n,[WeatherDelay] VARCHAR(50)\n,[NASDelay] VARCHAR(50)\n,[SecurityDelay] VARCHAR(50)\n,[LateAircraftDelay] VARCHAR(50)\n,[IsArrDelayed] BIT\n,[IsDepDelayed] BIT)\nWITH\n(\n\tLOCATION = '/flightonefile/',\n\tDATA_SOURCE = [myGen2FS],\n\tFILE_FORMAT = [SynapseParquetFormat]\n)\n\nSELECT TOP (100) * FROM Flights\n\n/*\nDROP EXTERNAL TABLE Flights\nDROP EXTERNAL DATA SOURCE [myGen2FS]\nDROP EXTERNAL FILE FORMAT [SynapseParquetFormat]\nDROP DATABASE SCOPED CREDENTIAL [FlightsCred]\n*/",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "FlightsData",
+						"poolName": "Built-in"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/Create external table populationExternalTable with SQL Serverless')]",
 			"type": "Microsoft.Synapse/workspaces/sqlscripts",
 			"apiVersion": "2019-06-01-preview",
@@ -2110,6 +2126,26 @@
 					},
 					"currentConnection": {
 						"databaseName": "Sample",
+						"poolName": "Built-in"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Flight Queries')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "SELECT   Month, DayOfMonth, COUNT(1) AS NumFlights\nFROM     Flights\nWHERE    Year = 2006 \nGROUP BY Month, DayOfMonth\nORDER BY Month, DayOfMonth",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "FlightsData",
 						"poolName": "Built-in"
 					},
 					"resultLimit": 5000
@@ -2762,15 +2798,15 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "ab170511-f776-43a0-9e88-059aedfc9353"
+						"spark.autotune.trackingId": "6d5a7e87-af63-431c-8db4-10c5d0962d58"
 					}
 				},
 				"metadata": {
 					"saveOutput": true,
 					"enableDebugMode": false,
 					"kernelspec": {
-						"name": "synapse_sparksql",
-						"display_name": "sql"
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
 					},
 					"language_info": {
 						"name": "sql"
@@ -2804,7 +2840,7 @@
 							"INSERT INTO `retail_mil`.`customer` VALUES (1,'2021-02-18',1022,557,101,'Tailspin Toys (Head Office)','Waldemar Fisar',90410,466);"
 						],
 						"outputs": [],
-						"execution_count": 4
+						"execution_count": 1
 					},
 					{
 						"cell_type": "code",
@@ -2824,11 +2860,11 @@
 						},
 						"source": [
 							"%%pyspark\r\n",
-							"df = spark.sql(\"SELECT * FROM `Retail_mil`.`Customer`\")\r\n",
+							"df = spark.sql(\"SELECT * FROM `Retail_mil`.`Customer` LIMIT 1\")\r\n",
 							"df.show(10)"
 						],
 						"outputs": [],
-						"execution_count": 13
+						"execution_count": 18
 					},
 					{
 						"cell_type": "code",
@@ -2845,10 +2881,10 @@
 							"collapsed": false
 						},
 						"source": [
-							"SELECT * FROM `Retail_mil`.`Customer`"
+							"SELECT * FROM `Retail_mil`.`Customer` LIMIT 1"
 						],
 						"outputs": [],
-						"execution_count": 1
+						"execution_count": 17
 					}
 				]
 			},
@@ -3246,6 +3282,280 @@
 						],
 						"outputs": [],
 						"execution_count": 6
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Flights Dataset Analytics')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"bigDataPool": {
+					"referenceName": "SampleSpark",
+					"type": "BigDataPoolReference"
+				},
+				"sessionProperties": {
+					"driverMemory": "56g",
+					"driverCores": 8,
+					"executorMemory": "56g",
+					"executorCores": 8,
+					"numExecutors": 2,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2",
+						"spark.autotune.trackingId": "c1070add-8c43-4f9e-a209-074a3a91f9d8"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"enableDebugMode": false,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
+					},
+					"language_info": {
+						"name": "python"
+					},
+					"a365ComputeOptions": {
+						"id": "/subscriptions/be13f18e-e3c7-4e40-a812-bca489b7b4e1/resourceGroups/bluebadgesynrg/providers/Microsoft.Synapse/workspaces/bluebadgesynws/bigDataPools/SampleSpark",
+						"name": "SampleSpark",
+						"type": "Spark",
+						"endpoint": "https://bluebadgesynws.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/SampleSpark",
+						"auth": {
+							"type": "AAD",
+							"authResource": "https://dev.azuresynapse.net"
+						},
+						"sparkVersion": "2.4",
+						"nodeCount": 3,
+						"cores": 8,
+						"memory": 56
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"gen2key = mssparkutils.credentials.getSecret('bbidatabrickskv','wasbkey','BlueBadgeAKV')\r\n",
+							"spark.conf.set(\"fs.azure.account.key.bluebadgegen22sa.dfs.core.windows.net\", gen2key)\r\n",
+							"\r\n",
+							"gen2_flights_path = \"abfs://bluebadgegen2fs@bluebadgegen22sa.dfs.core.windows.net/flightpq4\"\r\n",
+							"df = spark.read.format(\"parquet\").load(gen2_flights_path)\r\n",
+							"\r\n",
+							"df.createOrReplaceTempView(\"df\")"
+						],
+						"outputs": [],
+						"execution_count": 2
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"df.printSchema()"
+						],
+						"outputs": [],
+						"execution_count": 6
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"df.write.format(\"parquet\").saveAsTable(\"FlightData\")"
+						],
+						"outputs": [],
+						"execution_count": 8
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"microsoft": {
+								"language": "sparksql"
+							},
+							"collapsed": false
+						},
+						"source": [
+							"%%sql\r\n",
+							"select Month, DayOfMonth, count(1) as flights\r\n",
+							"  from flightdata \r\n",
+							" where Year = 2006 \r\n",
+							" group by Month, DayOfMonth\r\n",
+							" order by Month, DayOfMonth"
+						],
+						"outputs": [],
+						"execution_count": 10
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"microsoft": {
+								"language": "sparksql"
+							},
+							"collapsed": false
+						},
+						"source": [
+							"%%sql\r\n",
+							"select UniqueCarrier, count(1) from flightdata where UniqueCarrier like 'A%' group by UniqueCarrier"
+						],
+						"outputs": [],
+						"execution_count": 11
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"microsoft": {
+								"language": "sparksql"
+							},
+							"collapsed": false
+						},
+						"source": [
+							"%%sql\r\n",
+							"select Year, Month, sum(ArrDelay) as TotalArrivalDelay\r\n",
+							"  from flightdata\r\n",
+							" where Year = 2002 and UniqueCarrier = 'AS'\r\n",
+							" group by Year, Month\r\n",
+							" order by Year, Month"
+						],
+						"outputs": [],
+						"execution_count": 12
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"microsoft": {
+								"language": "sparksql"
+							},
+							"collapsed": false
+						},
+						"source": [
+							"%%sql\r\n",
+							"select Year, count(1) as flights\r\n",
+							"  from flightdata\r\n",
+							" where Month = 8 and UniqueCarrier = 'DL'\r\n",
+							" group by Year\r\n",
+							" order by Year"
+						],
+						"outputs": [],
+						"execution_count": 13
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"microsoft": {
+								"language": "sparksql"
+							},
+							"collapsed": false
+						},
+						"source": [
+							"%%sql\r\n",
+							"SELECT DISTINCT Year FROM FlightData ORDER BY Year"
+						],
+						"outputs": [],
+						"execution_count": 14
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"microsoft": {
+								"language": "sparksql"
+							},
+							"collapsed": false
+						},
+						"source": [
+							"%%sql\r\n",
+							"SELECT DISTINCT UniqueCarrier FROM FlightData ORDER BY UniqueCarrier"
+						],
+						"outputs": [],
+						"execution_count": 16
 					}
 				]
 			},
