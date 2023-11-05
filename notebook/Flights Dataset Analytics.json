@@ -1,0 +1,113 @@
+{
+	"name": "Flights Dataset Analytics",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "SampleSpark",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "56g",
+			"driverCores": 8,
+			"executorMemory": "56g",
+			"executorCores": 8,
+			"numExecutors": 2,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "111811dd-6cd8-488a-8ad6-966a008fa7d6"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"enableDebugMode": false,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/be13f18e-e3c7-4e40-a812-bca489b7b4e1/resourceGroups/bluebadgesynrg/providers/Microsoft.Synapse/workspaces/bluebadgesynws/bigDataPools/SampleSpark",
+				"name": "SampleSpark",
+				"type": "Spark",
+				"endpoint": "https://bluebadgesynws.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/SampleSpark",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "2.4",
+				"nodeCount": 3,
+				"cores": 8,
+				"memory": 56,
+				"automaticScaleJobs": false
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"gen2key = mssparkutils.credentials.getSecret('bbidatabrickskv','wasbkey','BlueBadgeAKV')\r\n",
+					"spark.conf.set(\"fs.azure.account.key.bluebadgegen22sa.dfs.core.windows.net\", gen2key)\r\n",
+					"\r\n",
+					"gen2_flights_path = \"abfs://bluebadgegen2fs@bluebadgegen22sa.dfs.core.windows.net/flightpq4\"\r\n",
+					"df = spark.read.format(\"parquet\").load(gen2_flights_path)\r\n",
+					"\r\n",
+					"df.createOrReplaceTempView(\"df\")"
+				],
+				"execution_count": 2
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"df.describe()"
+				],
+				"execution_count": 4
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"df.format(\"parquet\").saveAsTable(\"FlightData\")"
+				],
+				"execution_count": null
+			}
+		]
+	}
+}
