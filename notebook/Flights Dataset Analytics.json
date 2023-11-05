@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "457417ac-70e9-4136-9500-fd5820d2c94a"
+				"spark.autotune.trackingId": "c1070add-8c43-4f9e-a209-074a3a91f9d8"
 			}
 		},
 		"metadata": {
@@ -86,9 +86,9 @@
 					}
 				},
 				"source": [
-					"df.describe()"
+					"df.printSchema()"
 				],
-				"execution_count": 4
+				"execution_count": 6
 			},
 			{
 				"cell_type": "code",
@@ -104,9 +104,9 @@
 					}
 				},
 				"source": [
-					"df.format(\"parquet\").saveAsTable(\"FlightData\")"
+					"df.write.format(\"parquet\").saveAsTable(\"FlightData\")"
 				],
-				"execution_count": null
+				"execution_count": 8
 			},
 			{
 				"cell_type": "code",
@@ -122,17 +122,18 @@
 					},
 					"microsoft": {
 						"language": "sparksql"
-					}
+					},
+					"collapsed": false
 				},
 				"source": [
 					"%%sql\r\n",
 					"select Month, DayOfMonth, count(1) as flights\r\n",
-					"  from gen2 \r\n",
+					"  from flightdata \r\n",
 					" where Year = 2006 \r\n",
 					" group by Month, DayOfMonth\r\n",
 					" order by Month, DayOfMonth"
 				],
-				"execution_count": null
+				"execution_count": 10
 			},
 			{
 				"cell_type": "code",
@@ -148,13 +149,14 @@
 					},
 					"microsoft": {
 						"language": "sparksql"
-					}
+					},
+					"collapsed": false
 				},
 				"source": [
 					"%%sql\r\n",
-					"select UniqueCarrier, count(1) from gen2 where UniqueCarrier like 'A%' group by UniqueCarrier"
+					"select UniqueCarrier, count(1) from flightdata where UniqueCarrier like 'A%' group by UniqueCarrier"
 				],
-				"execution_count": null
+				"execution_count": 11
 			},
 			{
 				"cell_type": "code",
@@ -170,17 +172,18 @@
 					},
 					"microsoft": {
 						"language": "sparksql"
-					}
+					},
+					"collapsed": false
 				},
 				"source": [
 					"%%sql\r\n",
 					"select Year, Month, sum(ArrDelay) as TotalArrivalDelay\r\n",
-					"  from gen2\r\n",
+					"  from flightdata\r\n",
 					" where Year = 2002 and UniqueCarrier = 'AS'\r\n",
 					" group by Year, Month\r\n",
 					" order by Year, Month"
 				],
-				"execution_count": null
+				"execution_count": 12
 			},
 			{
 				"cell_type": "code",
@@ -196,17 +199,18 @@
 					},
 					"microsoft": {
 						"language": "sparksql"
-					}
+					},
+					"collapsed": false
 				},
 				"source": [
 					"%%sql\r\n",
 					"select Year, count(1) as flights\r\n",
-					"  from gen2\r\n",
+					"  from flightdata\r\n",
 					" where Month = 8 and UniqueCarrier = 'DL'\r\n",
 					" group by Year\r\n",
 					" order by Year"
 				],
-				"execution_count": null
+				"execution_count": 13
 			},
 			{
 				"cell_type": "code",
@@ -222,13 +226,14 @@
 					},
 					"microsoft": {
 						"language": "sparksql"
-					}
+					},
+					"collapsed": false
 				},
 				"source": [
 					"%%sql\r\n",
 					"SELECT DISTINCT Year FROM FlightData ORDER BY Year"
 				],
-				"execution_count": null
+				"execution_count": 14
 			},
 			{
 				"cell_type": "code",
@@ -244,13 +249,14 @@
 					},
 					"microsoft": {
 						"language": "sparksql"
-					}
+					},
+					"collapsed": false
 				},
 				"source": [
 					"%%sql\r\n",
 					"SELECT DISTINCT UniqueCarrier FROM FlightData ORDER BY UniqueCarrier"
 				],
-				"execution_count": null
+				"execution_count": 16
 			}
 		]
 	}
