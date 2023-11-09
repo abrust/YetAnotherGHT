@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "c1070add-8c43-4f9e-a209-074a3a91f9d8"
+				"spark.autotune.trackingId": "3a812c72-f625-4f5b-b545-1f9c64b2c4e1"
 			}
 		},
 		"metadata": {
@@ -104,7 +104,7 @@
 					}
 				},
 				"source": [
-					"df.write.format(\"parquet\").saveAsTable(\"FlightData\")"
+					"df.write.format(\"parquet\").saveAsTable(\"FlightData\").mode(SaveMode.Overwrite)"
 				],
 				"execution_count": 8
 			},
