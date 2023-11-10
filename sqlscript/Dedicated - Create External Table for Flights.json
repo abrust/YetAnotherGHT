@@ -1,6 +1,9 @@
 {
-	"name": "Create External Table for Flights",
+	"name": "Dedicated - Create External Table for Flights",
 	"properties": {
+		"folder": {
+			"name": "Workshop"
+		},
 		"content": {
 			"query": "--Run on(c)e and done:\n--CREATE MASTER KEY\n\n-- Make sure SAS token still valid/not expired\nCREATE DATABASE SCOPED CREDENTIAL [FlightsCred]\nWITH IDENTITY='SHARED ACCESS SIGNATURE',  \nSECRET = 'sv=2020-02-10&st=2023-11-08T23%3A48%3A54Z&se=2025-11-09T23%3A48%3A00Z&sr=d&sp=rl&sig=oeAvbsYaQg9zNxyXyPNN2yo%2Blx90Py4HgQn%2BCy4IQVw%3D&sdd=1'\n\nCREATE EXTERNAL FILE FORMAT [SynapseParquetFormat]\nWITH ( FORMAT_TYPE = PARQUET )\n\nCREATE EXTERNAL DATA SOURCE [myGen2FS]\nWITH (\n\tLOCATION   = 'abfss://bluebadgegen2fs@bluebadgegen22sa.dfs.core.windows.net' ,\n\tCREDENTIAL = FlightsCred\n)\n\nCREATE EXTERNAL TABLE Flights\n ([Year] INT\n,[Month] INT\n,[DayofMonth] INT\n,[DayOfWeek] INT\n,[DepTime] VARCHAR(50)\n,[CRSDepTime] VARCHAR(50)\n,[ArrTime]  VARCHAR(50)\n,[CRSArrTime]  VARCHAR(50)\n,[UniqueCarrier] VARCHAR(50)\n,[FlightNum] VARCHAR(50)\n,[TailNum] VARCHAR(50)\n,[ActualElapsedTime] INT\n,[CRSElapsedTime] INT\n,[AirTime] INT\n,[ArrDelay] INT\n,[DepDelay] INT\n,[Origin] VARCHAR(50)\n,[Destination] VARCHAR(50)\n,[Distance] INT\n,[TaxiIn] INT\n,[TaxiOut] INT\n,[Cancelled] BIT\n,[CancelledCode] VARCHAR(50)\n,[Diverted] BIT\n,[CarrierDelay] VARCHAR(50)\n,[WeatherDelay] VARCHAR(50)\n,[NASDelay] VARCHAR(50)\n,[SecurityDelay] VARCHAR(50)\n,[LateAircraftDelay] VARCHAR(50)\n,[IsArrDelayed] BIT\n,[IsDepDelayed] BIT)\nWITH\n(\n\tLOCATION = '/flightonefile/',\n\tDATA_SOURCE = [myGen2FS],\n\tFILE_FORMAT = [SynapseParquetFormat]\n)\n\nSELECT TOP (100) * FROM Flights\n\n/*\nDROP EXTERNAL TABLE Flights\nDROP EXTERNAL DATA SOURCE [myGen2FS]\nDROP EXTERNAL FILE FORMAT [SynapseParquetFormat]\nDROP DATABASE SCOPED CREDENTIAL [FlightsCred]\n*/",
 			"metadata": {
