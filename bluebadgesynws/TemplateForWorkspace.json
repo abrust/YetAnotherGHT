@@ -3434,7 +3434,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "1a151a1a-68c4-4b78-987f-4fb41d3cc91f"
+						"spark.autotune.trackingId": "2afa65ec-bada-4b6e-ad59-8120395d149d"
 					}
 				},
 				"metadata": {
@@ -3482,13 +3482,13 @@
 							"gen2key = mssparkutils.credentials.getSecret('bbidatabrickskv','wasbkey','BlueBadgeAKV')\r\n",
 							"spark.conf.set(\"fs.azure.account.key.bluebadgegen22sa.dfs.core.windows.net\", gen2key)\r\n",
 							"\r\n",
-							"gen2_flights_path = \"abfs://bluebadgegen2fs@bluebadgegen22sa.dfs.core.windows.net/flightpq4\"\r\n",
-							"df = spark.read.format(\"parquet\").load(gen2_flights_path)\r\n",
+							"gen2_flights_path = \"abfs://bluebadgegen2fs@bluebadgegen22sa.dfs.core.windows.net/flightcsv\"\r\n",
+							"df = spark.read.format(\"csv\").option(\"header\", True).load(gen2_flights_path)\r\n",
 							"\r\n",
 							"df.createOrReplaceTempView(\"df\")"
 						],
 						"outputs": [],
-						"execution_count": 2
+						"execution_count": 19
 					},
 					{
 						"cell_type": "code",
@@ -3507,7 +3507,7 @@
 							"df.printSchema()"
 						],
 						"outputs": [],
-						"execution_count": 6
+						"execution_count": 20
 					},
 					{
 						"cell_type": "code",
@@ -3523,10 +3523,11 @@
 							}
 						},
 						"source": [
-							"df.write.format(\"parquet\").saveAsTable(\"FlightData\").mode(SaveMode.Overwrite)"
+							"# Run only if managed table FlightData not already created (Takes 8:03)\r\n",
+							"df.write.format(\"parquet\").mode(\"overwrite\").saveAsTable(\"FlightData\")"
 						],
 						"outputs": [],
-						"execution_count": 8
+						"execution_count": 6
 					},
 					{
 						"cell_type": "code",
@@ -3554,7 +3555,7 @@
 							" order by Month, DayOfMonth"
 						],
 						"outputs": [],
-						"execution_count": 10
+						"execution_count": 21
 					},
 					{
 						"cell_type": "code",
@@ -3578,7 +3579,7 @@
 							"select UniqueCarrier, count(1) from flightdata where UniqueCarrier like 'A%' group by UniqueCarrier"
 						],
 						"outputs": [],
-						"execution_count": 11
+						"execution_count": 8
 					},
 					{
 						"cell_type": "code",
@@ -3606,7 +3607,7 @@
 							" order by Year, Month"
 						],
 						"outputs": [],
-						"execution_count": 12
+						"execution_count": 9
 					},
 					{
 						"cell_type": "code",
@@ -3634,7 +3635,7 @@
 							" order by Year"
 						],
 						"outputs": [],
-						"execution_count": 13
+						"execution_count": 10
 					},
 					{
 						"cell_type": "code",
@@ -3658,7 +3659,7 @@
 							"SELECT DISTINCT Year FROM FlightData ORDER BY Year"
 						],
 						"outputs": [],
-						"execution_count": 14
+						"execution_count": 11
 					},
 					{
 						"cell_type": "code",
@@ -3682,7 +3683,7 @@
 							"SELECT DISTINCT UniqueCarrier FROM FlightData ORDER BY UniqueCarrier"
 						],
 						"outputs": [],
-						"execution_count": 16
+						"execution_count": 12
 					}
 				]
 			},
