@@ -1,8 +1,8 @@
 {
-	"name": "Flights Dataset Analytics",
+	"name": "Flights Dataset Analytics L360",
 	"properties": {
 		"folder": {
-			"name": "Older"
+			"name": "L360 Workshop"
 		},
 		"nbformat": 4,
 		"nbformat_minor": 2,
@@ -20,7 +20,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "c5201224-dd54-475a-87d3-17728f8e7af4"
+				"spark.autotune.trackingId": "402e638f-ba4d-4453-ac37-1925d0f8ec0c"
 			}
 		},
 		"metadata": {

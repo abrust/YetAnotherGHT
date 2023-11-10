@@ -1,6 +1,9 @@
 {
 	"name": "OneLakeDemo",
 	"properties": {
+		"folder": {
+			"name": "Older"
+		},
 		"nbformat": 4,
 		"nbformat_minor": 2,
 		"bigDataPool": {
@@ -17,7 +20,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "8b6907c4-d284-4063-9cbd-7954ce020404"
+				"spark.autotune.trackingId": "7d2fb239-4c5f-4f89-9605-6bdf1ed6e925"
 			}
 		},
 		"metadata": {
