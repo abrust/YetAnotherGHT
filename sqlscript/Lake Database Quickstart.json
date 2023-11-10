@@ -1,6 +1,9 @@
 {
 	"name": "Lake Database Quickstart",
 	"properties": {
+		"folder": {
+			"name": "Older"
+		},
 		"content": {
 			"query": "SELECT [CustomerId]\n,[CustomerEstablishedDate]\n,[CustomerTypeId]\n,[ResponsibilityCenterId]\n,[LedgerId]\n,[CustomerNote]\n,[PartyId]\n,[GlobalLocationNumber]\n FROM Customer\n\n /* ,[LedgerAccountNumber] */",
 			"metadata": {

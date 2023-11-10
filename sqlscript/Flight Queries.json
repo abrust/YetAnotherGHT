@@ -1,6 +1,9 @@
 {
 	"name": "Flight Queries",
 	"properties": {
+		"folder": {
+			"name": "Older"
+		},
 		"content": {
 			"query": "SELECT   Month, DayOfMonth, COUNT(1) AS NumFlights\nFROM     Flights\nWHERE    Year = 2006 \nGROUP BY Month, DayOfMonth\nORDER BY Month, DayOfMonth",
 			"metadata": {
