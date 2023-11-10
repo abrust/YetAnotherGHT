@@ -1,5 +1,5 @@
 {
-	"name": "Dedicated - Create External Table for Flights",
+	"name": "Serverless - Create External Table for Flights",
 	"properties": {
 		"folder": {
 			"name": "Workshop"
