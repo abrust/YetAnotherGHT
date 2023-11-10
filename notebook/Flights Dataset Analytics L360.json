@@ -20,7 +20,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "41df00ae-0480-457a-81d4-b8ae12abfee3"
+				"spark.autotune.trackingId": "78ab0ad1-d468-4168-9c47-d717057dce3b"
 			}
 		},
 		"metadata": {
@@ -31,7 +31,7 @@
 				"display_name": "Synapse PySpark"
 			},
 			"language_info": {
-				"name": "python"
+				"name": "sql"
 			},
 			"a365ComputeOptions": {
 				"id": "/subscriptions/be13f18e-e3c7-4e40-a812-bca489b7b4e1/resourceGroups/bluebadgesynrg/providers/Microsoft.Synapse/workspaces/bluebadgesynws/bigDataPools/SampleSpark",
@@ -62,9 +62,13 @@
 						"transient": {
 							"deleting": false
 						}
+					},
+					"microsoft": {
+						"language": "python"
 					}
 				},
 				"source": [
+					"%%pyspark\r\n",
 					"gen2key = mssparkutils.credentials.getSecret('bbidatabrickskv','wasbkey','BlueBadgeAKV')\r\n",
 					"spark.conf.set(\"fs.azure.account.key.bluebadgegen22sa.dfs.core.windows.net\", gen2key)\r\n",
 					"\r\n",
@@ -73,7 +77,7 @@
 					"\r\n",
 					"df.createOrReplaceTempView(\"df\")"
 				],
-				"execution_count": 19
+				"execution_count": 30
 			},
 			{
 				"cell_type": "code",
@@ -86,12 +90,16 @@
 						"transient": {
 							"deleting": false
 						}
+					},
+					"microsoft": {
+						"language": "python"
 					}
 				},
 				"source": [
+					"%%pyspark\r\n",
 					"df.printSchema()"
 				],
-				"execution_count": 20
+				"execution_count": 31
 			},
 			{
 				"cell_type": "code",
@@ -104,9 +112,13 @@
 						"transient": {
 							"deleting": false
 						}
+					},
+					"microsoft": {
+						"language": "python"
 					}
 				},
 				"source": [
+					"%%pyspark\r\n",
 					"# Run only if managed table FlightData not already created (Takes 8:03)\r\n",
 					"df.write.format(\"parquet\").mode(\"overwrite\").saveAsTable(\"FlightData\")"
 				],
@@ -124,20 +136,16 @@
 							"deleting": false
 						}
 					},
-					"microsoft": {
-						"language": "sparksql"
-					},
 					"collapsed": false
 				},
 				"source": [
-					"%%sql\r\n",
 					"select Month, DayOfMonth, count(1) as flights\r\n",
 					"  from flightdata \r\n",
 					" where Year = 2006 \r\n",
 					" group by Month, DayOfMonth\r\n",
 					" order by Month, DayOfMonth"
 				],
-				"execution_count": 21
+				"execution_count": 32
 			},
 			{
 				"cell_type": "code",
@@ -151,16 +159,12 @@
 							"deleting": false
 						}
 					},
-					"microsoft": {
-						"language": "sparksql"
-					},
 					"collapsed": false
 				},
 				"source": [
-					"%%sql\r\n",
 					"select UniqueCarrier, count(1) from flightdata where UniqueCarrier like 'A%' group by UniqueCarrier"
 				],
-				"execution_count": 8
+				"execution_count": 33
 			},
 			{
 				"cell_type": "code",
@@ -174,20 +178,16 @@
 							"deleting": false
 						}
 					},
-					"microsoft": {
-						"language": "sparksql"
-					},
 					"collapsed": false
 				},
 				"source": [
-					"%%sql\r\n",
 					"select Year, Month, sum(ArrDelay) as TotalArrivalDelay\r\n",
 					"  from flightdata\r\n",
 					" where Year = 2002 and UniqueCarrier = 'AS'\r\n",
 					" group by Year, Month\r\n",
 					" order by Year, Month"
 				],
-				"execution_count": 9
+				"execution_count": 34
 			},
 			{
 				"cell_type": "code",
@@ -201,20 +201,16 @@
 							"deleting": false
 						}
 					},
-					"microsoft": {
-						"language": "sparksql"
-					},
 					"collapsed": false
 				},
 				"source": [
-					"%%sql\r\n",
 					"select Year, count(1) as flights\r\n",
 					"  from flightdata\r\n",
 					" where Month = 8 and UniqueCarrier = 'DL'\r\n",
 					" group by Year\r\n",
 					" order by Year"
 				],
-				"execution_count": 10
+				"execution_count": 35
 			},
 			{
 				"cell_type": "code",
@@ -228,16 +224,12 @@
 							"deleting": false
 						}
 					},
-					"microsoft": {
-						"language": "sparksql"
-					},
 					"collapsed": false
 				},
 				"source": [
-					"%%sql\r\n",
 					"SELECT DISTINCT Year FROM FlightData ORDER BY Year"
 				],
-				"execution_count": 11
+				"execution_count": 36
 			},
 			{
 				"cell_type": "code",
@@ -251,16 +243,12 @@
 							"deleting": false
 						}
 					},
-					"microsoft": {
-						"language": "sparksql"
-					},
 					"collapsed": false
 				},
 				"source": [
-					"%%sql\r\n",
 					"SELECT DISTINCT UniqueCarrier FROM FlightData ORDER BY UniqueCarrier"
 				],
-				"execution_count": 12
+				"execution_count": 37
 			}
 		]
 	}
